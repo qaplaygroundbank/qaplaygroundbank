@@ -1,27 +1,27 @@
-// pages/LoginPage.js
-const { BasePage } = require('./BasePage');
+import BasePage from './BasePage.js';
+import { URLS } from '../utils/constants.js';
+import selectors from '../selectors/loginPageSelectors.js';
 
-//Page object for the SecureBank login page
 class LoginPage extends BasePage {
   constructor(page) {
     super(page);
-    this.usernameInput = page.getByTestId('login-username-input');
-    this.passwordInput = page.getByTestId('login-password-input');
-    this.loginButton = page.getByTestId('login-submit-btn');
-    this.forgotLoginLink = page.getByTestId('forgot-password-link');
+
+    this.usernameInput = page.getByTestId(selectors.usernameInput);
+    this.passwordInput = page.getByTestId(selectors.passwordInput);
+    this.loginButton = page.getByRole('button', {
+      name: 'Sign in to SecureBank'
+    });
   }
 
-  //Opens the login page;login is appended to baseURL from the config
-  async goto() {
-    await this.page.goto('login');
+  async openLoginPage() {
+    await this.navigate(URLS.LOGIN_PAGE);
   }
 
-  //Signs in; empty string is used if a value is missing
   async login(username, password) {
-    await this.usernameInput.fill(username ?? '');
-    await this.passwordInput.fill(password ?? '');
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
     await this.loginButton.click();
   }
 }
 
-module.exports = { LoginPage };
+export default LoginPage;
