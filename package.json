@@ -1,30 +1,19 @@
 {
-  "name": "qaplaygroundbank",
+  "name": "playwright",
   "version": "1.0.0",
-  "description": "QA automation framework using Node.js and Playwright",
-  "main": "bin/qaplayground.js",
-  "bin": {
-    "qaplayground": "bin/qaplayground.js"
-  },
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "cli": "node bin/qaplayground.js",
     "test": "playwright test",
-    "report": "playwright show-report"
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
   },
-  "keywords": [
-    "playwright",
-    "automation",
-    "qa"
-  ],
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.64.0",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^26.2.0"
-  },
-  "dependencies": {
-    "commander": "^15.0.0",
-    "dotenv": "^18.0.7"
   }
 }
