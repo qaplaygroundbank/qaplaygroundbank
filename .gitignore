@@ -1,15 +1,6 @@
-# Local environment variables and secrets
-.env
-.env.*
-!.env.example
-
-# Playwright
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/
-package-lock.json
-
-.DS_Store
+playwright-report/
+test-results/
+playwright-install.log
+test-output.log
+projects/tests/qaplaygroundbank/
