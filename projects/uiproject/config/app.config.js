@@ -21,6 +21,13 @@ const environments = {
         loginUrl: process.env.UI_STAGE_LOGIN_URL,
         username: process.env.UI_STAGE_USERNAME,
         password: process.env.UI_STAGE_PASSWORD
+    },
+    parabank: {
+        loginUrl:
+            process.env.UI_PARABANK_LOGIN_URL ||
+            'https://parabank.parasoft.com/parabank/index.htm',
+        username: process.env.UI_PARABANK_USERNAME,
+        password: process.env.UI_PARABANK_PASSWORD
     }
 };
 

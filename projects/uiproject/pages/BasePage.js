@@ -1,7 +1,5 @@
 // pages/BasePage.js
-import { expect } from "@playwright/test";
 class BasePage {
-  /** @param {import('@playwright/test').Page} page */
   constructor(page) {
     this.page = page;
     this.leftNav = page.locator('#leftPanel');
@@ -23,7 +21,6 @@ class BasePage {
     return this.leftNav.getByRole('link', { name: text, exact: true });
   }
 
-  /** The generic red/error message box ParaBank renders inside #rightPanel. */
   errorMessage() {
     return this.page.locator('#rightPanel .error, #rightPanel p.error');
   }
@@ -33,4 +30,4 @@ class BasePage {
   }
 }
 
-export default BasePage;
+module.exports = { BasePage };
