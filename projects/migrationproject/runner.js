@@ -1,19 +1,19 @@
 
+import logger from '../../commonlib/logger.js';
+
 async function runMigrationProject(options) {
-    console.log('=================================');
-    console.log('   MIGRATION PROJECT EXECUTION   ');
-    console.log('=================================');
+    logger.info('=================================');
+    logger.info('   MIGRATION PROJECT EXECUTION   ');
+    logger.info('=================================');
 
-    console.log(`Environment : ${options.env}`);
-    console.log(`Suite       : ${options.suite}`);
+    logger.info(`Environment : ${options.env}`);
+    logger.info(`Suite       : ${options.suite}`);
 
-    console.log('');
-    console.log('Starting Migration project...');
-    console.log('');
+    logger.info('Starting Migration project...');
 
     // Migration test execution will be implemented here.
 
-    console.log('Migration project execution completed.');
+    logger.info('Migration project execution completed.');
 }
 
 export { runMigrationProject };

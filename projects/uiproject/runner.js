@@ -1,8 +1,8 @@
-
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
+import logger from '../../commonlib/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,14 +13,14 @@ async function runUiProject(options) {
     const headed = options.headed || false;
     const suite = options.suite || 'smoke';
 
-    console.log('=================================');
-    console.log('      UI PROJECT EXECUTION       ');
-    console.log('=================================');
+    logger.info('=================================');
+    logger.info('      UI PROJECT EXECUTION       ');
+    logger.info('=================================');
 
-    console.log(`Environment : ${options.env}`);
-    console.log(`Suite       : ${suite}`);
-    console.log(`Browser     : ${browser}`);
-    console.log(`Headed      : ${headed}`);
+    logger.info(`Environment : ${options.env}`);
+    logger.info(`Suite       : ${suite}`);
+    logger.info(`Browser     : ${browser}`);
+    logger.info(`Headed      : ${headed}`);
 
     const configFile = path.resolve(
         __dirname,
@@ -40,9 +40,9 @@ async function runUiProject(options) {
         );
 
         args.push(testFile);
-        console.log(`Test File   : ${testFile}`);
+        logger.info(`Test File   : ${testFile}`);
     } else {
-        console.log('Test File   : All configured UI tests');
+        logger.info('Test File   : All configured UI tests');
     }
 
     // Configure Playwright and browser selection.
@@ -81,10 +81,8 @@ async function runUiProject(options) {
         args.push('--grep', grepPattern);
     }
 
-    console.log(`Config File : ${configFile}`);
-    console.log('');
-    console.log('Starting Playwright...');
-    console.log('');
+    logger.info(`Config File : ${configFile}`);
+    logger.info('Starting Playwright...');
 
     const playwrightProcess = spawn(
         process.execPath,
@@ -99,18 +97,19 @@ async function runUiProject(options) {
     );
 
     return new Promise((resolve, reject) => {
-        playwrightProcess.on('error', reject);
+        playwrightProcess.on('error', (error) => {
+            logger.error('Failed to start Playwright:', error);
+            reject(error);
+        });
 
         playwrightProcess.on('close', (exitCode) => {
             if (exitCode === 0) {
-                console.log('');
-                console.log(
+                logger.info(
                     'Playwright execution completed successfully.'
                 );
                 resolve();
             } else {
-                console.log('');
-                console.log(
+                logger.error(
                     `Playwright execution failed. Exit code: ${exitCode}`
                 );
 
