@@ -1,5 +1,4 @@
-// pages/AccountsOverviewPage.js
-const { BasePage } = require('./BasePage');
+import BasePage from './BasePage.js';
 
 class AccountsOverviewPage extends BasePage {
   constructor(page) {
@@ -31,4 +30,4 @@ class AccountsOverviewPage extends BasePage {
   }
 }
 
-module.exports = { AccountsOverviewPage };
+export default AccountsOverviewPage;

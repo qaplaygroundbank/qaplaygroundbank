@@ -1,5 +1,4 @@
-// pages/FindTransactionsPage.js
-const { BasePage } = require('BasePage');
+import BasePage from './BasePage.js';
 
 class FindTransactionsPage extends BasePage {
   constructor(page) {
@@ -41,4 +40,4 @@ class FindTransactionsPage extends BasePage {
   }
 }
 
-module.exports = { FindTransactionsPage };
+export default FindTransactionsPage;

@@ -1,5 +1,5 @@
-async function runMigrationProject(options) {
 
+async function runMigrationProject(options) {
     console.log('=================================');
     console.log('   MIGRATION PROJECT EXECUTION   ');
     console.log('=================================');
@@ -16,6 +16,4 @@ async function runMigrationProject(options) {
     console.log('Migration project execution completed.');
 }
 
-module.exports = {
-    runMigrationProject
-};
+export { runMigrationProject };

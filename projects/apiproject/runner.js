@@ -1,5 +1,5 @@
-async function runApiProject(options) {
 
+async function runApiProject(options) {
     console.log('=================================');
     console.log('      API PROJECT EXECUTION      ');
     console.log('=================================');
@@ -16,6 +16,4 @@ async function runApiProject(options) {
     console.log('API project execution completed.');
 }
 
-module.exports = {
-    runApiProject
-};
+export { runApiProject };
