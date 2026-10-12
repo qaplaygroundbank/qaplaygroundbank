@@ -1,3 +1,3 @@
-const { startCLI } = require('../cli');
+import { startCLI } from '../cli/index.js';
 
 startCLI();
