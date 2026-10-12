@@ -1,27 +1,25 @@
 import BasePage from './BasePage.js';
 import { URLS } from '../utils/constants.js';
-import selectors from '../selectors/loginPageSelectors.js';
+import loginPageSelectors from '../selectors/loginPageSelectors.js';
+import { resolveLocator } from '../utils/locatorResolver.js';
 
 class LoginPage extends BasePage {
-  constructor(page) {
-    super(page);
+    constructor(page) {
+        super(page);
+        this.usernameInput = resolveLocator(page, loginPageSelectors.usernameInput);
+        this.passwordInput = resolveLocator(page, loginPageSelectors.passwordInput);
+        this.loginButton = resolveLocator(page, loginPageSelectors.loginButton);
+    }
 
-    this.usernameInput = page.getByTestId(selectors.usernameInput);
-    this.passwordInput = page.getByTestId(selectors.passwordInput);
-    this.loginButton = page.getByRole('button', {
-      name: 'Sign in to SecureBank'
-    });
-  }
+    async openLoginPage() {
+        await this.navigate(URLS.LOGIN_PAGE);
+    }
 
-  async openLoginPage() {
-    await this.navigate(URLS.LOGIN_PAGE);
-  }
-
-  async login(username, password) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
-  }
+    async login(username, password) {
+        await this.usernameInput.fill(username);
+        await this.passwordInput.fill(password);
+        await this.loginButton.click();
+    }
 }
 
 export default LoginPage;
