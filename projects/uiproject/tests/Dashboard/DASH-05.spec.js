@@ -1,9 +1,9 @@
 // tests/DASH-05.spec.js
-import { test, expect } from '../fixtures/baseFixture.js';
-import appConfig from '../config/app.config.js';
-import dashboardData from '../data/dashboardData.json' with {type:'json'};
-import DashboardPage from '../pages/DashboardPage.js';
-import AccountsOverviewPage from '../pages/AccountsOverviewPage.js';
+import { test, expect } from '../../fixtures/baseFixture.js';
+import appConfig from '../../config/app.config.js';
+import dashboardData from '../../data/dashboardData.json' with {type:'json'};
+import DashboardPage from '../../pages/DashboardPage.js';
+import AccountsOverviewPage from '../../pages/AccountsOverviewPage.js';
  
 test('DASH-05: negative/overdrawn balance is handled correctly @dashboard', async ({ page, loginPage }) => {
   const environment = process.env.QA_PLAYGROUND_ENV || 'qa';
