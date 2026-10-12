@@ -1,4 +1,6 @@
-const { test, expect } = require('@playwright/test');
+
+import { test, expect } from '@playwright/test';
+import logger from '../../../commonlib/logger.js';
 
 test('Verify each displayed payee can be selected', async ({ page }) => {
 
@@ -23,7 +25,7 @@ test('Verify each displayed payee can be selected', async ({ page }) => {
     const payees = page.getByRole('option');
     const payeeCount = await payees.count();
 
-    console.log(`Total Payees Available: ${payeeCount}`);
+    logger.info(`Total Payees Available: ${payeeCount}`);
 
     await page.keyboard.press('Escape');
 
@@ -38,6 +40,6 @@ test('Verify each displayed payee can be selected', async ({ page }) => {
 
         await expect(payeeDropdown).toContainText(expectedValue);
 
-        console.log(`Selected and verified: ${expectedValue}`);
+        logger.info(`Selected and verified: ${expectedValue}`);
     }
 });

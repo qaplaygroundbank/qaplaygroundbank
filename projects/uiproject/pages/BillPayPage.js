@@ -1,5 +1,4 @@
-// pages/BillPayPage.js
-const { BasePage } = require('BasePage');
+import BasePage from './BasePage.js';
 
 class BillPayPage extends BasePage {
   constructor(page) {
@@ -42,4 +41,4 @@ class BillPayPage extends BasePage {
   }
 }
 
-module.exports = { BillPayPage };
+export default BillPayPage;

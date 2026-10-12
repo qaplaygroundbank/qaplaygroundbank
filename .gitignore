@@ -1,3 +1,7 @@
+# Local environment variables and secrets
+.env
+.env.*
+!.env.example
 
 # Playwright
 node_modules/
@@ -6,5 +10,6 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
-
 package-lock.json
+
+.DS_Store
