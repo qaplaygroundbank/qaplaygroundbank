@@ -1,16 +1,11 @@
-const { registerApiProject } = require('../projects/apiproject/cli');
-const { registerMigrationProject } = require('../projects/migrationproject/cli');
-const { registerUiProject } = require('../projects/uiproject/cli');
+import { registerApiProject } from '../projects/apiproject/cli.js';
+import { registerMigrationProject } from '../projects/migrationproject/cli.js';
+import { registerUiProject } from '../projects/uiproject/cli.js';
 
 function registerProjects(program) {
-
     registerApiProject(program);
-
     registerMigrationProject(program);
-
     registerUiProject(program);
 }
 
-module.exports = {
-    registerProjects
-};
+export { registerProjects };
