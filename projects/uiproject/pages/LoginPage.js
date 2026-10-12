@@ -1,24 +1,23 @@
-// pages/LoginPage.js
-const { BasePage } = require('BasePage');
+class LoginPage {
 
-class LoginPage extends BasePage {
-  constructor(page) {
-    super(page);
-    this.usernameInput = page.locator('input[name="username"]');
-    this.passwordInput = page.locator('input[name="password"]');
-    this.loginButton = page.locator('input[value="Log In"]');
-    this.forgotLoginLink = page.getByRole('link', { name: 'Forgot login info?' });
-  }
+    constructor(page) {
+        this.page = page;
 
-  async goto() {
-    await this.page.goto('index.htm');
-  }
+        // Locators
+        this.usernameField = page.locator("//input[@id='login-username']");
+        this.passwordField = page.locator("//input[@id='login-password']");
+        this.loginButton = page.locator("//button[@type='submit']");
+    }
 
-  async login(username, password) {
-    await this.usernameInput.fill(username ?? '');
-    await this.passwordInput.fill(password ?? '');
-    await this.loginButton.click();
-  }
+    async navigateToLoginPage() {
+        await this.page.goto('https://qaplayground.com/bank/login');
+    }
+
+    async login(username, password) {
+        await this.usernameField.fill(username);
+        await this.passwordField.fill(password);
+        await this.loginButton.click();
+    }
 }
 
 module.exports = { LoginPage };

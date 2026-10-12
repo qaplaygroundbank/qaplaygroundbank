@@ -1,36 +1,22 @@
 const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
 
-test('DASH-01 login', async ({ page }) => {
+test('DASH-01 Verify successful login and dashboard load', async ({ page }) => {
 
-    await page.goto('https://qaplayground.com/bank/login');
+    const loginPage = new LoginPage(page);
 
+    await loginPage.navigateToLoginPage();
 
-    const usernameField = page.locator("//input[@id='login-username']");
-    await expect(usernameField).toBeVisible();
+    await loginPage.login(
+        'standard_user',
+        'bank_sauce'
+    );
 
-    const passwordField = page.locator("//input[@id='login-password']");
-    await expect(passwordField).toBeVisible();
+    await expect(page).toHaveURL(/dashboard/);
 
-    await usernameField.fill('standard_user');
-    await passwordField.fill('bank_sauce');
+    await page.screenshot({
+        path: 'evidence/DASH-01-Pass.png',
+        fullPage: true
+    });
 
-    const loginButton = page.locator("//button[@type='submit']");
-
-    await loginButton.click();
-
-    console.log("Current URL:", page.url());
-    await page.waitForTimeout(5000);
-
-    // need to check current url
-    console.log("Current URL After Login:", page.url());
-
-
-
-    // checking User Redirected to Dashboard
-    await expect(page).toHaveURL(/dashboard/i);
-
-    // checking Dashboard loaded successfully
-    await expect(page.locator('body')).toBeVisible();
-
-    console.log('Dashboard loaded successfully without blocking errors');
 });

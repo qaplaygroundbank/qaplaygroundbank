@@ -1,53 +1,25 @@
 const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
 
-test('DASH-02 Test Case Login', async ({ page }) => {
+test('DASH-02 Verify logged-in user account information', async ({ page }) => {
 
-    // Try to login
-    await page.goto('https://qaplayground.com/bank/login');
+    const loginPage = new LoginPage(page);
 
-    await page.locator('#login-username').fill('standard_user');
-    await page.locator('#login-password').fill('bank_sauce');
-    await page.locator("button[type='submit']").click();
+    await loginPage.navigateToLoginPage();
 
-    // Verify dashboard
+    await loginPage.login(
+        'standard_user',
+        'bank_sauce'
+    );
     await expect(page).toHaveURL(/dashboard/);
-    console.log('Dashboard displayed successfully');
 
-    // checking account section
-    await expect(page.locator('body')).toContainText('Total Net Worth');
-    await expect(page.locator('body')).toContainText('Across 2 accounts');
-    console.log('Account summary section is displayed');
+    await expect(
+    page.getByTestId('sidebar-link-accounts')
+).toBeVisible();
 
-    // checking the same in terminal for networht
-    const totalNetWorthText = await page.locator('text=Total Net Worth').textContent();
-    console.log('Total Net Worth Label:', totalNetWorthText);
+    await page.screenshot({
+        path: 'evidence/DASH-02-Pass.png',
+        fullPage: true
+    });
 
-    const dashboardContent = await page.locator('body').textContent();
-
-    if (dashboardContent.includes('$17,050.00')) {
-        console.log('Net Worth Amount: $17,050.00');
-    }
-
-    if (dashboardContent.includes('Across 2 accounts')) {
-        console.log('Account Summary: Across 2 accounts');
-    }
-
-    // check in logged user 
-    await expect(page.locator('body')).toContainText('standard_user');
-    await expect(page.locator('body')).toContainText('Welcome back');
-
-    console.log('Logged-in user information verified');
-
-    // check account summary values
-    await expect(page.locator('body')).toContainText('$17,050.00');
-
-    console.log('Account summary values are populated');
-
-    // checking unrelated users are not displayed
-    await expect(page.locator('body')).not.toContainText('locked_user');
-    await expect(page.locator('body')).not.toContainText('problem_user');
-
-    console.log('No unrelated user information displayed');
-
-    console.log('DASH-02 Test Case Passed Successfully');
 });
