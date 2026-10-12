@@ -7,4 +7,13 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 
-package-lock.json
+# Local execution output (attach evidence to the PR / CI artifact instead)
+run-result.txt
+
+# Documentation (kept locally, not checked in)
+*.md
+
+# NOTE: package-lock.json is intentionally NOT ignored.
+# CI runs `npm ci` with `cache: npm`, both of which require a committed
+# lockfile. Ignoring it makes the workflow fail at "Install dependencies".
+

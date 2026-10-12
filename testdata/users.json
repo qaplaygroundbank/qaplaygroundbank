@@ -1,4 +1,9 @@
 {
+  "appConfig": {
+    "currency": "USD",
+    "locale": "en-US",
+    "netWorthCardLabel": "Net Worth"
+  },
   "standardUser": {
     "username": "standard_user",
     "password": "bank_sauce",

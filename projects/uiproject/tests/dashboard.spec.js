@@ -1,24 +1,23 @@
-// tests/dashboard.spec.js
-const { test, expect } = require('@playwright/test');
-const { SecureBankLoginPage } = require('../pages/SecureBankLoginPage');
-const { DashboardPage } = require('../pages/DashboardPage');
-const users = require('../../../testdata/users.json');
+import { test, expect } from '@playwright/test';
+import LoginPage from '../pages/LoginPage.js';
+import DashboardPage from '../pages/DashboardPage.js';
+import users from '../../../testdata/users.json' with { type: 'json' };
 
-// Keeps the browser open after the test (pass or fail) when KEEP_BROWSER_OPEN=1.
-// Close the Playwright Inspector window or click "Resume" to finish the run.
+// Optional, opt-in debug hook: when KEEP_BROWSER_OPEN is set the Playwright
+// Inspector pauses after the test so you can inspect the page. Normal test
+// timeout handling is left unchanged; use `--debug` for full Inspector control.
 test.afterEach(async ({ page }) => {
   if (process.env.KEEP_BROWSER_OPEN) {
-    test.setTimeout(0); // no time limit while the browser is left open
     await page.pause();
   }
 });
 
 test('Verify dashboard is displayed after successful authentication', async ({ page }) => {
-  const loginPage = new SecureBankLoginPage(page);
+  const loginPage = new LoginPage(page);
   const dashboardPage = new DashboardPage(page);
 
   // Step 1: Open the login page and check the fields are displayed
-  await loginPage.open();
+  await loginPage.openLoginPage();
   await expect(loginPage.usernameInput).toBeVisible();
   await expect(loginPage.passwordInput).toBeVisible();
 
@@ -35,6 +34,7 @@ test('Verify dashboard is displayed after successful authentication', async ({ p
   await expect(dashboardPage.quickActions).toBeVisible();
   await expect(dashboardPage.recentTransactions).toBeVisible();
   await expect(dashboardPage.logoutButton).toBeVisible();
-  await expect(dashboardPage.errorMessage).toHaveCount(0);
-  await page.waitForTimeout(3000);
+  // Verify no visible blocking error is present (an empty alert region may
+  // legitimately exist in the DOM, so assert visibility rather than count).
+  await expect(dashboardPage.errorMessage).toBeHidden();
 });

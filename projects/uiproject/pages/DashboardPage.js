@@ -1,3 +1,10 @@
+// Pattern used to pick out balance-bearing account summary cards on the
+// dashboard. It matches cards whose text contains a currency symbol next to a
+// number, so unrelated statistic cards (counts, percentages, etc.) are excluded
+// even if they reuse the generic `stat-card` test id. This keeps the expected
+// account-summary card count reliable if the dashboard adds other stat cards.
+const CURRENCY_BALANCE_PATTERN = /[$€£¥₹₽₩]\s?-?\d/;
+
 // Page object for the SecureBank dashboard shown after login.
 class DashboardPage {
   constructor(page) {
@@ -7,7 +14,13 @@ class DashboardPage {
     this.welcomeMessage = page.getByTestId('dashboard-welcome-message');
     this.userInfo = page.getByTestId('sidebar-user-info');
     this.statCards = page.getByTestId('dashboard-stat-cards');
-    this.accountSummaryCards = this.statCards.getByTestId('stat-card');
+    // Every statistic card in the section (generic `stat-card` test id).
+    this.statCardItems = this.statCards.getByTestId('stat-card');
+    // Only the account summary cards: the balance-bearing ones. Filtering here
+    // means adding a non-balance statistic card will not change this count.
+    this.accountSummaryCards = this.statCardItems.filter({
+      hasText: CURRENCY_BALANCE_PATTERN
+    });
     this.quickActions = page.getByTestId('quick-actions-section');
     this.recentTransactions = page.getByTestId('recent-transactions-section');
     this.logoutButton = page.getByTestId('topbar-logout-btn');
@@ -16,8 +29,23 @@ class DashboardPage {
     this.errorMessage = page.getByRole('alert').filter({ hasText: /\S/ });
   }
 
+  // Each card renders its label in the first <p> and its value in the second <p>.
+  accountSummaryLabel(card) {
+    return card.locator('p').first();
+  }
+
   accountSummaryValue(card) {
     return card.locator('p').nth(1);
+  }
+
+  // Locate a single account summary card by its visible label (e.g. "Net Worth").
+  accountSummaryCardByLabel(label) {
+    return this.accountSummaryCards.filter({ hasText: label });
+  }
+
+  // Convenience accessor for a labelled card's value locator.
+  accountSummaryValueByLabel(label) {
+    return this.accountSummaryValue(this.accountSummaryCardByLabel(label));
   }
 
   async isAccountSummaryValueDisplayedWithoutOverlap(value) {
@@ -65,4 +93,4 @@ class DashboardPage {
   }
 }
 
-module.exports = { DashboardPage };
+export default DashboardPage;

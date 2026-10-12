@@ -1,22 +1,27 @@
-const { test, expect } = require('@playwright/test');
-const { SecureBankLoginPage } = require('../pages/SecureBankLoginPage');
-const { DashboardPage } = require('../pages/DashboardPage');
-const users = require('../../../testdata/users.json');
+import { test, expect } from '@playwright/test';
+import LoginPage from '../pages/LoginPage.js';
+import DashboardPage from '../pages/DashboardPage.js';
+import users from '../../../testdata/users.json' with { type: 'json' };
+import {
+  createCurrencyFormatter,
+  parseCurrencyValue,
+  matchesCurrencyFormat
+} from '../utils/currency.js';
 
-// Keeps the browser open after the test (pass or fail) when KEEP_BROWSER_OPEN=1.
-// Close the Playwright Inspector window or click "Resume" to finish the run.
+// Optional, opt-in debug hook (see dashboard.spec.js). Normal timeouts unchanged.
 test.afterEach(async ({ page }) => {
   if (process.env.KEEP_BROWSER_OPEN) {
-    test.setTimeout(0); // no time limit while the browser is left open
     await page.pause();
   }
 });
 
 test('Account balance is displayed with valid currency format', async ({ page }) => {
-  const loginPage = new SecureBankLoginPage(page);
+  const loginPage = new LoginPage(page);
   const dashboardPage = new DashboardPage(page);
+  const appConfig = users.appConfig;
+  const formatter = createCurrencyFormatter(appConfig);
 
-  await loginPage.open();
+  await loginPage.openLoginPage();
   await loginPage.login(users.standardUser.username, users.standardUser.password);
 
   await expect(page).toHaveURL(/\/bank\/dashboard/);
@@ -24,18 +29,24 @@ test('Account balance is displayed with valid currency format', async ({ page })
   await expect(dashboardPage.accountSummaryCards).toHaveCount(4);
 
   const cards = await dashboardPage.accountSummaryCards.all();
-  const displayedValues = [];
 
   for (const card of cards) {
     const value = dashboardPage.accountSummaryValue(card);
     await expect(value).toBeVisible();
 
     const text = (await value.textContent())?.trim() ?? '';
-    expect(text).toMatch(/^[+-]?\$(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}$/);
-    expect(Number(text.replace(/[$,]/g, ''))).not.toBeNaN();
+    // Non-blank, numeric, and correctly formatted for the configured
+    // currency/locale. Negative balances are supported.
+    expect(text).not.toBe('');
+    expect(parseCurrencyValue(text)).not.toBeNaN();
+    expect(matchesCurrencyFormat(text, formatter)).toBe(true);
     expect(await dashboardPage.isAccountSummaryValueDisplayedWithoutOverlap(value)).toBe(true);
-    displayedValues.push(text);
   }
 
-  expect(displayedValues[0]).toBe(users.standardUser.expectedDashboardNetWorth);
+  // Identify the net-worth card by its label instead of assuming it is the
+  // first card in the section.
+  const netWorthValue = dashboardPage.accountSummaryValueByLabel(appConfig.netWorthCardLabel);
+  await expect(netWorthValue).toBeVisible();
+  const netWorthText = (await netWorthValue.textContent())?.trim() ?? '';
+  expect(netWorthText).toBe(users.standardUser.expectedDashboardNetWorth);
 });

@@ -1,9 +1,14 @@
 // pages/BasePage.js
+import { expect } from "@playwright/test";
 class BasePage {
   /** @param {import('@playwright/test').Page} page */
   constructor(page) {
     this.page = page;
     this.leftNav = page.locator('#leftPanel');
+  }
+
+  async navigate(url) {
+    await this.page.goto(url);
   }
 
   async gotoHome() {
@@ -28,4 +33,4 @@ class BasePage {
   }
 }
 
-module.exports = { BasePage };
+export default BasePage;
