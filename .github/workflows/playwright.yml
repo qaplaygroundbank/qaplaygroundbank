@@ -21,7 +21,7 @@ on:
         options:
           - dev
           - qa
-          - uat
+          - stage
 
       suite:
         description: 'Test suite'
@@ -34,13 +34,10 @@ on:
 
 jobs:
   automation-tests:
-
     timeout-minutes: 60
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -58,6 +55,15 @@ jobs:
 
       - name: Run automation
         run: npm run cli -- ${{ inputs.project }} --env ${{ inputs.environment }} --suite ${{ inputs.suite }}
+        env:
+          QA_PLAYGROUND_ENV: ${{ inputs.environment }}
+
+          # Application URL is configuration, not a secret.
+          UI_QA_LOGIN_URL: https://qaplayground.com/bank/login
+
+          # Pass credentials only for a QA UI execution.
+          UI_QA_USERNAME: ${{ inputs.project == 'ui' && inputs.environment == 'qa' && secrets.UI_QA_USERNAME || '' }}
+          UI_QA_PASSWORD: ${{ inputs.project == 'ui' && inputs.environment == 'qa' && secrets.UI_QA_PASSWORD || '' }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
@@ -66,4 +72,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
-          

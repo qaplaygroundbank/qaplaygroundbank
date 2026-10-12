@@ -1,19 +1,17 @@
-const { runMigrationProject } = require('./runner');
+
+import { runMigrationProject } from './runner.js';
+import { addGlobalOptions } from '../../cli/options.js';
 
 function registerMigrationProject(program) {
-
-    program
+    const migrationCommand = program
         .command('migration')
-        .description('Run migration project')
-        .option('--env <environment>', 'Environment to run against', 'qa')
-        .option('--suite <suite>', 'Test suite to execute', 'smoke')
-        .action(async (options) => {
+        .description('Run migration project');
 
-            await runMigrationProject(options);
+    addGlobalOptions(migrationCommand);
 
-        });
+    migrationCommand.action(async (options) => {
+        await runMigrationProject(options);
+    });
 }
 
-module.exports = {
-    registerMigrationProject
-};
+export { registerMigrationProject };
