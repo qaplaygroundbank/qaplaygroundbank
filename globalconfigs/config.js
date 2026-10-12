@@ -3,4 +3,4 @@ const config = {
     defaultSuite: 'smoke'
 };
 
-module.exports = config;
+export default config;

@@ -18,7 +18,7 @@
   ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.64.0",
     "@types/node": "^26.2.0"

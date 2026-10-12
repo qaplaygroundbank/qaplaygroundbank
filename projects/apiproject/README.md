@@ -1,65 +1,66 @@
-# QA Playground Bank
+# API Automation Project
 
-This repository is a Playwright automation project for practicing and building end-to-end UI tests against a banking demo application.
+This directory is the planned home for API automation within QA Playground Bank. It is registered with the shared CLI so that API test execution can use the same top-level command structure as the other projects.
 
-## Prerequisites
+> **Current status:** The API CLI and runner are scaffolding/placeholders. The current runner logs the selected environment and suite but does not execute API requests or API test assertions. A successful command is not evidence that API tests have run.
 
-Before running the tests, make sure you have the following installed on your machine:
+## Prerequisites and setup
 
-- Node.js (version 18 or newer is recommended)
-- npm
-- A modern browser environment supported by Playwright
+Run from the repository root:
 
-## Setup
+```bash
+npm ci
+npm run cli -- --help
+npm run cli -- api --help
+```
 
-1. Open a terminal in the project root.
-2. Install project dependencies:
+Playwright browser installation is needed for browser-based tests, but API-only tests may not require browser binaries once an API test implementation is added.
 
-   npm install
+## Current command
 
-3. Install the Playwright browser binaries:
+The CLI currently accepts the shared environment and suite options:
 
-   npx playwright install
+```bash
+npm run cli -- api
+npm run cli -- api --env qa --suite smoke
+npm run cli -- api --env dev --suite regression
+```
 
-## Running Tests
+The command currently demonstrates CLI routing only. API request setup, test discovery, assertions, reporting, and environment-specific API configuration still need to be implemented.
 
-Run the full suite:
+## Intended project layout
 
-npx playwright test
+```text
+projects/apiproject/
+├── cli.js                     # Registers the API CLI command
+├── runner.js                  # Current placeholder runner
+├── config/
+│   └── apiproject.config.js   # Configuration location
+├── fixtures/
+│   └── apiproject.fixture.js  # Fixture location
+├── tests/
+│   └── sampleTest.spec.js     # Test location
+└── README.md
+```
 
-Run a specific test file:
+Some files or directories may currently be empty. Treat this layout as the intended organization, not a claim that API test functionality is already implemented.
 
-npx playwright test tests/sendMoney.spec.js
+## Implementation guidance
 
-Run tests in headed mode (opens the browser UI):
+When API automation is introduced:
 
-npx playwright test --headed
+- Define the API base URL and environment-specific configuration.
+- Keep credentials and tokens in environment variables or approved secrets storage.
+- Create reusable API request fixtures or clients where they reduce duplication.
+- Add tests under `tests/` with meaningful assertions.
+- Define how suites are selected and how test failures propagate to the CLI exit code.
+- Document report output and any setup needed to run the tests locally and in CI.
+- Reuse the framework's shared logger from `commonlib/logger.js`.
 
-Run tests in UI mode:
+Do not place secrets in test files, README examples, or committed `.env` files.
 
-npx playwright test --ui
+## GitHub Actions
 
-Open the HTML test report:
+The manual workflow offers `api` as a project choice and passes the selected environment and suite to the CLI. At present, that invocation reaches the placeholder runner. Update this README when real API execution is implemented so the documented commands, configuration variables, and test/report behavior reflect the actual implementation.
 
-npx playwright show-report
-
-## Project Structure
-
-- tests/ - contains Playwright test specs
-- pages/ - page object classes for different screens
-- fixtures/ - reusable test setup and base fixtures
-- testdata/ - JSON files used for test inputs
-- utils/ - helper utilities such as logging
-- playwright.config.js - Playwright configuration
-
-## Recommended Workflow
-
-- Add tests under the tests/ folder
-- Keep selectors and page actions in the pages/ classes
-- Store reusable data in the testdata/ folder
-- Use the base fixtures to share setup logic across tests
-- Run targeted tests first while developing, then run the full suite before completing changes
-
-## Notes
-
-This repo is set up as a starter project for learning and building Playwright-based test automation. You can adjust the test configuration and base URLs in the Playwright config as your application setup evolves.
+For common setup, CLI options, environment handling, contribution workflow, and CI details, see the [root README](../../readme.md).

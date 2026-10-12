@@ -1,8 +1,8 @@
-const { runMigrationProject } = require('./runner');
-const { addGlobalOptions } = require('../../cli/options');
+
+import { runMigrationProject } from './runner.js';
+import { addGlobalOptions } from '../../cli/options.js';
 
 function registerMigrationProject(program) {
-
     const migrationCommand = program
         .command('migration')
         .description('Run migration project');
@@ -14,6 +14,4 @@ function registerMigrationProject(program) {
     });
 }
 
-module.exports = {
-    registerMigrationProject
-};
+export { registerMigrationProject };

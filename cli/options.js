@@ -1,6 +1,5 @@
-
-const { Option } = require('commander');
-const config = require('../globalconfigs/config');
+import { Option } from 'commander';
+import config from '../globalconfigs/config.js';
 
 function addGlobalOptions(command) {
     command
@@ -31,6 +30,4 @@ function addGlobalOptions(command) {
     return command;
 }
 
-module.exports = {
-    addGlobalOptions
-};
+export { addGlobalOptions };

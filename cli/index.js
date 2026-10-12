@@ -1,8 +1,7 @@
-const { Command } = require('commander');
-const { registerProjects } = require('./registerProjects');
+import { Command } from 'commander';
+import { registerProjects } from './registerProjects.js';
 
 function startCLI() {
-
     const program = new Command();
 
     program
@@ -15,6 +14,4 @@ function startCLI() {
     program.parse(process.argv);
 }
 
-module.exports = {
-    startCLI
-};
+export { startCLI };
