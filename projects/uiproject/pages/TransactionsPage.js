@@ -1,8 +1,12 @@
-import BasePage from './BasePage.js';
+import { expect } from '@playwright/test';
 
-class FindTransactionsPage extends BasePage {
+// pages/FindTransactionsPage.js
+const { BasePage } = require('BasePage');
+
+export class TransactionsPage extends BasePage {
   constructor(page) {
     super(page);
+    this.transactionsLink = page.getByTestId('sidebar-link-transactions');
     this.transactionIdInput = page.locator('#transactionId');
     this.dateInput = page.locator('#transactionDate');
     this.fromDateInput = page.locator('#fromDate');
@@ -11,6 +15,16 @@ class FindTransactionsPage extends BasePage {
     this.resultsTable = page.locator('#transactionTable');
     this.resultsRows = page.locator('#transactionTable tbody tr');
     this.errorText = page.locator('#rightPanel .error, #transactionTable + .error');
+
+    // Page Objects
+    this.transactionsPage = page.getByTestId('transactions-page');
+    this.pageTitle = page.getByTestId('transactions-page-title');
+    this.searchInput = page.getByTestId('all-txn-search-input');
+    this.accountDropdown = page.getByTestId('all-txn-account-select');
+    this.typeFilter = page.getByTestId('all-txn-type-filter');
+    this.transactionsTable = page.getByTestId('all-transactions-table');
+    this.transactionRows = page.getByTestId('all-txn-row');
+
   }
 
   async goto(accountId) {
@@ -38,6 +52,39 @@ class FindTransactionsPage extends BasePage {
     await this.amountInput.fill(String(amount));
     await this.page.getByRole('button', { name: 'Find Transactions' }).nth(3).click();
   }
+
+  //click on transaction tab in left side bar
+  async navigateToTransactions() {
+    await this.transactionsLink.click();
+  }
+
+  async navigateToTransactions() {
+    await this.transactionsLink.click();
+  }
+
+  async verifyTransactionPage() {
+    await expect(
+      this.page.getByRole('heading', {
+        name: /Transactions/i
+      })
+    ).toBeVisible();
+  }
+
+  async waitForTransactionLoaded() {
+    await expect(this.transactionsPage).toBeVisible();
+    await expect(this.pageTitle).toHaveText('Transactions');
+  }
+
+  async verifyVisible() {
+    await expect(this.searchInput).toBeVisible();
+    await expect(this.accountDropdown).toBeVisible();
+    await expect(this.typeFilter).toBeVisible();
+    await expect(this.transactionsTable).toBeVisible();
+
+    const rowCount = await this.transactionRows.count();
+    expect(rowCount).toBeGreaterThan(0);
+  }
+
 }
 
-export default FindTransactionsPage;
+
