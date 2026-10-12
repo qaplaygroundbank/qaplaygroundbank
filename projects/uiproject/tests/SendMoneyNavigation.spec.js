@@ -1,23 +1,21 @@
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '../fixtures/baseFixture.js';
+import bankData from '../data/bankData.json' with { type: 'json' };
 
-test('Verify Send Money page navigation after login', async ({ page }) => {
+test('Verify Send Money page navigation after login',
+  async ({ page, loginPage }) => {
 
-    // Step 1: Open Login Page
-    await page.goto('https://qaplayground.com/bank/login');
+    await loginPage.openLoginPage();
 
-    // Step 2: Login
-    await page.locator('input[name="username"]').fill('standard_user');
-    await page.locator('input[name="password"]').fill('bank_sauce');
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    await loginPage.login(
+      bankData.standardUser.username,
+      bankData.standardUser.password
+    );
 
-    // Step 3: Open Send Money
     await page.getByTestId('sidebar-link-send-money').click();
 
-    // Step 4: Verify Page
     await expect(
-        page.getByRole('heading', { name: 'Send Money' })
+      page.getByRole('heading', { name: 'Send Money' })
     ).toBeVisible();
 
     console.log('Send Money Page Opened Successfully');
-
 });
