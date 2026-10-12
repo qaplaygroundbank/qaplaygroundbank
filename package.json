@@ -1,15 +1,29 @@
 {
-  "name": "playwright",
+  "name": "qaplaygroundbank",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
+  "description": "QA automation framework using Node.js and Playwright",
+  "main": "bin/qaplayground.js",
+  "bin": {
+    "qaplayground": "bin/qaplayground.js"
+  },
+  "scripts": {
+    "cli": "node bin/qaplayground.js",
+    "test": "playwright test",
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "qa"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.62.1",
+    "@playwright/test": "^1.64.0",
     "@types/node": "^26.2.0"
+  },
+  "dependencies": {
+    "commander": "^15.0.0"
   }
 }

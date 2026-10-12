@@ -1,0 +1,36 @@
+{
+  "standardUser": {
+    "username": "standard_user",
+    "password": "bank_sauce"
+  },
+
+   "lockedUser": {
+    "username": "locked_user",
+    "password": "bank_sauce"
+  },
+
+  "frozenUser": {
+    "username": "frozen_user",
+    "password": "bank_sauce"
+  },
+
+   "overdraftUser": {
+    "username": "overdraft_user",
+    "password": "bank_sauce"
+  },
+
+   "slowUser": {
+    "username": "slow_user",
+    "password": "bank_sauce"
+  },
+
+  "errorUser": {
+    "username": "error_user",
+    "password": "bank_sauce"
+  },
+
+  "admin_user": {
+    "username": "admin_user",
+    "password": "admin_sauce"
+  }
+}

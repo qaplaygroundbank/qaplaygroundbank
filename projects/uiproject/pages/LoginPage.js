@@ -1,24 +1,27 @@
-// pages/LoginPage.js
-const { BasePage } = require('BasePage');
+import BasePage from './BasePage.js';
+import { URLS } from '../utils/constants.js';
+import selectors from '../selectors/loginPageSelectors.js';
 
 class LoginPage extends BasePage {
   constructor(page) {
     super(page);
-    this.usernameInput = page.locator('input[name="username"]');
-    this.passwordInput = page.locator('input[name="password"]');
-    this.loginButton = page.locator('input[value="Log In"]');
-    this.forgotLoginLink = page.getByRole('link', { name: 'Forgot login info?' });
+
+    this.usernameInput = page.getByTestId(selectors.usernameInput);
+    this.passwordInput = page.getByTestId(selectors.passwordInput);
+    this.loginButton = page.getByRole('button', {
+      name: 'Sign in to SecureBank'
+    });
   }
 
-  async goto() {
-    await this.page.goto('index.htm');
+  async openLoginPage() {
+    await this.navigate(URLS.LOGIN_PAGE);
   }
 
   async login(username, password) {
-    await this.usernameInput.fill(username ?? '');
-    await this.passwordInput.fill(password ?? '');
+    await this.usernameInput.fill(username);
+    await this.passwordInput.fill(password);
     await this.loginButton.click();
   }
 }
 
-module.exports = { LoginPage };
+export default LoginPage;
