@@ -1,6 +1,10 @@
+import { resolveLocator } from '../utils/locatorResolver.js';
+import commonSelectors from '../selectors/commonSelectors.js';
+
 class BasePage {
   constructor(page) {
     this.page = page;
+    this.logoutButton = resolveLocator(page, commonSelectors.logoutButton)
   }
 
   async navigate(url) {
@@ -12,7 +16,7 @@ class BasePage {
   }
 
   async logout() {
-    await this.page.locator('#leftPanel a', { hasText: 'Log Out' }).click();
+    await this.logoutButton.click();
   }
 }
 
