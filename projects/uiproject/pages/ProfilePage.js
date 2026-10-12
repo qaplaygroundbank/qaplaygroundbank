@@ -1,4 +1,5 @@
 import BasePage from './BasePage.js';
+import profilePageSelectors from '../selectors/Profile/profilePageSelectors.js';
 
 export class ProfilePage extends BasePage {
     constructor(page) {
