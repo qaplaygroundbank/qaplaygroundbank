@@ -1,15 +1,18 @@
 //Author : Lalith KUmar 
 //Module : Apply Loan
 
-const { expect } = require('@playwright/test');
-const { BasePage } = require('./BasePage');
+import { expect } from '@playwright/test';
+import BasePage from './BasePage.js';
 
 
-class LoanPage extends BasePage {
+export class LoanPage extends BasePage {
   constructor(page) {
     super(page);
 
     this.loanHeader = page.locator('div[data-testid="apply-loan-page"]');
+    this.dashboardLink = page.locator('[data-testid="sidebar-link-dashboard"]');
+    this.pageTitle = page.locator('h1[data-testid="apply-loan-page-title"]');
+    this.pageBody = page.locator('body');
     this.amountInput = page.locator('input[name="amount"]');
     this.downPaymentInput = page.locator('input[name="downPayment"]');
     this.fromAccountSelect = page.locator('select[name="fromAccountId"]');
@@ -134,5 +137,3 @@ class LoanPage extends BasePage {
   }
 
 }
-
-module.exports = { LoanPage };
