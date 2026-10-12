@@ -1,5 +1,4 @@
-// pages/TransferFundsPage.js
-const { BasePage } = require('BasePage');
+import BasePage from './BasePage.js';
 
 class TransferFundsPage extends BasePage {
   constructor(page) {
@@ -28,4 +27,4 @@ class TransferFundsPage extends BasePage {
   }
 }
 
-module.exports = { TransferFundsPage };
+export default TransferFundsPage;

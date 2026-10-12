@@ -1,8 +1,8 @@
-const { runUiProject } = require('./runner');
-const { addGlobalOptions } = require('../../cli/options');
+
+import { runUiProject } from './runner.js';
+import { addGlobalOptions } from '../../cli/options.js';
 
 function registerUiProject(program) {
-
     const uiCommand = program
         .command('ui')
         .description('Run UI automation project');
@@ -20,6 +20,4 @@ function registerUiProject(program) {
     });
 }
 
-module.exports = {
-    registerUiProject
-};
+export { registerUiProject };

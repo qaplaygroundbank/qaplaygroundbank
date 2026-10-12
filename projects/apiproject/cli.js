@@ -1,8 +1,8 @@
-const { runApiProject } = require('./runner');
-const { addGlobalOptions } = require('../../cli/options');
+
+import { runApiProject } from './runner.js';
+import { addGlobalOptions } from '../../cli/options.js';
 
 function registerApiProject(program) {
-
     const apiCommand = program
         .command('api')
         .description('Run API automation project');
@@ -14,6 +14,4 @@ function registerApiProject(program) {
     });
 }
 
-module.exports = {
-    registerApiProject
-};
+export { registerApiProject };

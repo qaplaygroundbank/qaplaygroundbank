@@ -1,4 +1,6 @@
-const { test, expect } = require('@playwright/test');
+
+import { test, expect } from '@playwright/test';
+import logger from '../../../commonlib/logger.js';
 
 test('Verify Payee field is displayed and select first payee', async ({ page }) => {
 
@@ -26,7 +28,7 @@ test('Verify Payee field is displayed and select first payee', async ({ page }) 
     const firstPayee = page.getByRole('option').first();
 
     const payeeName = (await firstPayee.textContent()).trim();
-    console.log(`Selected Payee: ${payeeName}`);
+    logger.info(`Selected Payee: ${payeeName}`);
 
     await firstPayee.click();
 });

@@ -4,4 +4,4 @@ const environments = [
     'stage'
 ];
 
-module.exports = environments;
+export default environments;
