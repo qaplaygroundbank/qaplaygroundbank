@@ -1,20 +1,22 @@
 // tests/DASH-05.spec.js
 import { test, expect } from '../fixtures/baseFixture.js';
-import users from '../data/bankData.json';
-import dashboardData from '../data/dashboardData.json';
+import appConfig from '../config/app.config.js';
+import dashboardData from '../data/dashboardData.json' with {type:'json'};
 import DashboardPage from '../pages/DashboardPage.js';
 import AccountsOverviewPage from '../pages/AccountsOverviewPage.js';
  
 test('DASH-05: negative/overdrawn balance is handled correctly @dashboard', async ({ page, loginPage }) => {
-  const user = users.overdraftUser;
+  const environment = process.env.QA_PLAYGROUND_ENV || 'qa';
+  const {password} = appConfig.getUiCredentials(environment);
+  const username = dashboardData.overdraftUsername;
   const accountsPage = new AccountsOverviewPage(page);
   const dashboard = new DashboardPage(page);
  
   // Step 1: log in with an account that permits a negative balance
   await loginPage.openLoginPage();
-  await loginPage.login(user.username, user.password);
+  await loginPage.login(username, password);
   await expect(dashboard.dashboardRoot).toBeVisible();
-  console.log(`Login successful as ${user.username}`);
+  console.log(`Login successful as ${username}`);
   console.log(`Dashboard URL: ${page.url()}`);
  
   // Step 2: locate the overdraft user's expected account on the Accounts page
