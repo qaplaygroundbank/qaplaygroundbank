@@ -1,6 +1,6 @@
 
-require('dotenv').config();
-const {test, expect} = require('@playwright/test');
+import 'dotenv/config';
+import { test, expect } from '@playwright/test';
 
 async function login(page) {
 
