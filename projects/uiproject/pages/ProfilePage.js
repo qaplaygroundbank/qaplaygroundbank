@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import profilePageSelectors from '../selectors/Profile/profilePageSelectors.js';
+import profilePageSelectors from '../selectors/profile/profilePageSelectors.js';
 
 // Page Object Model for Profile page
 class ProfilePage {
