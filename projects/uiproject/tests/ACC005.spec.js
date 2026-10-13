@@ -1,54 +1,54 @@
 import { test, expect } from '@playwright/test';
-import { AccountPage } from '../../pages/AccountPage';
-import { accountTestData } from '../../data/accountTestData';
-import { assertEqualsExpected } from '../../utils/accountUtils';
 
 test.describe('Accounts Module', () => {
+  test('ACC-005 | ACC-FR-02 | Account number/details are displayed correctly', async ({ page }) => {
+    const configuredBaseURL = process.env.BASE_URL;
+    expect(configuredBaseURL, 'BASE_URL must be configured before navigation.').toBeTruthy();
 
-    test(
-        'ACC-005 | ACC-FR-02 | Account number/details are displayed correctly',
-        async ({ page }) => {
+    await page.goto(`${configuredBaseURL}/index.htm`);
 
-            const accountPage = new AccountPage(page);
+    const usernameInput = page.locator('input[name="username"]');
+    const passwordInput = page.locator('input[name="password"]');
+    const loginButton = page.locator('input[value="Log In"]');
 
-            // Preconditions
-            await page.goto(process.env.BASE_URL);
+    await expect(usernameInput).toBeVisible();
+    await usernameInput.fill('john');
+    await passwordInput.fill('demo');
+    await loginButton.click();
 
-            // Authentication Step
-            // Replace with framework login method
-            // await loginPage.login();
+    await expect(page.locator('#leftPanel')).toContainText('Log Out');
 
-            // Step 1
-            // Open Account
+    const accountTable = page.locator('#accountTable');
+    await expect(accountTable).toBeVisible();
 
-            await accountPage.openAccountPage();
+    const accountRows = page.locator('#accountTable tbody tr');
+    await expect(accountRows.first()).toBeVisible();
 
-            // Step 2
-            // Capture displayed account identifier
+    const rows = await accountRows.all();
+    expect(rows.length, 'The authenticated user should have at least one account.').toBeGreaterThan(0);
 
-            const displayedAccountId =
-                await accountPage.getAccountIdentifier();
+    const selectedRow = accountRows.first();
+    const accountNumber = (await selectedRow.locator('td').nth(0).textContent())?.trim();
+    const balance = (await selectedRow.locator('td').nth(1).textContent())?.trim();
 
-            // Step 3
-            // Compare against expected data
+    expect(accountNumber, 'Account number should be present in the overview table.').toBeTruthy();
+    expect(balance, 'Balance should be present in the overview table.').toBeTruthy();
 
-            assertEqualsExpected(
-                displayedAccountId,
-                accountTestData.accountNumber
-            );
+    await selectedRow.locator('a').click();
 
-            // Step 4
-            // Verify complete account details
+    const displayedAccountId = page.locator('#accountId');
+    const displayedAccountType = page.locator('#accountType');
+    const displayedBalance = page.locator('#balance');
 
-            await accountPage.verifyAccountDetails(
-                accountTestData
-            );
+    await expect(displayedAccountId).toBeVisible();
+    await expect(displayedAccountType).toBeVisible();
+    await expect(displayedBalance).toBeVisible();
 
-            // Expected Result Validation
+    await expect(displayedAccountId).toHaveText(accountNumber);
+    expect((await displayedAccountType.textContent())?.trim().toUpperCase()).toMatch(/CHECKING|SAVINGS/);
 
-            expect(displayedAccountId).toBe(
-                accountTestData.accountNumber
-            );
-        }
-    );
+    const normalizedBalance = (await displayedBalance.textContent())?.replace(/[$,\s]/g, '').trim();
+    const expectedBalance = balance?.replace(/[$,\s]/g, '').trim();
+    expect(normalizedBalance).toBe(expectedBalance);
+  });
 });
