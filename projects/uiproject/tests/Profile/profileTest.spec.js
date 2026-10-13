@@ -5,7 +5,6 @@ import ProfileTestData from '../../testData/ProfileTestData.json' with { type: '
 
 let loginPage;
 let profilePage;
-
 test.describe('Profile', () => {
 
     test.beforeEach(async ({ page }) => {
@@ -19,16 +18,18 @@ test.describe('Profile', () => {
         await profilePage.navigateToProfile();
     });
 
-    test('PROF-05 @smoke @P1 Verify a valid email can be entered/saved.', async () => {
+    test('PROF-05 Verify a valid email can be entered/saved.',{ tag: ['@smoke', '@profile'] }, async () => {
         await profilePage.verifyValidEmail(
             ProfileTestData.ValidData.Email
         );
     });
 
-    test('PROF-06 @smoke @P2 Verify invalid email format is rejected.', async () => {
+    test('PROF-06 @smoke @P2 Verify invalid email format is rejected.',{ tag: ['@smoke', '@profile'] }, async () => {
         await profilePage.verifyInvalidEmail(
             ProfileTestData.InvalidEmailId.Email
         );
     });
+
+
 
 });
