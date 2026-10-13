@@ -1,43 +1,94 @@
+import { expect } from '@playwright/test';
 import BasePage from './BasePage.js';
+import { URLS, VALIDATIONS } from '../utils/constants.js';
+import billPaySelectors from '../selectors/billPayPageSelectors.js';
+import { resolveLocator } from '../utils/locatorResolver.js';
 
 class BillPayPage extends BasePage {
   constructor(page) {
     super(page);
-    this.payeeName = page.locator('input[name="payee.name"]');
-    this.street = page.locator('input[name="payee.address.street"]');
-    this.city = page.locator('input[name="payee.address.city"]');
-    this.state = page.locator('input[name="payee.address.state"]');
-    this.zipCode = page.locator('input[name="payee.address.zipCode"]');
-    this.phone = page.locator('input[name="payee.phoneNumber"]');
-    this.accountNumber = page.locator('input[name="payee.accountNumber"]');
-    this.verifyAccount = page.locator('input[name="verifyAccount"]');
-    this.amount = page.locator('input[name="amount"]');
-    this.fromAccountId = page.locator('select[name="fromAccountId"]');
-    this.sendPaymentButton = page.locator('input[value="Send Payment"]');
-    this.confirmationHeading = page.locator('#billpayResult h1.title');
-    this.errorText = page.locator('#rightPanel .error');
+
+    this.billPayMenuLink = resolveLocator(page, billPaySelectors.billPayMenuLink);
+    this.fromAccountDropdown = resolveLocator(page, billPaySelectors.fromAccountDropdown);
+    this.billerSearchInput = resolveLocator(page, billPaySelectors.billerSearchInput);
+    this.billerOption = resolveLocator(page, billPaySelectors.billerOption);
+    this.amountInput = resolveLocator(page, billPaySelectors.amountInput);
+    this.memoInput = resolveLocator(page, billPaySelectors.memoInput);
+    this.reviewPaymentButton = resolveLocator(page, billPaySelectors.reviewPaymentButton);
+    this.confirmPaymentButton = resolveLocator(page, billPaySelectors.confirmPaymentButton);
+    this.billPayPageTitle = resolveLocator(page, billPaySelectors.billPayPageTitle);
+    this.confirmPaymentHeading = resolveLocator(page, billPaySelectors.confirmPaymentHeading);
+    this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
+    this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
   }
 
-  async goto() {
-    await this.page.goto('billpay.htm');
+  async navigateToBillPay() {
+    await this.billPayMenuLink.click();
   }
 
-  async pay(payee = {}) {
-    const map = {
-      name: this.payeeName, street: this.street, city: this.city, state: this.state,
-      zipCode: this.zipCode, phone: this.phone, accountNumber: this.accountNumber,
-      verifyAccount: this.verifyAccount, amount: this.amount,
-    };
-    for (const [key, locator] of Object.entries(map)) {
-      if (payee[key] !== undefined) await locator.fill(String(payee[key]));
-    }
-    if (payee.fromLabel) {
-      const options = await this.fromAccountId.locator('option').allTextContents();
-      if (options.some((option) => option.includes(payee.fromLabel))) {
-        await this.fromAccountId.selectOption({ label: payee.fromLabel });
-      }
-    }
-    await this.sendPaymentButton.click();
+  async selectFromAccount(accountName) {
+    await this.fromAccountDropdown.click();
+    await this.page.getByText(accountName).click();
+  }
+
+  async searchBiller(biller) {
+    await this.billerSearchInput.fill(biller);
+  }
+
+  async selectBiller() {
+    await this.billerOption.click();
+  }
+
+  async enterAmount(amount) {
+    await this.amountInput.fill(amount);
+  }
+
+  async enterMemo(memo) {
+    await this.memoInput.fill(memo);
+  }
+
+  async clickReviewPayment() {
+    await this.reviewPaymentButton.click();
+  }
+
+  async clickConfirmPayment() {
+    await this.confirmPaymentButton.click();
+  }
+
+  async verifyBillPayPageLoaded() {
+    await expect(this.billPayPageTitle).toBeVisible();
+  }
+
+  async verifyConfirmPaymentPopup() {
+    await expect(
+      this.confirmPaymentHeading
+    ).toBeVisible();
+  }
+
+  async payBill(billData) {
+    await this.selectFromAccount(
+      billData.fromAccount
+    );
+    await this.searchBiller(billData.biller);
+    await this.selectBiller();
+    await this.enterAmount(billData.amount);
+    await this.clickReviewPayment();
+    await this.verifyConfirmPaymentPopup();
+    await this.clickConfirmPayment();
+  }
+
+  async verifyBillPaymentSuccess() {
+
+    await expect(this.successHeading)
+      .toHaveText('Payment Scheduled');
+
+    await expect(this.referenceNumber)
+      .toBeVisible();
+
+    await expect(this.page)
+      .toHaveURL(
+        VALIDATIONS.BILL_PAY_CONFIRMATION_URL
+      );
   }
 }
 
