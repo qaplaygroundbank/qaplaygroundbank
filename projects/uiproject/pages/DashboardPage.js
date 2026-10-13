@@ -18,6 +18,16 @@ class DashboardPage extends BasePage {
     await this.netWorthValue.waitFor();
     return (await this.netWorthValue.innerText()).trim();
   }
+
+  //Opens the Accounts page from the sidebar
+  async openAccounts() {
+    await this.accountsLink.click();
+  }
+
+  //Returns to the Dashboard from the sidebar
+  async openDashboard() {
+    await this.dashboardLink.click();
+  }
  
   // Converts display text to a number; fails clearly if the text holds no amount
   static toNumber(text) {
