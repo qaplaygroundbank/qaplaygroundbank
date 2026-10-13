@@ -39,7 +39,7 @@ async function runUiProject(options) {
             options.testFile
         );
 
-        args.push(testFile);
+        args.push(testFile.replace(/\\/g, '/'));
         logger.info(`Test File   : ${testFile}`);
     } else {
         logger.info('Test File   : All configured UI tests');
