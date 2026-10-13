@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
-import profileData from '../../testData/ProfileTestData.json' assert { type: 'json' };
+import profileData from '../../testData/ProfileData.json' assert { type: 'json' };
 
 let profilePage;
 
