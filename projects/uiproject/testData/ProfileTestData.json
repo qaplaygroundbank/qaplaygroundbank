@@ -1,0 +1,9 @@
+{
+  "profile": {
+    "firstName": "Alex",
+    "lastName": "Morgan",
+    "email": "alex.morgan@example.com",
+    "phone": "(415) 555-0101",
+    "address": "123 Market Street, San Francisco, CA 94105"
+  }
+}

@@ -1,30 +1,65 @@
+// Profile page selectors
+const profilePageSelectors = {
+    // Profile menu link
+    profileLink: {
+        type: 'testId',
+        value: 'sidebar-link-profile'
+    },
 
-const loginPageSelectors = {
-  // Username input
-    usernameInput: {
+    // Profile page container
+    profilePage: {
         type: 'testId',
-        value: 'login-username-input'
+        value: 'profile-page'
     },
-    // Password input
-    passwordInput: {
+
+    // Profile page title
+    profilePageTitle: {
         type: 'testId',
-        value: 'login-password-input'
+        value: 'profile-page-title'
     },
-    // Login button
-    loginButton: {
-        type: 'role',
-        role: 'button',
-        name: 'Sign in to SecureBank'
+
+    // Personal Information section
+    personalInfoSection: {
+        type: 'testId',
+        value: 'personal-info-section'
+    },
+
+    // Edit Profile button
+    editProfileButton: {
+        type: 'testId',
+        value: 'edit-profile-btn'
+    },
+
+    // Profile details
+    username: {
+        type: 'testId',
+        value: 'profile-username'
+    },
+
+    firstName: {
+        type: 'testId',
+        value: 'profile-first-name'
+    },
+
+    lastName: {
+        type: 'testId',
+        value: 'profile-last-name'
+    },
+
+    email: {
+        type: 'testId',
+        value: 'profile-email'
+    },
+
+    phone: {
+        type: 'testId',
+        value: 'profile-phone'
+    },
+
+    address: {
+        type: 'testId',
+        value: 'profile-address'
     }
-    // *******THE FOLLOWING SELECTORS ARE SAMPLE USE CASES TO DEMONSTRATE DIFFERENT SELECTION METHODS *****
-    // transferButton: {
-    //   type: 'css',
-    //   value: '.transfer-button'
-    // },
-    // usernameInput: {
-    //   type: 'id',
-    //   value: 'username'
-    // }
 };
 
-export default loginPageSelectors;
+export default profilePageSelectors;
