@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import profilePageSelectors from '../selectors/profilePageSelectors.js';
+import profilePageSelectors from '../selectors/Profile/profilePageSelectors.js';
 
 // Page Object Model for Profile page
 class ProfilePage {
@@ -8,6 +8,8 @@ class ProfilePage {
     constructor(page) {
         this.page = page;
     }
+
+    // PROF-001 Profile Page Navigation
 
     // Navigate to Profile page
     async navigateToProfile() {
@@ -42,7 +44,7 @@ class ProfilePage {
         ).toBeVisible();
     }
 
-    // Verify Edit Profile button is visible and enabled
+    // Verify Edit Profile button
     async verifyEditProfileButton() {
         await expect(
             this.page.getByTestId(profilePageSelectors.editProfileButton.value)
@@ -52,6 +54,8 @@ class ProfilePage {
             this.page.getByTestId(profilePageSelectors.editProfileButton.value)
         ).toBeEnabled();
     }
+
+    // PROF-002 Profile Information Validation
 
     // Verify Username
     async verifyUsername(username) {
@@ -74,14 +78,14 @@ class ProfilePage {
         ).toHaveText(lastName);
     }
 
-    // Verify Email Address
+    // Verify Email
     async verifyEmail(email) {
         await expect(
             this.page.getByTestId(profilePageSelectors.email.value)
         ).toHaveText(email);
     }
 
-    // Verify Phone Number
+    // Verify Phone
     async verifyPhone(phone) {
         await expect(
             this.page.getByTestId(profilePageSelectors.phone.value)
@@ -93,6 +97,39 @@ class ProfilePage {
         await expect(
             this.page.getByTestId(profilePageSelectors.address.value)
         ).toHaveText(address);
+    }
+
+    // PROF-012 Phone Boundary Validation
+
+    // Click Edit Profile button
+    async clickEditProfile() {
+        await this.page
+            .getByTestId(profilePageSelectors.editProfileButton.value)
+            .click();
+    }
+
+    // Enter Phone Number
+    async enterPhone(phoneNumber) {
+        const phoneInput = this.page.getByTestId(
+            profilePageSelectors.phoneInput.value
+        );
+
+        await phoneInput.clear();
+        await phoneInput.fill(phoneNumber);
+    }
+
+    // Click Save Profile button
+    async clickSaveProfile() {
+        await this.page
+            .getByTestId(profilePageSelectors.saveProfileButton.value)
+            .click();
+    }
+
+    // Verify Phone Input Value
+    async verifyPhoneValue(expectedPhone) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.phoneInput.value)
+        ).toHaveValue(expectedPhone);
     }
 }
 

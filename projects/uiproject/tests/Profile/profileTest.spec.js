@@ -56,3 +56,31 @@ test('@smoke PROF-002 Verify User Profile Information Is Displayed Correctly', a
     await profilePage.verifyPhone(profileData.profile.phone);
     await profilePage.verifyAddress(profileData.profile.address);
 });
+
+// PROF-012 - Verify Phone Boundary Length Validation
+test('@smoke PROF-012 Verify Phone Boundary Length Is Validated', async () => {
+
+    // Navigate to Profile page
+    await profilePage.navigateToProfile();
+
+    // Open profile edit mode
+    await profilePage.clickEditProfile();
+
+    // Enter invalid phone number (below minimum length)
+    await profilePage.enterPhone(profileData.profile.belowMinPhone);
+
+    // Save profile
+    await profilePage.clickSaveProfile();
+
+    // Verify validation message
+    await profilePage.verifyPhoneValidationMessage();
+
+    // Enter valid phone number
+    await profilePage.enterPhone(profileData.profile.validPhone);
+
+    // Save profile
+    await profilePage.clickSaveProfile();
+
+    // Verify save successful
+    await profilePage.verifyProfileSavedSuccessfully();
+});

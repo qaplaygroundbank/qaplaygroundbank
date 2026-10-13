@@ -4,6 +4,10 @@
     "lastName": "Morgan",
     "email": "alex.morgan@example.com",
     "phone": "(415) 555-0101",
-    "address": "123 Market Street, San Francisco, CA 94105"
+    "address": "123 Market Street, San Francisco, CA 94105",
+
+    "validPhone": "(415) 555-0101",
+    "belowMinPhone": "12345",
+    "aboveMaxPhone": "12345678901234567890"
   }
 }
