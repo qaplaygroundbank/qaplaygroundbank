@@ -1,4 +1,4 @@
-
+import { Option } from 'commander';
 import { runUiProject } from './runner.js';
 import { addGlobalOptions } from '../../cli/options.js';
 
@@ -10,6 +10,19 @@ function registerUiProject(program) {
     addGlobalOptions(uiCommand);
 
     uiCommand
+        .addOption(
+            new Option(
+                '--browser <browser>',
+                'Browser to use for UI tests'
+            )
+                .choices(['chromium', 'firefox', 'webkit'])
+                .default('chromium')
+        )
+        .option(
+            '--headed',
+            'Run the browser in visible mode',
+            false
+        )
         .option(
             '--test-file <file>',
             'Run a specific UI test file'
