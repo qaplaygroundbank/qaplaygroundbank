@@ -1,7 +1,7 @@
 // tests/DASH-05.spec.js
 import { test, expect } from '../../fixtures/baseFixture.js';
 import appConfig from '../../config/app.config.js';
-import dashboardData from '../../data/dashboardData.json' with {type:'json'};
+import dashboardData from '../../testData/dashboardData.json' with {type:'json'};
 import DashboardPage from '../../pages/DashboardPage.js';
 import AccountsOverviewPage from '../../pages/AccountsOverviewPage.js';
  
