@@ -1,5 +1,6 @@
 // Profile page selectors
 const profilePageSelectors = {
+
     // Profile menu link
     profileLink: {
         type: 'testId',
@@ -61,16 +62,36 @@ const profilePageSelectors = {
         value: 'profile-address'
     },
 
-    // Email field in Edit mode
+    // Editable fields in Edit mode
+    firstNameInput: {
+        type: 'testId',
+        value: 'profile-first-name-input'
+    },
+
+    lastNameInput: {
+        type: 'testId',
+        value: 'profile-last-name-input'
+    },
+
     emailInput: {
         type: 'testId',
         value: 'profile-email-input'
     },
 
-    // Phone field in Edit mode
     phoneInput: {
         type: 'testId',
         value: 'profile-phone-input'
+    },
+
+    addressInput: {
+        type: 'testId',
+        value: 'profile-address-input'
+    },
+
+    // Cancel button in Edit mode
+    cancelEditProfileButton: {
+        type: 'testId',
+        value: 'cancel-edit-profile-btn'
     }
 };
 

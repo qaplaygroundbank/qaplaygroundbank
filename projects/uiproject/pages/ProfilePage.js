@@ -10,8 +10,8 @@ class ProfilePage {
     }
 
     // Navigate to Profile page
-    async navigateToProfile() {
-        await this.page
+    navigateToProfile() {
+        return this.page
             .getByTestId(
                 profilePageSelectors.profileLink.value
             )
@@ -19,13 +19,13 @@ class ProfilePage {
     }
 
     // Verify Profile page URL
-    async verifyProfileUrl() {
-        await expect(this.page).toHaveURL(/profile/);
+    verifyProfileUrl() {
+        return expect(this.page).toHaveURL(/profile/);
     }
 
     // Verify Profile page is displayed
-    async verifyProfilePageVisible() {
-        await expect(
+    verifyProfilePageVisible() {
+        return expect(
             this.page.getByTestId(
                 profilePageSelectors.profilePage.value
             )
@@ -33,8 +33,8 @@ class ProfilePage {
     }
 
     // Verify Profile page title
-    async verifyProfileTitle() {
-        await expect(
+    verifyProfileTitle() {
+        return expect(
             this.page.getByTestId(
                 profilePageSelectors.profilePageTitle.value
             )
@@ -42,55 +42,130 @@ class ProfilePage {
     }
 
     // Verify Personal Information section
-    async verifyPersonalInfoSection() {
-        await expect(
+    verifyPersonalInfoSection() {
+        return expect(
             this.page.getByTestId(
                 profilePageSelectors.personalInfoSection.value
             )
         ).toBeVisible();
     }
 
-    // Verify Edit Profile button is visible and enabled
-    async verifyEditProfileButton() {
-        const editProfileButton = this.page.getByTestId(
+    // Return Edit Profile button locator
+    getEditProfileButton() {
+        return this.page.getByTestId(
             profilePageSelectors.editProfileButton.value
         );
+    }
 
-        await expect(editProfileButton).toBeVisible();
-        await expect(editProfileButton).toBeEnabled();
+    // Verify Edit Profile button
+    verifyEditProfileButton() {
+        return expect(
+            this.getEditProfileButton()
+        ).toBeVisible();
     }
 
     // Click Edit Profile button
     clickEditProfile() {
-        return this.page
-            .getByTestId(
-                profilePageSelectors.editProfileButton.value
-            )
-            .click();
+        return this.getEditProfileButton().click();
     }
 
-    // Return Email input locator in Edit mode
+    // Return First Name input locator
+    getFirstNameInput() {
+        return this.page.getByTestId(
+            profilePageSelectors.firstNameInput.value
+        );
+    }
+
+    // Read current First Name value
+    getFirstNameValue() {
+        return this.getFirstNameInput().inputValue();
+    }
+
+    // Enter First Name
+    enterFirstName(firstName) {
+        return this.getFirstNameInput().fill(firstName);
+    }
+
+    // Return Last Name input locator
+    getLastNameInput() {
+        return this.page.getByTestId(
+            profilePageSelectors.lastNameInput.value
+        );
+    }
+
+    // Read current Last Name value
+    getLastNameValue() {
+        return this.getLastNameInput().inputValue();
+    }
+
+    // Enter Last Name
+    enterLastName(lastName) {
+        return this.getLastNameInput().fill(lastName);
+    }
+
+    // Return Email input locator
     getEmailInput() {
         return this.page.getByTestId(
             profilePageSelectors.emailInput.value
         );
     }
 
-    // Read the current Email value
+    // Read current Email value
     getEmailValue() {
         return this.getEmailInput().inputValue();
     }
 
-    // Enter an Email value
+    // Enter Email
     enterEmail(email) {
         return this.getEmailInput().fill(email);
     }
 
-    // Read the browser-generated Email validation message
+    // Read browser-generated Email validation message
     getEmailValidationMessage() {
         return this.getEmailInput().evaluate(
             element => element.validationMessage
         );
+    }
+
+    // Return Phone input locator
+    getPhoneInput() {
+        return this.page.getByTestId(
+            profilePageSelectors.phoneInput.value
+        );
+    }
+
+    // Read current Phone value
+    getPhoneValue() {
+        return this.getPhoneInput().inputValue();
+    }
+
+    // Enter Phone
+    enterPhone(phone) {
+        return this.getPhoneInput().fill(phone);
+    }
+
+    // Return Phone validation message locator
+    getPhoneValidationMessage() {
+        return this.page.getByText(
+            'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
+        );
+    }
+
+    // Return Address input locator
+    getAddressInput() {
+        return this.page.getByTestId(
+            profilePageSelectors.addressInput.value
+        );
+    }
+
+    // Read current Address value
+    getAddressValue() {
+        return this.getAddressInput().inputValue();
+    }
+
+    // Enter Address
+    enterAddress(address) {
+        return this.getAddressInput().fill(address);
     }
 
     // Return Save Changes button locator
@@ -106,46 +181,19 @@ class ProfilePage {
         return this.getSaveChangesButton().click();
     }
 
-    // Verify Username
-    async verifyUsername(username) {
-        await expect(
-            this.page.getByTestId(
-                profilePageSelectors.username.value
-            )
-        ).toHaveText(username);
-    }
-
-    // Verify First Name
-    async verifyFirstName(firstName) {
-        await expect(
-            this.page.getByTestId(
-                profilePageSelectors.address.value
-            )
-        ).toHaveText(address);
-    }
-    // Return Phone input locator in Edit mode
-    getPhoneInput() {
+    // Return Cancel Edit button locator
+    getCancelEditProfileButton() {
         return this.page.getByTestId(
-            profilePageSelectors.phoneInput.value
+            profilePageSelectors.cancelEditProfileButton.value
         );
     }
 
-    // Read the existing Phone value
-    getPhoneValue() {
-        return this.getPhoneInput().inputValue();
+    // Click Cancel without saving
+    clickCancelEditProfile() {
+        return this.getCancelEditProfileButton().click();
     }
 
-    // Enter a Phone value
-    enterPhone(phone) {
-        return this.getPhoneInput().fill(phone);
-    }
-
-    // Return the Phone validation message locator
-    getPhoneValidationMessage() {
-        return this.page.getByText(
-            'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
-        );
-    }
 }
+// Verify displayed 
 export default ProfilePage;
         
