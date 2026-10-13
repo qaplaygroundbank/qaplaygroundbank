@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import profilePageSelectors from '../selectors/Profile/profilePageSelectors.js';
+import profilePageSelectors from '../selectors/profilePageSelectors.js';
 
 class ProfilePage {
     constructor(page) {
@@ -28,25 +28,24 @@ class ProfilePage {
         ).toBeEnabled();
     }
 
-    async verifyEmail(email) {
-        await expect(
-            this.page.getByTestId(profilePageSelectors.email.value)
-        ).toHaveText(email);
+    async verifyValidEmail(validEmail) {
+        await this.page.getByTestId(profilePageSelectors.editProfileButton.value).click();
+        const emailInput = this.page.getByTestId(profilePageSelectors.email.value);
+        await emailInput.clear();
+        await emailInput.fill(validEmail);
+        await this.page.getByRole('button', {name: 'Save Changes'}).click();  
+        const successMsg = this.page.getByTestId(profilePageSelectors.profileSuccessMessage.value);
+        await expect(successMsg).toBeVisible();
+        await expect(successMsg).toHaveText('Profile updated successfully.');    
     }
 
     async verifyInvalidEmail(invalidEmail) {
-        await this.page.waitForTimeout(3000);
         await this.page.getByTestId(profilePageSelectors.editProfileButton.value).click();
-        const emailInput = this.page.getByTestId('profile-email-input');
+        const emailInput = this.page.getByTestId(profilePageSelectors.email.value);
         await emailInput.clear();
         await emailInput.fill(invalidEmail);
-        await this.page.getByRole('button', {
-            name: 'Save Changes'
-        }).click();
-        await this.page.waitForTimeout(3000);
-        await expect(
-            this.page.getByTestId('profile-error')
-        ).toHaveText('Please enter a valid email address.');
+        await this.page.getByRole('button', {name: 'Save Changes'}).click();  
+        await expect(this.page.getByTestId(profilePageSelectors.profileErrorMessage.value)).toHaveText('Please enter a valid email address.');
     }
 }
 

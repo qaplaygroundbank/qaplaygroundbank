@@ -1,0 +1,13 @@
+{
+    "ValidData": {
+        "FirstName": "Alex",
+        "LastName": "Morgan",
+        "Email": "alex.morgan@example.com",
+        "Phone": "(415) 555-0101",
+        "Address": "123 Market Street, San Francisco, CA 94105"
+    },
+
+    "InvalidEmailId": {
+        "Email": "xyz"
+    }
+}

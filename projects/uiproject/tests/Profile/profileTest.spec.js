@@ -1,34 +1,34 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
+import ProfileTestData from '../../testData/ProfileTestData.json' with { type: 'json' };
 
-test('Test Invalid Email address of Profile', async ({ page }) => {
+let loginPage;
+let profilePage;
 
-    // Create page objects
-    const loginPage = new LoginPage(page);
-    const profilePage = new ProfilePage(page);
+test.describe('Profile', () => {
 
-    // Open the application login page
-    await loginPage.openLoginPage();
+    test.beforeEach(async ({ page }) => {
+        loginPage = new LoginPage(page);
+        profilePage = new ProfilePage(page);
+        await loginPage.openLoginPage();
+        await loginPage.login(
+            process.env.UI_QA_USERNAME,
+            process.env.UI_QA_PASSWORD
+        );
+        await profilePage.navigateToProfile();
+    });
 
-    // Login using credentials from .env file
-    await loginPage.login(
-        process.env.UI_QA_USERNAME,
-        process.env.UI_QA_PASSWORD
-    );
+    test('PROF-05 @smoke @P1 Verify a valid email can be entered/saved.', async () => {
+        await profilePage.verifyValidEmail(
+            ProfileTestData.ValidData.Email
+        );
+    });
 
-      // Navigate to Profile page
-    await profilePage.navigateToProfile();
-
-    // Verify Edit Profile button
-    await profilePage.verifyEditProfileButton();
-
-    // Verify Email Address
-    await profilePage.verifyEmail(
-        'alex.morgan@example.com'
-    );
-
-    //Verify Invalid address
-    await profilePage.verifyInvalidEmail('xyz');
+    test('PROF-06 @smoke @P2 Verify invalid email format is rejected.', async () => {
+        await profilePage.verifyInvalidEmail(
+            ProfileTestData.InvalidEmailId.Email
+        );
+    });
 
 });
