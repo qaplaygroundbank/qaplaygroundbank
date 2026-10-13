@@ -24,7 +24,7 @@ test.describe('Profile', () => {
         );
     });
 
-    test('PROF-06 @smoke @P2 Verify invalid email format is rejected.',{ tag: ['@smoke', '@profile'] }, async () => {
+    test('PROF-06 Verify invalid email format is rejected.',{ tag: ['@smoke', '@profile'] }, async () => {
         await profilePage.verifyInvalidEmail(
             ProfileTestData.InvalidEmailId.Email
         );
