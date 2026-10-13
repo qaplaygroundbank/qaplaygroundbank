@@ -1,7 +1,7 @@
 
-import { test, expect } from '../fixtures/baseFixture.js';
-import appConfig from '../config/app.config.js';
-import { VALIDATIONS } from '../utils/constants.js';
+import { test, expect } from '../../fixtures/baseFixture.js';
+import appConfig from '../../config/app.config.js';
+import { VALIDATIONS } from '../../utils/constants.js';
 
 test.describe('Bank Login', () => {
 
