@@ -115,6 +115,12 @@ const profilePageSelectors = {
     cancelEditProfileButton: {
         type: 'testId',
         value: 'cancel-edit-profile-btn'
+    },
+
+    // Phone validation error message
+    phoneValidationError: {
+        type: 'testId',
+        value: 'profile-error'
     }
 };
 

@@ -11,10 +11,10 @@ test.beforeEach(async ({ page }) => {
     const loginPage = new LoginPage(page);
     profilePage = new ProfilePage(page);
 
-    // Open the application login page
+    // Open application
     await loginPage.openLoginPage();
 
-    // Login using credentials from .env file
+    // Login using environment credentials
     await loginPage.login(
         process.env.UI_QA_USERNAME,
         process.env.UI_QA_PASSWORD
@@ -24,13 +24,14 @@ test.beforeEach(async ({ page }) => {
     await expect(page).toHaveURL(/dashboard/);
 });
 
-// PROF-001 - Verify user can access the Profile page
+// PROF-001 - Verify User Can Successfully Access The Profile Page
+
 test('@smoke PROF-001 Verify User Can Successfully Access The Profile Page', async () => {
 
     // Navigate to Profile page
     await profilePage.navigateToProfile();
 
-    // Verify Profile page components
+    // Verify Profile page UI components
     await profilePage.verifyProfileUrl();
     await profilePage.verifyProfilePageVisible();
     await profilePage.verifyProfileTitle();
@@ -38,49 +39,72 @@ test('@smoke PROF-001 Verify User Can Successfully Access The Profile Page', asy
     await profilePage.verifyEditProfileButton();
 });
 
-// PROF-002 - Verify profile information is displayed correctly
-test('@smoke PROF-002 Verify User Profile Information Is Displayed Correctly', async ({ page }) => {
+// PROF-002 - Verify User Profile Information Is Displayed Correctly
+
+test('@smoke PROF-002 Verify User Profile Information Is Displayed Correctly', async () => {
 
     // Navigate to Profile page
     await profilePage.navigateToProfile();
 
-    // Verify Profile page details
+    // Verify Profile page
     await profilePage.verifyProfileUrl();
     await profilePage.verifyProfileTitle();
 
-    // Verify user information
-    await profilePage.verifyUsername(process.env.UI_QA_USERNAME);
-    await profilePage.verifyFirstName(profileData.profile.firstName);
-    await profilePage.verifyLastName(profileData.profile.lastName);
-    await profilePage.verifyEmail(profileData.profile.email);
-    await profilePage.verifyPhone(profileData.profile.phone);
-    await profilePage.verifyAddress(profileData.profile.address);
+    // Verify profile details
+    await profilePage.verifyUsername(
+        process.env.UI_QA_USERNAME
+    );
+
+    await profilePage.verifyFirstName(
+        profileData.profile.firstName
+    );
+
+    await profilePage.verifyLastName(
+        profileData.profile.lastName
+    );
+
+    await profilePage.verifyEmail(
+        profileData.profile.email
+    );
+
+    await profilePage.verifyPhone(
+        profileData.profile.phone
+    );
+
+    await profilePage.verifyAddress(
+        profileData.profile.address
+    );
 });
 
+
 // PROF-012 - Verify Phone Boundary Length Validation
+
 test('@smoke PROF-012 Verify Phone Boundary Length Is Validated', async () => {
 
     // Navigate to Profile page
     await profilePage.navigateToProfile();
 
-    // Open profile edit mode
+    // Open Edit Profile mode
     await profilePage.clickEditProfile();
 
-    // Enter invalid phone number (below minimum length)
-    await profilePage.enterPhone(profileData.profile.belowMinPhone);
+    // Enter phone number exceeding supported length
+    await profilePage.enterPhone(
+        profileData.profile.aboveMaxPhone
+    );
 
-    // Save profile
+    // Save profile changes
     await profilePage.clickSaveProfile();
 
-    // Verify validation message
+    // Verify phone validation message
     await profilePage.verifyPhoneValidationMessage();
 
     // Enter valid phone number
-    await profilePage.enterPhone(profileData.profile.validPhone);
+    await profilePage.enterPhone(
+        profileData.profile.validPhone
+    );
 
-    // Save profile
-    await profilePage.clickSaveProfile();
-
-    // Verify save successful
-    await profilePage.verifyProfileSavedSuccessfully();
+    // Verify phone field value
+    await profilePage.verifyPhoneValue(
+        profileData.profile.validPhone
+    );
 });

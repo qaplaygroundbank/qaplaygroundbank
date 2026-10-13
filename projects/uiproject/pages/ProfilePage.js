@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import profilePageSelectors from '../selectors/profile/profilePageSelectors.js';
+import profilePageSelectors from '../selectors/profilePageSelectors.js';
 
 // Page Object Model for Profile page
 class ProfilePage {
@@ -130,6 +130,17 @@ class ProfilePage {
         await expect(
             this.page.getByTestId(profilePageSelectors.phoneInput.value)
         ).toHaveValue(expectedPhone);
+    }
+
+    // Verify Phone Validation Error Message
+    async verifyPhoneValidationMessage() {
+        await expect(
+            this.page.getByTestId(
+                profilePageSelectors.phoneValidationError.value
+            )
+        ).toHaveText(
+            'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
+        );
     }
 }
 
