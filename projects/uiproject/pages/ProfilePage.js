@@ -1,199 +1,297 @@
 import { expect } from '@playwright/test';
+import BasePage from './BasePage.js';
 import profilePageSelectors from '../selectors/profilePageSelectors.js';
+import { resolveLocator } from '../utils/locatorResolver.js';
 
-// Page Object Model for Profile page
-class ProfilePage {
+class ProfilePage extends BasePage {
 
-    // Initialize page instance
     constructor(page) {
-        this.page = page;
-    }
+        super(page);
 
-    // Navigate to Profile page
-    navigateToProfile() {
-        return this.page
-            .getByTestId(
-                profilePageSelectors.profileLink.value
-            )
-            .click();
-    }
+        // Profile page locators
+        this.profileLink = resolveLocator(
+            page,
+            profilePageSelectors.profileLink
+        );
 
-    // Verify Profile page URL
-    verifyProfileUrl() {
-        return expect(this.page).toHaveURL(/profile/);
-    }
+        this.profilePage = resolveLocator(
+            page,
+            profilePageSelectors.profilePage
+        );
 
-    // Verify Profile page is displayed
-    verifyProfilePageVisible() {
-        return expect(
-            this.page.getByTestId(
-                profilePageSelectors.profilePage.value
-            )
-        ).toBeVisible();
-    }
+        this.profilePageTitle = resolveLocator(
+            page,
+            profilePageSelectors.profilePageTitle
+        );
 
-    // Verify Profile page title
-    verifyProfileTitle() {
-        return expect(
-            this.page.getByTestId(
-                profilePageSelectors.profilePageTitle.value
-            )
-        ).toHaveText('Profile & Settings');
-    }
+        this.personalInfoSection = resolveLocator(
+            page,
+            profilePageSelectors.personalInfoSection
+        );
 
-    // Verify Personal Information section
-    verifyPersonalInfoSection() {
-        return expect(
-            this.page.getByTestId(
-                profilePageSelectors.personalInfoSection.value
-            )
-        ).toBeVisible();
-    }
+        this.editProfileButton = resolveLocator(
+            page,
+            profilePageSelectors.editProfileButton
+        );
 
-    // Return Edit Profile button locator
-    getEditProfileButton() {
-        return this.page.getByTestId(
-            profilePageSelectors.editProfileButton.value
+        // Profile values in view mode
+        this.username = resolveLocator(
+            page,
+            profilePageSelectors.username
+        );
+
+        this.firstName = resolveLocator(
+            page,
+            profilePageSelectors.firstName
+        );
+
+        this.lastName = resolveLocator(
+            page,
+            profilePageSelectors.lastName
+        );
+
+        this.email = resolveLocator(
+            page,
+            profilePageSelectors.email
+        );
+
+        this.phone = resolveLocator(
+            page,
+            profilePageSelectors.phone
+        );
+
+        this.address = resolveLocator(
+            page,
+            profilePageSelectors.address
+        );
+
+        // Editable Profile fields
+        this.firstNameInput = resolveLocator(
+            page,
+            profilePageSelectors.firstNameInput
+        );
+
+        this.lastNameInput = resolveLocator(
+            page,
+            profilePageSelectors.lastNameInput
+        );
+
+        this.emailInput = resolveLocator(
+            page,
+            profilePageSelectors.emailInput
+        );
+
+        this.phoneInput = resolveLocator(
+            page,
+            profilePageSelectors.phoneInput
+        );
+
+        this.addressInput = resolveLocator(
+            page,
+            profilePageSelectors.addressInput
+        );
+
+        // Buttons and messages
+        this.submitButton = resolveLocator(
+            page,
+            profilePageSelectors.submitButton
+        );
+
+        this.cancelEditProfileButton = resolveLocator(
+            page,
+            profilePageSelectors.cancelEditProfileButton
+        );
+
+        this.profileErrorMessage = resolveLocator(
+            page,
+            profilePageSelectors.profileErrorMessage
+        );
+
+        this.profileSuccessMessage = resolveLocator(
+            page,
+            profilePageSelectors.profileSuccessMessage
         );
     }
 
-    // Verify Edit Profile button
-    verifyEditProfileButton() {
-        return expect(
-            this.getEditProfileButton()
+    async navigateToProfile() {
+        await this.profileLink.click();
+    }
+
+    async verifyPersonalInfoSection() {
+        await expect(
+            this.personalInfoSection
         ).toBeVisible();
     }
 
-    // Click Edit Profile button
-    clickEditProfile() {
-        return this.getEditProfileButton().click();
+    async verifyEditProfileButton() {
+        await expect(
+            this.editProfileButton
+        ).toBeVisible();
+
+        await expect(
+            this.editProfileButton
+        ).toBeEnabled();
     }
 
-    // Return First Name input locator
+    async clickEditProfile() {
+        await this.editProfileButton.click();
+    }
+
+    async clickSaveChanges() {
+        await this.submitButton.click();
+    }
+    async _readFieldValue(
+        displayLocator,
+        inputLocator
+    ) {
+        const inputVisible =
+            await inputLocator
+                .isVisible()
+                .catch(() => false);
+
+        if (inputVisible) {
+            return inputLocator.inputValue();
+        }
+
+        const displayCount =
+            await displayLocator.count();
+
+        if (displayCount > 0) {
+            return displayLocator.textContent();
+        }
+
+        return inputLocator.inputValue();
+    }
+
+    async getFirstNameValue() {
+        return this._readFieldValue(
+            this.firstName,
+            this.firstNameInput
+        );
+    }
+
+    async getLastNameValue() {
+        return this._readFieldValue(
+            this.lastName,
+            this.lastNameInput
+        );
+    }
+
+    async getEmailValue() {
+        return this._readFieldValue(
+            this.email,
+            this.emailInput
+        );
+    }
+
+    async getPhoneValue() {
+        return this._readFieldValue(
+            this.phone,
+            this.phoneInput
+        );
+    }
+
+    async getAddressValue() {
+        return this._readFieldValue(
+            this.address,
+            this.addressInput
+        );
+    }
+
     getFirstNameInput() {
-        return this.page.getByTestId(
-            profilePageSelectors.firstNameInput.value
-        );
+        return this.firstNameInput;
     }
 
-    // Read current First Name value
-    getFirstNameValue() {
-        return this.getFirstNameInput().inputValue();
-    }
-
-    // Enter First Name
-    enterFirstName(firstName) {
-        return this.getFirstNameInput().fill(firstName);
-    }
-
-    // Return Last Name input locator
     getLastNameInput() {
-        return this.page.getByTestId(
-            profilePageSelectors.lastNameInput.value
-        );
+        return this.lastNameInput;
     }
 
-    // Read current Last Name value
-    getLastNameValue() {
-        return this.getLastNameInput().inputValue();
-    }
-
-    // Enter Last Name
-    enterLastName(lastName) {
-        return this.getLastNameInput().fill(lastName);
-    }
-
-    // Return Email input locator
     getEmailInput() {
-        return this.page.getByTestId(
-            profilePageSelectors.emailInput.value
-        );
+        return this.emailInput;
     }
 
-    // Read current Email value
-    getEmailValue() {
-        return this.getEmailInput().inputValue();
-    }
-
-    // Enter Email
-    enterEmail(email) {
-        return this.getEmailInput().fill(email);
-    }
-
-    // Read browser-generated Email validation message
-    getEmailValidationMessage() {
-        return this.getEmailInput().evaluate(
-            element => element.validationMessage
-        );
-    }
-
-    // Return Phone input locator
     getPhoneInput() {
-        return this.page.getByTestId(
-            profilePageSelectors.phoneInput.value
-        );
+        return this.phoneInput;
     }
 
-    // Read current Phone value
-    getPhoneValue() {
-        return this.getPhoneInput().inputValue();
-    }
-
-    // Enter Phone
-    enterPhone(phone) {
-        return this.getPhoneInput().fill(phone);
-    }
-
-    // Return Phone validation message locator
-    getPhoneValidationMessage() {
-        return this.page.getByText(
-            'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
-        );
-    }
-
-    // Return Address input locator
     getAddressInput() {
-        return this.page.getByTestId(
-            profilePageSelectors.addressInput.value
-        );
+        return this.addressInput;
     }
 
-    // Read current Address value
-    getAddressValue() {
-        return this.getAddressInput().inputValue();
+    async enterFirstName(value) {
+        await this.firstNameInput.fill(value);
     }
 
-    // Enter Address
-    enterAddress(address) {
-        return this.getAddressInput().fill(address);
+    async enterLastName(value) {
+        await this.lastNameInput.fill(value);
     }
 
-    // Return Save Changes button locator
+    async enterEmail(value) {
+        await this.emailInput.fill(value);
+    }
+
+    async enterPhone(value) {
+        await this.phoneInput.fill(value);
+    }
+
+    async enterAddress(value) {
+        await this.addressInput.fill(value);
+    }
+
     getSaveChangesButton() {
-        return this.page.getByRole(
-            'button',
-            { name: 'Save Changes' }
+        return this.submitButton;
+    }
+
+    getEmailValidationMessage() {
+        return this.profileErrorMessage.textContent();
+    }
+
+    getPhoneValidationMessage() {
+        return this.profileErrorMessage;
+    }
+
+    async verifyValidEmail(validEmail) {
+        await this.clickEditProfile();
+
+        await this.emailInput.clear();
+        await this.emailInput.fill(validEmail);
+
+        await this.clickSaveChanges();
+
+        await expect(
+            this.profileSuccessMessage
+        ).toBeVisible();
+
+        await expect(
+            this.profileSuccessMessage
+        ).toHaveText(
+            'Profile updated successfully.'
         );
     }
 
-    // Click Save Changes
-    clickSaveChanges() {
-        return this.getSaveChangesButton().click();
-    }
+    async verifyInvalidEmail(invalidEmail) {
+        await this.clickEditProfile();
 
-    // Return Cancel Edit button locator
+        await this.emailInput.clear();
+        await this.emailInput.fill(invalidEmail);
+
+        await this.clickSaveChanges();
+
+        await expect(
+            this.profileErrorMessage
+        ).toHaveText(
+            'Please enter a valid email address.'
+        );
+    }
+    // Return Cancel Edit Profile button
     getCancelEditProfileButton() {
-        return this.page.getByTestId(
-            profilePageSelectors.cancelEditProfileButton.value
-        );
+        return this.cancelEditProfileButton;
     }
 
     // Click Cancel without saving
-    clickCancelEditProfile() {
-        return this.getCancelEditProfileButton().click();
+    async clickCancelEditProfile() {
+        await this.cancelEditProfileButton.click();
     }
-
 }
-// Verify displayed 
+
 export default ProfilePage;
-        

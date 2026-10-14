@@ -88,10 +88,26 @@ const profilePageSelectors = {
         value: 'profile-address-input'
     },
 
-    // Cancel button in Edit mode
+    // Form buttons
+    submitButton: {
+        type: 'testId',
+        value: 'save-profile-btn'
+    },
+
     cancelEditProfileButton: {
         type: 'testId',
         value: 'cancel-edit-profile-btn'
+    },
+
+    // Validation and success messages
+    profileErrorMessage: {
+        type: 'testId',
+        value: 'profile-error'
+    },
+
+    profileSuccessMessage: {
+        type: 'testId',
+        value: 'profile-save-success'
     }
 };
 
