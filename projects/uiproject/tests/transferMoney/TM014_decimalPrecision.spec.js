@@ -33,7 +33,8 @@ test.describe('TM-014: TRANSFER MONEY - Boundary Precision Testing', () => {
 
     test('TM-FR-03: Verify supported currency decimal precision is handled correctly', async ({ page }) => {
         const data = testData.decimalValuePrecision;
-        const expectedFormattedAmount = `$${Number(data.precisionAmount).toFixed(2)}`;
+
+        const expectedFormattedAmount = `$${Number(data.amount).toFixed(2)}`;
         // Confirm transfer page
         const modalHeading = page.getByRole('heading', { name: 'Confirm Transfer' });
         const modalAmountValue = page.getByRole('dialog').getByText(expectedFormattedAmount);
@@ -48,10 +49,10 @@ test.describe('TM-014: TRANSFER MONEY - Boundary Precision Testing', () => {
         await page.getByRole('option', { name: data.toAccount, exact: false }).first().click();
 
         // Step 4: Input the maximum decimal precision amount (e.g., "100.333")
-        await transferPage.enterAmount(data.precisionAmount);
+        await transferPage.enterAmount(data.amount);
 
         // Step 5: Process form data to open the confirmation stage
-        await transferPage.reviewTransferButton.click();
+        await transferPage.clickReviewTransfer();
 
         
         await expect(modalHeading).toBeVisible();
