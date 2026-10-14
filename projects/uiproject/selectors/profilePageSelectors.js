@@ -31,51 +31,29 @@ const profilePageSelectors = {
     },
 
     // Profile details
-    username: {
-        type: 'testId',
-        value: 'profile-username'
-    },
-
-    firstName: {
-        type: 'testId',
-        value: 'profile-first-name'
-    },
-
-    lastName: {
-        type: 'testId',
-        value: 'profile-last-name'
-    },
-
     email: {
         type: 'testId',
-        value: 'profile-email'
+        value: 'profile-email-input'
     },
 
-    phone: {
-        type: 'testId',
-        value: 'profile-phone'
+    // Submit Button
+    submitButton: {
+    type: 'testId',
+    value: 'save-profile-btn'
     },
 
-    address: {
-        type: 'testId',
-        value: 'profile-address'
+    // Profile Error
+    profileErrorMessage: {
+    type: 'testId',
+    value: 'profile-error'
     },
 
-    phoneInput: {
-        type: "testId",
-        value: "profile-phone-input"
-    },
-
-
-    saveProfileButton: {
-        type: "testId",
-        value: "save-profile-btn"
-    },
-
-    successMessage: {
-        type: "testId",
-        value: "profile-save-success"
-    }
+    //Success Message
+    profileSuccessMessage: {
+    type:'testID',
+    value: 'profile-save-success'
+}
+    
 };
 
 export default profilePageSelectors;
