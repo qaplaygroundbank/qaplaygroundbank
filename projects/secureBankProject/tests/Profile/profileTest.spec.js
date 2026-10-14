@@ -32,8 +32,8 @@ test.describe('Profile', () => {
         );
     });
 
-    // PROF-003 - Verify user can updatethe Profile page
-test('PROF-003 Verify User Can Successfully Access The Profile Page',{ tag: ['@smoke', '@profile'] }, async ({page}) => {
+    // PROF-003 - Verify valid profile changes can be saved.
+test('PROF-003 Verify valid profile changes can be saved.',{ tag: ['@smoke', '@profile'] }, async ({page}) => {
     -
     // Navigate to Profile page
     await profilePage.navigateToProfile();
