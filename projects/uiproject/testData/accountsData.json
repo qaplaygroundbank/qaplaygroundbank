@@ -1,0 +1,10 @@
+{
+  "checkingAccount": {
+    "name": "Everyday Checking",
+    "status": "Active"
+  },
+  "savingsAccount": {
+    "name": "High-Yield Savings",
+    "status": "Active"
+  }
+}
