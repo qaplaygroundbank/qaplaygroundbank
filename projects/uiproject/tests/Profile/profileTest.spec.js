@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
 import ProfileTestData from '../../testData/ProfileTestData.json' with { type: 'json' };
