@@ -15,7 +15,6 @@ export default defineConfig({
     reporter: 'html',
 
     use: {
-        baseURL: 'https://qaplayground.com',
         trace: 'on-first-retry'
     },
 

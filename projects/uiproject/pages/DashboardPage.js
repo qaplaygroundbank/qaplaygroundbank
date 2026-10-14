@@ -5,29 +5,35 @@
 // account-summary card count reliable if the dashboard adds other stat cards.
 const CURRENCY_BALANCE_PATTERN = /[$€£¥₹₽₩]\s?-?\d/;
 
+import { resolveLocator } from '../utils/locatorResolver.js';
+import dashboardSelectors from '../selectors/dashboardPageSelectors.js';
+
 // Page object for the SecureBank dashboard shown after login.
 class DashboardPage {
   constructor(page) {
     this.page = page;
 
-    this.dashboardContainer = page.getByTestId('bank-dashboard-page');
-    this.welcomeMessage = page.getByTestId('dashboard-welcome-message');
-    this.userInfo = page.getByTestId('sidebar-user-info');
-    this.statCards = page.getByTestId('dashboard-stat-cards');
+    this.dashboardContainer = resolveLocator(page, dashboardSelectors.dashboardContainer);
+    this.welcomeMessage = resolveLocator(page, dashboardSelectors.welcomeMessage);
+    this.userInfo = resolveLocator(page, dashboardSelectors.userInfo);
+    this.statCards = resolveLocator(page, dashboardSelectors.statCards);
     // Every statistic card in the section (generic `stat-card` test id).
-    this.statCardItems = this.statCards.getByTestId('stat-card');
+    this.statCardItems = this.statCards.getByTestId(dashboardSelectors.statCard.value);
     // Only the account summary cards: the balance-bearing ones. Filtering here
     // means adding a non-balance statistic card will not change this count.
     this.accountSummaryCards = this.statCardItems.filter({
       hasText: CURRENCY_BALANCE_PATTERN
     });
-    this.quickActions = page.getByTestId('quick-actions-section');
-    this.recentTransactions = page.getByTestId('recent-transactions-section');
-    this.logoutButton = page.getByTestId('topbar-logout-btn');
+    this.quickActions = resolveLocator(page, dashboardSelectors.quickActions);
+    this.recentTransactions = resolveLocator(page, dashboardSelectors.recentTransactions);
+    this.logoutButton = resolveLocator(page, dashboardSelectors.logoutButton);
 
     // Only alerts that actually contain text (the page also has an empty alert region)
-    this.errorMessage = page.getByRole('alert').filter({ hasText: /\S/ });
+    this.errorMessage = resolveLocator(page, dashboardSelectors.errorMessage).filter({
+      hasText: /\S/
+    });
   }
+
 
   // Each card renders its label in the first <p> and its value in the second <p>.
   accountSummaryLabel(card) {
