@@ -4,5 +4,12 @@
         "biller": "Electric",
         "amount": "500",
         "memo": "Monthly bill payment"
+    },
+
+     "negativeAmountUser": {
+        "fromAccount": "Everyday Checking",
+        "biller": "Electric",
+        "amount": "-500",
+        "memo": "Monthly bill payment"
     }
 }

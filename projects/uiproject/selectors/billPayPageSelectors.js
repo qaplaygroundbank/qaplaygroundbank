@@ -65,6 +65,11 @@ const billPaySelectors = {
         value: 'bill-pay-success-heading'
     },
 
+    billPaymentErrorMessage: {
+        type: 'testId',
+        value: 'bill-pay-error'
+    },
+
     referenceNumber: {
         type: 'testId',
         value: 'bill-pay-ref-id'
