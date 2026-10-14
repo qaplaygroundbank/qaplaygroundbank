@@ -117,6 +117,12 @@ const profilePageSelectors = {
     phoneValidationError: {
         type: 'testId',
         value: 'profile-error'
+    },
+    
+    // Email displayed on profile page
+    profileEmail: {
+        type: 'testId',
+        value: 'profile-email'
 }
 
 };

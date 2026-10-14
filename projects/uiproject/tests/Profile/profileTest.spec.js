@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
-import ProfileTestData from '../../testData/ProfileTestData.json';
+import ProfileTestData from '../../testData/ProfileTestData.json' assert { type: 'json' };
 
 test.describe('Profile', () => {
 
@@ -70,7 +70,7 @@ test.describe('Profile', () => {
             ProfileTestData.ValidData.LastName
         );
 
-        await profilePage.verifyEmail(
+        await profilePage.verifyProfileEmail(
             ProfileTestData.ValidData.Email
         );
 
@@ -109,7 +109,7 @@ test.describe('Profile', () => {
 
     // Close session after test execution
     test.afterAll(async () => {
-        
+        await loginPage.logout();
         await context.close();
 
 });

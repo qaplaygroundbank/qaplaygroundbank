@@ -1,9 +1,10 @@
 import { expect } from '@playwright/test';
 import profilePageSelectors from '../selectors/profilePageSelectors.js';
+import BasePage from './BasePage.js';
 
-class ProfilePage {
+class ProfilePage extends BasePage {
     constructor(page) {
-        this.page = page;
+        super(page);
     }
 
     async navigateToProfile() {
@@ -96,11 +97,16 @@ class ProfilePage {
             .click();
     }
 
+    // Verify Profile Email
+    async verifyProfileEmail(email) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.profileEmail.value)).toHaveText(email);
+    }
+
     // Enter Phone Number
     async enterPhone(phoneNumber) {
         const phoneInput = this.page.getByTestId(
-            profilePageSelectors.phoneInput.value
-        );
+            profilePageSelectors.phoneInput.value);
 
         await phoneInput.clear();
         await phoneInput.fill(phoneNumber);
