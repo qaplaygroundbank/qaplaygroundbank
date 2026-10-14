@@ -1,0 +1,5 @@
+{
+  "overdraftUsername": "overdraft_user",
+  "currency": { "locale": "en-US", "code": "USD" },
+  "overdrawnAccount": "Everyday Checking"
+}
