@@ -20,6 +20,12 @@ class BillPayPage extends BasePage {
     this.confirmPaymentHeading = resolveLocator(page, billPaySelectors.confirmPaymentHeading);
     this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
     this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
+    this.addBillerButton = resolveLocator(page, billPaySelectors.addBillerButton);
+    this.addBillerHeading = resolveLocator(page,billPaySelectors.addBillerHeading);
+    this.newBillerNameInput = resolveLocator(page,billPaySelectors.newBillerNameInput);
+    this.accountReferenceInput = resolveLocator(page,billPaySelectors.accountReferenceInput);
+    this.submitAddBillerButton = resolveLocator(page,billPaySelectors.submitAddBillerButton);
+    this.paymentDateInput = resolveLocator(page,billPaySelectors.paymentDateInput);
   }
 
   async navigateToBillPay() {
@@ -89,6 +95,31 @@ class BillPayPage extends BasePage {
       .toHaveURL(
         VALIDATIONS.BILL_PAY_CONFIRMATION_URL
       );
+  }
+  async clickAddBiller() {
+    await this.addBillerButton.click();
+  }
+
+  async verifyAddBillerPageDisplayed() {
+    await expect(this.addBillerHeading)
+        .toBeVisible();
+  }
+  async addNewBiller(billerName, accountNumber) {
+    await this.newBillerNameInput.fill(billerName);
+    await this.accountReferenceInput.fill(accountNumber);
+    await this.submitAddBillerButton.click();
+  }
+  async verifyBillerAdded(billerName) {
+    await expect(this.page.getByText(billerName)).toBeVisible();
+    console.log(`Biller Added Successfully: ${billerName}`)
+  }
+  async selectPaymentDate(date) {
+    await this.paymentDateInput.click();
+    await this.paymentDateInput.fill(date);
+  }
+  async verifyPaymentDate(date) {
+    await expect(this.paymentDateInput).toHaveValue(date);
+    console.log(`Payment Date Selected Successfully: ${date}`);
   }
 }
 

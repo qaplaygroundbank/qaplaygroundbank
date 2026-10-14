@@ -68,7 +68,39 @@ const billPaySelectors = {
     referenceNumber: {
         type: 'testId',
         value: 'bill-pay-ref-id'
-    }
+    },
+    // ADD NEW SELECTORS HERE
+    addBillerButton: {
+        type: 'role',
+        role: 'button',
+        name: 'Add'
+    },
+    
+    addBillerHeading: {
+        type: 'role',
+        role: 'heading',
+        name: 'Add New Biller'
+    },
+    newBillerNameInput: {
+    type: 'placeholder',
+    value: 'e.g. City Electric Co.'
+    },
+
+    accountReferenceInput: {
+        type: 'placeholder',
+        value: 'e.g. ACC-0042'
+    },
+
+    submitAddBillerButton: {
+        type: 'role',
+        role: 'button',
+        name: 'Add Biller'
+    },
+
+    paymentDateInput: {
+    type: 'label',
+    value: 'Payment Date'
+}
 
 };
 
