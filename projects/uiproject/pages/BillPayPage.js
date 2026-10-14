@@ -20,6 +20,7 @@ class BillPayPage extends BasePage {
     this.confirmPaymentHeading = resolveLocator(page, billPaySelectors.confirmPaymentHeading);
     this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
     this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
+    this.cancelPaymentButton = resolveLocator(page, billPaySelectors.cancelPaymentButton);
   }
 
   async navigateToBillPay() {
@@ -90,6 +91,31 @@ class BillPayPage extends BasePage {
         VALIDATIONS.BILL_PAY_CONFIRMATION_URL
       );
   }
+
+  async selectFirstFromAccount() {
+    await this.fromAccountDropdown.click();
+    await this.page.getByRole('option').first().click();
+  }
+
+  async clickCancelPayment() {
+    await expect(this.cancelPaymentButton).toBeVisible();
+    await expect(this.cancelPaymentButton).toBeEnabled();
+    await this.cancelPaymentButton.click();
+ }
+
+  async verifyPaymentCancelled() {
+    await expect(this.page).toHaveURL(/\/bank\/dashboard$/);
+
+    await expect(
+        this.page.getByRole('heading', {
+            name: /Welcome back/
+        })
+    ).toBeVisible();
+
+    await expect(this.successHeading).toBeHidden();
+
+    await expect(this.referenceNumber).toBeHidden();
+ }
 }
 
 export default BillPayPage;

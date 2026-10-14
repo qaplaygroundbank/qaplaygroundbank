@@ -68,6 +68,11 @@ const billPaySelectors = {
     referenceNumber: {
         type: 'testId',
         value: 'bill-pay-ref-id'
+    },
+
+    cancelPaymentButton: {
+    type: 'testId',
+    value: 'cancel-bill-btn'
     }
 
 };
