@@ -1,110 +1,117 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
-import profileData from '../../testData/ProfileData.json' assert { type: 'json' };
+import ProfileTestData from '../../testData/ProfileTestData.json';
 
-let profilePage;
+test.describe('Profile', () => {
 
-// Common login steps for all Profile test cases
-test.beforeEach(async ({ page }) => {
+    let context;
+    let page;
+    let loginPage;
+    let profilePage;
 
-    const loginPage = new LoginPage(page);
-    profilePage = new ProfilePage(page);
+    // Initialize browser session and login
+    test.beforeAll(async ({ browser }) => {
 
-    // Open application
-    await loginPage.openLoginPage();
+        context = await browser.newContext();
+        page = await context.newPage();
 
-    // Login using environment credentials
-    await loginPage.login(
-        process.env.UI_QA_USERNAME,
-        process.env.UI_QA_PASSWORD
-    );
+        loginPage = new LoginPage(page);
+        profilePage = new ProfilePage(page);
 
-    // Verify successful login
-    await expect(page).toHaveURL(/dashboard/);
+        await loginPage.openLoginPage();
+
+        await loginPage.login(
+            process.env.UI_QA_USERNAME,
+            process.env.UI_QA_PASSWORD
+        );
+
+        await profilePage.navigateToProfile();
+    });
+
+    test('PROF-05 Verify a valid email can be entered/saved.',{ tag: ['@smoke', '@profile'] }, async () => {
+        await profilePage.verifyValidEmail(
+            ProfileTestData.ValidData.Email
+        );
+    });
+
+    test('PROF-06 Verify invalid email format is rejected.',{ tag: ['@smoke', '@profile'] }, async () => {
+        await profilePage.verifyInvalidEmail(
+            ProfileTestData.InvalidEmailId.Email
+        );
+    });
+
+    // PROF-001 - Verify User Can Successfully Access The Profile Page
+    test('PROF-001 Verify User Can Successfully Access The Profile Page', { tag: ['@smoke', '@profile'] }, async () => {
+
+        await profilePage.verifyProfileUrl();
+        await profilePage.verifyProfilePageVisible();
+        await profilePage.verifyProfileTitle();
+        await profilePage.verifyPersonalInfoSection();
+        await profilePage.verifyEditProfileButton();
+
+    });
+
+    // PROF-002 - Verify User Profile Information Is Displayed Correctly
+    test('PROF-002 Verify User Profile Information Is Displayed Correctly', { tag: ['@smoke', '@profile'] }, async () => {
+
+        await profilePage.verifyProfileUrl();
+        await profilePage.verifyProfileTitle();
+
+        await profilePage.verifyUsername(
+            process.env.UI_QA_USERNAME
+        );
+
+        await profilePage.verifyFirstName(
+            ProfileTestData.ValidData.FirstName
+        );
+
+        await profilePage.verifyLastName(
+            ProfileTestData.ValidData.LastName
+        );
+
+        await profilePage.verifyEmail(
+            ProfileTestData.ValidData.Email
+        );
+
+        await profilePage.verifyPhone(
+            ProfileTestData.ValidData.Phone
+        );
+
+        await profilePage.verifyAddress(
+            ProfileTestData.ValidData.Address
+        );
+
+    });
+
+    // PROF-012 - Verify Phone Boundary Length Validation
+    test('PROF-012 Verify Phone Boundary Length Is Validated', { tag: ['@smoke', '@profile'] }, async () => {
+
+        await profilePage.clickEditProfile();
+
+        await profilePage.enterPhone(
+            ProfileTestData.PhoneData.AboveMaxPhone
+        );
+
+        await profilePage.clickSaveProfile();
+
+        await profilePage.verifyPhoneValidationMessage();
+
+        await profilePage.enterPhone(
+            ProfileTestData.PhoneData.ValidPhone
+        );
+
+        await profilePage.verifyPhoneValue(
+            ProfileTestData.PhoneData.ValidPhone
+        );
+
+    });
+
+    // Close session after test execution
+    test.afterAll(async () => {
+        
+        await context.close();
+
 });
 
-// PROF-001 - Verify User Can Successfully Access The Profile Page
-
-test('@smoke PROF-001 Verify User Can Successfully Access The Profile Page', async () => {
-
-    // Navigate to Profile page
-    await profilePage.navigateToProfile();
-
-    // Verify Profile page UI components
-    await profilePage.verifyProfileUrl();
-    await profilePage.verifyProfilePageVisible();
-    await profilePage.verifyProfileTitle();
-    await profilePage.verifyPersonalInfoSection();
-    await profilePage.verifyEditProfileButton();
-});
-
-// PROF-002 - Verify User Profile Information Is Displayed Correctly
-
-test('@smoke PROF-002 Verify User Profile Information Is Displayed Correctly', async () => {
-
-    // Navigate to Profile page
-    await profilePage.navigateToProfile();
-
-    // Verify Profile page
-    await profilePage.verifyProfileUrl();
-    await profilePage.verifyProfileTitle();
-
-    // Verify profile details
-    await profilePage.verifyUsername(
-        process.env.UI_QA_USERNAME
-    );
-
-    await profilePage.verifyFirstName(
-        profileData.profile.firstName
-    );
-
-    await profilePage.verifyLastName(
-        profileData.profile.lastName
-    );
-
-    await profilePage.verifyEmail(
-        profileData.profile.email
-    );
-
-    await profilePage.verifyPhone(
-        profileData.profile.phone
-    );
-
-    await profilePage.verifyAddress(
-        profileData.profile.address
-    );
-});
-
-
-// PROF-012 - Verify Phone Boundary Length Validation
-
-test('@smoke PROF-012 Verify Phone Boundary Length Is Validated', async () => {
-
-    // Navigate to Profile page
-    await profilePage.navigateToProfile();
-
-    // Open Edit Profile mode
-    await profilePage.clickEditProfile();
-
-    // Enter phone number exceeding supported length
-    await profilePage.enterPhone(
-        profileData.profile.aboveMaxPhone
-    );
-
-    // Save profile changes
-    await profilePage.clickSaveProfile();
-
-    // Verify phone validation message
-    await profilePage.verifyPhoneValidationMessage();
-
-    // Enter valid phone number
-    await profilePage.enterPhone(
-        profileData.profile.validPhone
-    );
-
-    // Verify phone field value
-    await profilePage.verifyPhoneValue(
-        profileData.profile.validPhone
-    );
 });

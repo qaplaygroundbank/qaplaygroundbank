@@ -1,11 +1,6 @@
-// Profile Page Selectors
-// Module: Profile
-
+// Profile page selectors
 const profilePageSelectors = {
-
-    // PROF-001 - Verify User Can Successfully Access The Profile Page
-
-    // Profile navigation menu
+    // Profile menu link
     profileLink: {
         type: 'testId',
         value: 'sidebar-link-profile'
@@ -35,8 +30,29 @@ const profilePageSelectors = {
         value: 'edit-profile-btn'
     },
 
-    // PROF-002 - Verify User Profile Information Is Displayed Correctly
+    // Profile details
+    email: {
+        type: 'testId',
+        value: 'profile-email-input'
+    },
 
+    // Submit Button
+    submitButton: {
+    type: 'testId',
+    value: 'save-profile-btn'
+    },
+
+    // Profile Error
+    profileErrorMessage: {
+    type: 'testId',
+    value: 'profile-error'
+    },
+
+    //Success Message
+    profileSuccessMessage: {
+    type:'testID',
+    value: 'profile-save-success'
+    },
     // Username displayed on profile page
     username: {
         type: 'testId',
@@ -55,12 +71,6 @@ const profilePageSelectors = {
         value: 'profile-last-name'
     },
 
-    // Email displayed on profile page
-    email: {
-        type: 'testId',
-        value: 'profile-email'
-    },
-
     // Phone number displayed on profile page
     phone: {
         type: 'testId',
@@ -73,8 +83,6 @@ const profilePageSelectors = {
         value: 'profile-address'
     },
 
-    // PROF-012 - Verify Phone Boundary Length Validation
-
     // First Name input field
     firstNameInput: {
         type: 'testId',
@@ -85,12 +93,6 @@ const profilePageSelectors = {
     lastNameInput: {
         type: 'testId',
         value: 'profile-last-name-input'
-    },
-
-    // Email input field
-    emailInput: {
-        type: 'testId',
-        value: 'profile-email-input'
     },
 
     // Phone input field
@@ -105,12 +107,6 @@ const profilePageSelectors = {
         value: 'profile-address-input'
     },
 
-    // Save Changes button
-    saveProfileButton: {
-        type: 'testId',
-        value: 'save-profile-btn'
-    },
-
     // Cancel Changes button
     cancelEditProfileButton: {
         type: 'testId',
@@ -121,7 +117,8 @@ const profilePageSelectors = {
     phoneValidationError: {
         type: 'testId',
         value: 'profile-error'
-    }
+}
+
 };
 
 export default profilePageSelectors;
