@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
 import ProfileTestData from '../../testData/ProfileTestData.json' with { type: 'json' };
+import { VALIDATIONS } from '../../utils/constants.js';
+
 
 let loginPage;
 let profilePage;
@@ -30,6 +32,25 @@ test.describe('Profile', () => {
         );
     });
 
+    // PROF-003 - Verify user can updatethe Profile page
+test('PROF-003 Verify User Can Successfully Access The Profile Page',{ tag: ['@smoke', '@profile'] }, async ({page}) => {
+    -
+    // Navigate to Profile page
+    await profilePage.navigateToProfile();
+
+    // Verify Profile page details
+    await profilePage.verifyProfileUrl();
+    await profilePage.verifyProfileTitle();
+
+    //Click on EditProfilebutton
+    await profilePage.tapOnEditProfileButton();
+    await profilePage.updateMobileNumber(ProfileTestData.editProfile.phone);
+    await profilePage.tapOnSaveProfileChanges();
+    await profilePage.verifyProfileUpdateSuccessMessage(ProfileTestData.editProfile.successMessage);
+    await profilePage.refeshPageAndValidateupdatedPhoneNumber(ProfileTestData.editProfile.phone);
+
+
+});
 
 
 });
