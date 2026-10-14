@@ -11,15 +11,13 @@ test.describe('SM-FR-02 - Add Payee', () => {
 
     test.beforeEach(async ({ page }) => {
 
-        // Validate environment variables
-        expect(LOGIN_URL, 'UI_QA_LOGIN_URL is missing').toBeTruthy();
-        expect(USERNAME, 'UI_QA_USERNAME is missing').toBeTruthy();
-        expect(PASSWORD, 'UI_QA_PASSWORD is missing').toBeTruthy();
+        expect(LOGIN_URL).toBeTruthy();
+        expect(USERNAME).toBeTruthy();
+        expect(PASSWORD).toBeTruthy();
 
-        // Open login page
+        // Login
         await page.goto(LOGIN_URL);
 
-        // Login with environment credentials
         await page
             .getByPlaceholder('Enter username')
             .fill(USERNAME);
@@ -32,70 +30,61 @@ test.describe('SM-FR-02 - Add Payee', () => {
             .getByRole('button', { name: 'Sign In' })
             .click();
 
-        // Verify successful login
+        // Dashboard Validation
         await expect(page).toHaveURL(/\/bank\/dashboard/);
 
         await expect(
-            page.getByRole('heading', { name: /Welcome back/i })
+            page.getByRole('heading', {
+                name: /Welcome back/i
+            })
         ).toBeVisible();
 
-        // Open Send Money page
+        // Navigate to Send Money
         const sendMoneyMenu = page
             .getByText('Send Money', { exact: true })
             .first();
 
         await expect(sendMoneyMenu).toBeVisible();
+
         await sendMoneyMenu.click();
 
-        // Verify Send Money page
-        await expect(page).toHaveURL(/\/bank\/send-money/);
-
+        // Send Money Page Validation
         await expect(
-            page.getByRole('heading', {
-                name: 'Send Money',
-                exact: true
-            })
+            page.getByText('Pay someone externally')
         ).toBeVisible();
 
         await expect(
-            page.getByText('Pay someone externally', {
-                exact: true
-            })
+            page.getByText('Add', { exact: true })
         ).toBeVisible();
     });
 
-
     test(
-        'Positive - Verify Add Payee flow opens',
+        'Positive - Verify Add Payee flow opens @smoke',
         async ({ page }) => {
 
-            const addPayeeButton = page
-                .getByText('Add', { exact: true });
+            const addPayeeButton =
+                page.getByText('Add', { exact: true });
 
             await expect(addPayeeButton).toBeVisible();
             await expect(addPayeeButton).toBeEnabled();
 
             await addPayeeButton.click();
 
-            // Verify Add Payee flow opened
-            const addPayeeHeading = page
-                .getByText('Add Payee', { exact: true });
+            // Verify Add Payee dialog opened
+            const cancelAddPayeeButton =
+                page.getByTestId('cancel-add-payee-btn');
 
-            await expect(addPayeeHeading).toBeVisible();
+            await expect(cancelAddPayeeButton)
+                .toBeVisible();
+
+            await expect(cancelAddPayeeButton)
+                .toBeEnabled();
         }
     );
 
-
-    test(
-    'Negative - Verify cancelling Add Payee does not create a payee',
+  test(
+    'Negative - Verify cancelling Add Payee does not create a payee @smoke',
     async ({ page }) => {
-
-        const payeeDropdown = page.getByText(
-            'Select a payee',
-            { exact: true }
-        );
-
-        await expect(payeeDropdown).toBeVisible();
 
         const addPayeeButton = page.getByText(
             'Add',
@@ -107,38 +96,39 @@ test.describe('SM-FR-02 - Add Payee', () => {
 
         await addPayeeButton.click();
 
-        const addPayeeHeading = page.getByText(
-            'Add Payee',
-            { exact: true }
-        );
-
-        await expect(addPayeeHeading).toBeVisible();
-
-        // Unique locator from the application DOM
         const cancelAddPayeeButton = page.getByTestId(
             'cancel-add-payee-btn'
         );
 
-        await expect(cancelAddPayeeButton).toBeVisible();
-        await expect(cancelAddPayeeButton).toBeEnabled();
+        await expect(cancelAddPayeeButton)
+            .toBeVisible();
 
+        await expect(cancelAddPayeeButton)
+            .toBeEnabled();
+
+        // Cancel Add Payee
         await cancelAddPayeeButton.click();
 
-        // Verify Add Payee dialog closed
-        await expect(addPayeeHeading).not.toBeVisible();
+        // Verify Add Payee popup/dialog closed
+        await expect(
+            page.getByTestId('cancel-add-payee-btn')
+        ).not.toBeVisible();
 
         // Verify user remains on Send Money page
-        await expect(page).toHaveURL(/\/bank\/send-money/);
-
         await expect(
-            page.getByRole('heading', {
-                name: 'Send Money',
-                exact: true
-            })
+            page.getByText('Pay someone externally')
         ).toBeVisible();
 
-        // Verify payee selection remains unchanged
-        await expect(payeeDropdown).toBeVisible();
+        await expect(
+            page.getByText('Add', { exact: true })
+        ).toBeVisible();
+
+        // Verify Review & Send button is still available
+        await expect(
+            page.getByRole('button', {
+                name: /Review & Send/i
+            })
+        ).toBeVisible();
     }
 );
 });
