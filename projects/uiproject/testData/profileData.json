@@ -1,0 +1,18 @@
+{
+    "profile": {
+        "firstName": "Admin",
+        "lastName": "User",
+        "email": "admin@securebank.example.com",
+        "phone": "(415) 555-0001",
+        "address": "1 SecureBank Plaza, San Francisco, CA 94111",
+        "missingDomainEmail": "admin@",
+        "alphabeticPhone": "abcdefghij",
+        "aboveMaxPhone": "12345678901234567890",
+        "validPhone": "(415) 555-0101",
+        "temporaryFirstName": "TestFirst",
+        "temporaryLastName": "TestLast",
+        "temporaryEmail": "temporary.profile@example.com",
+        "temporaryPhone": "(415) 555-0101",
+        "temporaryAddress": "100 Test Avenue, Bengaluru, KA 560001"
+    }
+}
