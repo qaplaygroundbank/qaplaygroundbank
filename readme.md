@@ -1,302 +1,146 @@
-# QA Playground Bank
+# SecureBank UI Automation Project
 
-QA Playground Bank is a JavaScript-based automation framework built with Node.js and Playwright. It provides a shared command-line interface (CLI) for organizing automation work into separate UI, API, and migration projects.
+This project contains Playwright browser tests for the QA Playground SecureBank application. It is executed through the repository's shared CLI and uses its own Playwright configuration, page objects, fixtures, selectors, and test data.
 
-> **Current implementation status:** UI automation is implemented and has been validated locally. The API and migration runners are currently scaffolding/placeholders; their CLI commands run, but they do not yet execute real API or migration test suites.
+## Prerequisites and setup
 
-## Contents
-
-- [Prerequisites](#prerequisites)
-- [Setup](#setup)
-- [Configuration and secrets](#configuration-and-secrets)
-- [Run projects](#run-projects)
-- [CLI options](#cli-options)
-- [Makefile shortcuts](#makefile-shortcuts)
-- [Reports and troubleshooting](#reports-and-troubleshooting)
-- [Repository structure](#repository-structure)
-- [Development and contribution workflow](#development-and-contribution-workflow)
-- [GitHub Actions](#github-actions)
-
-## Prerequisites
-
-Install the following:
-
-- Node.js 18 or newer (use a currently supported LTS version where possible)
-- npm, which is included with Node.js
-- Git
-- A supported operating system for Playwright browsers
-
-Check the installations:
-
-```bash
-node --version
-npm --version
-git --version
-```
-
-## Setup
-
-Clone the repository and move into its root directory:
-
-```bash
-git clone <repository-url>
-cd qaplaygroundbank
-```
-
-Install the dependencies recorded in `package-lock.json`:
+Run these commands from the repository root:
 
 ```bash
 npm ci
-```
-
-Install Playwright browser binaries for local development:
-
-```bash
 npx playwright install
+npm run cli -- securebank --help
 ```
 
-On Linux CI machines, browser system dependencies can also be installed with:
+The UI project loads environment configuration from the root `.env` file when present. See the root [README](../../readme.md#configuration-and-secrets) for the complete variable list and secret-handling guidance.
+
+## Running UI tests
+
+All commands below run from the repository root.
+
+Run the default smoke suite:
 
 ```bash
-npx playwright install --with-deps
-```
-
-Display the available CLI commands:
-
-```bash
-npm run cli -- --help
-```
-
-The available project commands are `ui`, `api`, and `migration`.
-
-## Configuration and secrets
-
-### Local `.env` file
-
-The UI configuration loads a `.env` file from the repository root. Create that file locally and do not commit it. Store credentials only in local environment variables or your organization's approved secrets manager.
-
-Example structure (replace the placeholder values locally):
-
-```dotenv
-UI_QA_LOGIN_URL=https://qaplayground.com/bank/login
-UI_QA_USERNAME=your_qa_username
-UI_QA_PASSWORD=your_qa_password
-
-UI_DEV_LOGIN_URL=
-UI_DEV_USERNAME=
-UI_DEV_PASSWORD=
-
-UI_STAGE_LOGIN_URL=
-UI_STAGE_USERNAME=
-UI_STAGE_PASSWORD=
-
-LOG_LEVEL=info
-```
-
-The QA login URL has a default fallback in the UI configuration. Dev and stage URLs must be configured if those environments are to be used. Credentials are required by tests that use the configured credential helper.
-
-Supported UI configuration variables:
-
-| Variable | Purpose |
-|---|---|
-| `UI_QA_LOGIN_URL` | QA application's login URL |
-| `UI_QA_USERNAME` / `UI_QA_PASSWORD` | QA login credentials |
-| `UI_DEV_LOGIN_URL` | Dev application's login URL |
-| `UI_DEV_USERNAME` / `UI_DEV_PASSWORD` | Dev login credentials |
-| `UI_STAGE_LOGIN_URL` | Stage application's login URL |
-| `UI_STAGE_USERNAME` / `UI_STAGE_PASSWORD` | Stage login credentials |
-| `LOG_LEVEL` | Shared logger threshold: `debug`, `info`, `warn`, or `error` |
-
-The CLI's default environment is `qa` and its default suite is `smoke`. The UI runner passes the selected environment through `QA_PLAYGROUND_ENV`.
-
-### Keep secrets out of Git
-
-- Do not commit `.env`, passwords, access tokens, or other credentials.
-- Keep `.env` in `.gitignore`.
-- Do not put real credentials in README examples or test source code.
-- In GitHub Actions, store credentials as repository or environment secrets.
-
-## Run projects
-
-Run commands from the repository root.
-
-### UI automation
-
-Run the default UI smoke suite on Chromium:
-
-```bash
-npm run cli -- ui
+npm run cli -- securebank
 ```
 
 Choose an environment and suite:
 
 ```bash
-npm run cli -- ui --env qa --suite smoke
-npm run cli -- ui --env qa --suite regression
+npm run cli -- securebank --env qa --suite smoke
+npm run cli -- securebank --env qa --suite regression
 ```
 
 Select a browser:
 
 ```bash
-npm run cli -- ui --env qa --suite regression --browser chromium
-npm run cli -- ui --env qa --suite regression --browser firefox
-npm run cli -- ui --env qa --suite regression --browser webkit
+npm run cli -- securebank --env qa --suite regression --browser chromium
+npm run cli -- securebank --env qa --suite regression --browser firefox
+npm run cli -- securebank --env qa --suite regression --browser webkit
 ```
 
-Run a specific UI test file. The path is relative to `projects/uiproject/`:
+Run one test file. `--test-file` is relative to `projects/secureBankProject/`:
 
 ```bash
-npm run cli -- ui --env qa --suite regression --test-file tests/loginTest.spec.js
+npm run cli -- securebank --env qa --suite regression --test-file tests/loginTest.spec.js
 ```
 
-Run with a visible browser:
+Show the browser while tests run:
 
 ```bash
-npm run cli -- ui --env qa --suite smoke --headed
+npm run cli -- securebank --env qa --suite smoke --headed
 ```
 
-The UI runner treats `regression` as all tests. Other suite names are used as tags, matching tests with a corresponding annotation such as `@smoke` or `@payments`. Use the tags actually present in the test files.
-
-### API automation
+Equivalent Makefile examples:
 
 ```bash
-npm run cli -- api --env qa --suite smoke
+make securebank
+make securebank ENV=qa SUITE=smoke
+make securebank ENV=qa SUITE=regression BROWSER=chromium
+make securebank TEST_FILE=tests/loginTest.spec.js
+make securebank HEADED=true
 ```
 
-The API CLI command and runner are currently placeholders. A successful command currently confirms CLI wiring only; it does not mean API tests were executed.
+### Suite filtering
 
-### Migration automation
+The runner treats `regression` as all tests. Other suite values are interpreted as tags. For example, `--suite payments` selects tests marked with `@payments`. Multiple tags can be comma-separated:
 
 ```bash
-npm run cli -- migration --env qa --suite smoke
+npm run cli -- securebank --env qa --suite smoke,payments
 ```
 
-The migration CLI command and runner are currently placeholders. A successful command currently confirms CLI wiring only; it does not mean migration tests were executed.
+Ensure the requested tags exist in the test files. A test without a matching tag may not be selected by a tag-filtered run.
 
-## CLI options
+## Environment configuration
 
-The project commands share these options:
+The supported environment names are `qa`, `dev`, and `stage`.
 
-| Option | Description | Default |
-|---|---|---|
-| `--env <environment>` | Select the environment | `qa` |
-| `--suite <suite>` | Select a suite or tag filter | `smoke` |
-| `--browser <browser>` | UI browser: `chromium`, `firefox`, or `webkit` | `chromium` |
-| `--headed` | Show the browser UI during UI execution | Off |
-| `--test-file <file>` | Run one UI test file; available on `ui` | Not set |
+| Environment | URL variable | Username variable | Password variable |
+|---|---|---|---|
+| QA | `UI_QA_LOGIN_URL` | `UI_QA_USERNAME` | `UI_QA_PASSWORD` |
+| Dev | `UI_DEV_LOGIN_URL` | `UI_DEV_USERNAME` | `UI_DEV_PASSWORD` |
+| Stage | `UI_STAGE_LOGIN_URL` | `UI_STAGE_USERNAME` | `UI_STAGE_PASSWORD` |
 
-`--browser` is relevant to UI execution. `--test-file` is available only for the UI command.
+The QA URL defaults to `https://qaplayground.com/bank/login` when `UI_QA_LOGIN_URL` is not set. Dev and stage URLs must be supplied explicitly. Credentials are required wherever the test or configuration helper requests them.
 
-## Makefile shortcuts
+Create a root `.env` file for local use and keep it out of version control. In GitHub Actions, configure secrets for credentials rather than committing them. The current manual workflow passes `UI_QA_USERNAME` and `UI_QA_PASSWORD` only for QA UI runs; dev and stage require workflow configuration before they are ready.
 
-The Makefile provides shorter commands for the same CLI:
+## Project layout
 
-```bash
-make help
-make ui
-make ui ENV=qa SUITE=smoke
-make ui ENV=qa SUITE=regression BROWSER=chromium
-make ui ENV=qa SUITE=regression BROWSER=firefox
-make ui ENV=qa SUITE=regression BROWSER=webkit
-make ui TEST_FILE=tests/loginTest.spec.js
-make ui HEADED=true
-make api
-make migration
-```
+projects/secureBankProject/
+├── cli.js                          # Registers the SecureBank CLI command
+├── runner.js                       # Builds and launches the Playwright command
+├── config/
+│   ├── app.config.js               # Environment URLs and credentials
+│   └── secureBankProject.config.js # SecureBank Playwright projects and reporter
+├── testData/                       # SecureBank test data
+├── fixtures/
+│   └── baseFixture.js              # Shared fixtures and Page Object fixtures
+├── pages/                          # Page Object classes
+├── selectors/                      # Centralized selectors
+├── tests/                          # Playwright test specifications
+│   ├── login/
+│   ├── billPay/
+│   └── profile/
+└── utils/                          # SecureBank-specific utilities
+``
 
-Supported Makefile variables:
 
-- `ENV=qa|dev|stage`
-- `SUITE=smoke|regression|<tag>`
-- `BROWSER=chromium|firefox|webkit`
-- `TEST_FILE=tests/<file>.spec.js` (relative to `projects/uiproject/`)
-- `HEADED=true|false`
+## Test implementation guidelines
 
-## Reports and troubleshooting
+- Keep test scenarios in `tests/`.
+- Keep page-specific interactions in the relevant Page Object class under `pages/`.
+- Reuse `fixtures/baseFixture.js` where its fixture contract fits the test.
+- Keep reusable selectors in `selectors/` when centralization helps.
+- Store reusable test data under `data/`.
+- Use the shared logger from `commonlib/logger.js` rather than creating another project-specific logger.
+- Prefer accessible Playwright locators such as `getByRole`, `getByLabel`, and `getByTestId` where appropriate.
+- Keep assertions explicit and avoid changing test behavior as part of unrelated refactoring.
 
-The UI Playwright configuration uses the HTML reporter. After a UI run, open the generated report with:
+## Browser configuration and reports
+
+The UI configuration defines Playwright projects for Chromium, Firefox, and WebKit. The runner selects one browser per invocation using `--browser`; run the command separately for each browser when cross-browser validation is required.
+
+The UI configuration uses the HTML reporter. Open the latest generated report from the repository root with:
 
 ```bash
 npm run report
 ```
 
-The report is typically generated in `playwright-report/`. The repository may contain local report output; do not treat checked-in or old report files as the latest result unless they were generated by your current run.
+Install an individual browser if needed:
 
-Common checks:
-
-1. Confirm dependencies are installed with `npm ci`.
-2. Install the required browser with `npx playwright install chromium` (or `firefox` / `webkit`).
-3. Confirm the selected environment's URL and credentials are configured.
-4. Run `npm run cli -- ui --help` to see UI command options.
-5. Use `--test-file` to isolate a failing test.
-6. Review the terminal output and the HTML report.
-
-## Repository structure
-
-```text
-qaplaygroundbank/
-├── bin/
-│   └── qaplayground.js          # CLI entry point
-├── cli/
-│   ├── index.js                 # CLI setup
-│   ├── options.js               # Shared CLI options
-│   └── registerProjects.js      # Registers project commands
-├── commonlib/
-│   ├── logger.js                # Shared logger
-│   └── util.js                  # Shared utilities (reserved for reusable helpers)
-├── globalconfigs/
-│   ├── config.js                # Default environment and suite
-│   ├── constants.js             # Framework constants
-│   └── environments.js          # Environment names
-├── projects/
-│   ├── apiproject/
-│   ├── migrationproject/
-│   └── uiproject/
-├── playwright.config.js         # Root Playwright config
-├── Makefile
-├── package.json
-└── readme.md
+```bash
+npx playwright install chromium
+npx playwright install firefox
+npx playwright install webkit
 ```
 
-Each project has its own `cli.js` and `runner.js`. The UI project has a dedicated Playwright configuration and additional folders for tests, page objects, fixtures, data, selectors, and utilities.
+## Troubleshooting
 
-## Development and contribution workflow
+- If the application cannot be opened, check the URL for the selected environment.
+- If login fails, verify the appropriate username and password environment variables.
+- If no tests are found, verify the `--test-file` path and suite tag.
+- If a browser executable is missing, install that browser with Playwright.
+- If a test fails, inspect the terminal output and HTML report before changing locators or assertions.
 
-Use the branch names and protection rules configured in your repository. The team's current intended flow is:
-
-1. Update your local `development` branch.
-2. Create a focused feature or fix branch from `development`.
-3. Make one logically related change at a time.
-4. Run the relevant tests and review `git diff --check`.
-5. Commit with a concise message describing the change.
-6. Push the feature branch and open a pull request into `development`.
-7. Obtain the required review approval (the repository is intended to require at least one approval) and address review feedback.
-8. Merge into `development` according to repository rules.
-9. Merge a tested, stable release from `development` into `main` through the team's agreed review process.
-
-Before committing, review `git status --short` and stage only files relevant to the change. Avoid committing `.env`, `node_modules/`, generated reports, or unrelated files.
-
-## GitHub Actions
-
-The repository's manual workflow is intended to be started from **GitHub → Actions → QA Playground Bank → Run workflow**. The workflow inputs select:
-
-- Project: `ui`, `api`, or `migration`
-- Environment: `dev`, `qa`, or `stage`
-- Suite: `smoke` or `regression`
-
-The workflow installs dependencies with `npm ci`, installs Playwright browsers with `npx playwright install --with-deps`, and invokes the shared CLI.
-
-For QA UI runs, configure the following GitHub Actions secrets:
-
-- `UI_QA_USERNAME`
-- `UI_QA_PASSWORD`
-
-The workflow also supplies `UI_QA_LOGIN_URL`. Dev and stage UI runs require the corresponding URL and credential variables to be added to the workflow and configured as secrets/variables before those environments are ready to run. Never hard-code credentials into the workflow.
-
-The API and migration workflow choices currently invoke placeholder runners until those projects are implemented.
-
-## Project-specific documentation
-
-- [UI project README](projects/uiproject/README.md)
-- [API project README](projects/apiproject/README.md)
-- [Migration project README](projects/migrationproject/README.md)
+For framework setup, CLI options, Git workflow, and GitHub Actions, see the [root README](../../readme.md).
