@@ -10,5 +10,6 @@ export const URLS = {
 };
 
 export const VALIDATIONS = {
-    DASHBOARD_URL: /dashboard/
+    DASHBOARD_URL: /dashboard/,
+    BILL_PAY_CONFIRMATION_URL: /bill-pay\/confirmation/
 };
