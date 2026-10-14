@@ -38,12 +38,27 @@ async function runUiProject(options) {
             __dirname,
             options.testFile
         );
-
-        args.push(testFile);
+ 
+        const normalizedTestFile = options.testFile.replace(/\\/g, '/');
+ 
+        args.push(normalizedTestFile);
+ 
         logger.info(`Test File   : ${testFile}`);
     } else {
         logger.info('Test File   : All configured UI tests');
     }
+    // if (options.testFile) {
+    //     const testFile = path.resolve(
+    //         __dirname,
+    //         options.testFile
+    //     );
+
+    //     args.push(testFile);
+    //     logger.info(`Test File   : ${testFile}`);
+    // } else {
+    //     logger.info('Test File   : All configured UI tests');
+    // }
+
 
     // Configure Playwright and browser selection.
     args.push(
@@ -71,6 +86,7 @@ async function runUiProject(options) {
     }
 
     // Regression means all tests, so do not apply a tag filter.
+    //if (!suiteNames.includes('regression')) {
     if (!suiteNames.includes('regression')) {
         const escapedSuites = suiteNames.map((name) =>
             name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
