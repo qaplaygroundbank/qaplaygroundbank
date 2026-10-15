@@ -39,6 +39,8 @@ test.describe('Dashboard', () => {
     await expect(page).toHaveURL(/\/bank\/dashboard/);
     await expect(dashboardPage.dashboardContainer).toBeVisible();
     await expect(dashboardPage.welcomeMessage).toContainText('Welcome back');
+    await expect(dashboardPage.userInfo).toHaveText(new RegExp(`^\\S*${credentials.username}$`));
+// You have to asset about logged in user.
 
     // Verify the dashboard UI loaded with no blocking error
     await expect(dashboardPage.statCards).toBeVisible();
@@ -82,6 +84,8 @@ test.describe('Dashboard', () => {
     }
   });
 
+    //Test case-03-account balance is displayed with valid currency format
+
   test('Account balance is displayed with valid currency format', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const dashboardPage = new DashboardPage(page);
@@ -90,6 +94,7 @@ test.describe('Dashboard', () => {
     );
     const appConfigData = dashboardTestData.appConfig;
     const formatter = createCurrencyFormatter(appConfigData);
+
 
     await loginPage.openLoginPage();
     await loginPage.login(credentials.username, credentials.password);
