@@ -4,41 +4,31 @@ import ProfilePage from '../../pages/ProfilePage.js';
 import ProfileTestData from '../../testData/ProfileTestData.json' assert { type: 'json' };
 
 test.describe('Profile', () => {
-
     let context;
     let page;
     let loginPage;
     let profilePage;
 
-    // Initialize browser session and login
+    // Setup browser session and login once before all Profile tests
     test.beforeAll(async ({ browser }) => {
-
         context = await browser.newContext();
         page = await context.newPage();
-
         loginPage = new LoginPage(page);
         profilePage = new ProfilePage(page);
 
         await loginPage.openLoginPage();
-
-        await loginPage.login(
-            process.env.UI_QA_USERNAME,
-            process.env.UI_QA_PASSWORD
-        );
-
+        await loginPage.login(process.env.UI_QA_USERNAME, process.env.UI_QA_PASSWORD);
         await profilePage.navigateToProfile();
     });
 
-    test('PROF-05 Verify a valid email can be entered/saved.',{ tag: ['@smoke', '@profile'] }, async () => {
-        await profilePage.verifyValidEmail(
-            ProfileTestData.ValidData.Email
-        );
+    // Verify valid email can be saved
+    test('PROF-05 Verify a valid email can be entered/saved.', { tag: ['@smoke', '@profile'] }, async () => {
+        await profilePage.verifyValidEmail(ProfileTestData.ValidData.Email);
     });
 
-    test('PROF-06 Verify invalid email format is rejected.',{ tag: ['@smoke', '@profile'] }, async () => {
-        await profilePage.verifyInvalidEmail(
-            ProfileTestData.InvalidEmailId.Email
-        );
+    // Verify invalid email is rejected
+    test('PROF-06 Verify invalid email format is rejected.', { tag: ['@profile'] }, async () => {
+        await profilePage.verifyInvalidEmail(ProfileTestData.InvalidEmailId.Email);
     });
 
     // PROF-001 - Verify User Can Successfully Access The Profile Page
