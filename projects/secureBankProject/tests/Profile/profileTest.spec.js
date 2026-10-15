@@ -136,4 +136,24 @@ test.describe.serial('Profile Tests', () => {
             await expect(profilePage.getAddressInput()).toHaveValue(originalAddress);
         }
     );
+
+    test(
+        'PROF-003 Verify valid profile changes can be saved',
+        { tag: ['@smoke', '@profile'] },
+        async () => {
+            await profilePage.verifyProfileUrl();
+            await profilePage.verifyProfileTitle();
+            await profilePage.tapOnEditProfileButton();
+            await profilePage.updateMobileNumber(
+                ProfileTestData.editProfile.phone
+            );
+            await profilePage.tapOnSaveProfileChanges();
+            await profilePage.verifyProfileUpdateSuccessMessage(
+                ProfileTestData.editProfile.successMessage
+            );
+            await profilePage.refeshPageAndValidateupdatedPhoneNumber(
+                ProfileTestData.editProfile.phone
+            );
+        }
+    );
 });

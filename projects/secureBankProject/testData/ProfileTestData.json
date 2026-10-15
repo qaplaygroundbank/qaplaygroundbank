@@ -6,7 +6,6 @@
         "Phone": "(415) 555-0101",
         "Address": "123 Market Street, San Francisco, CA 94105"
     },
-
     "InvalidEmailId": {
         "Email": "xyz"
     },
@@ -24,5 +23,9 @@
         "Email": "temporary.profile@example.com",
         "Phone": "(415) 555-0101",
         "Address": "100 Test Avenue, Bengaluru, KA 560001"
+    },
+    "editProfile": {
+        "phone": "(918) 366-1010",
+        "successMessage": "Profile updated successfully."
     }
 }
