@@ -43,7 +43,7 @@ class ProfilePage extends BasePage {
         const emailInput = this.page.getByTestId(profilePageSelectors.email.value);
         await emailInput.clear();
         await emailInput.fill(validEmail);
-        await this.page.getByRole('button', { name: 'Save Changes' }).click();
+        await this.submitButton.click();
         const successMsg = this.page.getByTestId(profilePageSelectors.profileSuccessMessage.value);
         await expect(successMsg).toBeVisible();
         await expect(successMsg).toHaveText('Profile updated successfully.');
@@ -54,7 +54,7 @@ class ProfilePage extends BasePage {
         const emailInput = this.page.getByTestId(profilePageSelectors.email.value);
         await emailInput.clear();
         await emailInput.fill(invalidEmail);
-        await this.page.getByRole('button', { name: 'Save Changes' }).click();
+        await this.submitButton.click();
         await expect(this.page.getByTestId(profilePageSelectors.profileErrorMessage.value)).toHaveText('Please enter a valid email address.');
     }
 
