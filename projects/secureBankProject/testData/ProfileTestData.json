@@ -6,7 +6,6 @@
         "Phone": "(415) 555-0101",
         "Address": "123 Market Street, San Francisco, CA 94105"
     },
-
     "InvalidEmailId": {
         "Email": "xyz"
     },
@@ -15,6 +14,11 @@
     "ValidPhone": "(415) 555-0101",
     "InvalidPhone": "12345",
     "AboveMaxPhone": "12345678901234567890"
+    },
+    
+    "editProfile": {
+        "phone": "(918) 366-1010",
+        "successMessage": "Profile updated successfully."
     }
 
 }

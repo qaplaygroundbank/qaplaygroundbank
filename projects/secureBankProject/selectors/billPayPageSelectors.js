@@ -68,7 +68,19 @@ const billPaySelectors = {
     referenceNumber: {
         type: 'testId',
         value: 'bill-pay-ref-id'
-    }
+    },
+
+    amountValidationMessage: {
+        type: 'testId',
+        value: 'bill-pay-error'
+},
+
+    closeConfirmPaymentPopup: {
+
+       type: 'css',
+       value: '[data-slot="dialog-close"]'
+
+}
 
 };
 

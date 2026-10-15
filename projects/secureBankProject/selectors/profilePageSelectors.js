@@ -50,7 +50,7 @@ const profilePageSelectors = {
 
     //Success Message
     profileSuccessMessage: {
-    type:'testID',
+    type: 'testId',
     value: 'profile-save-success'
     },
     // Username displayed on profile page
@@ -123,7 +123,7 @@ const profilePageSelectors = {
     profileEmail: {
         type: 'testId',
         value: 'profile-email'
-}
+    }
 
 };
 
