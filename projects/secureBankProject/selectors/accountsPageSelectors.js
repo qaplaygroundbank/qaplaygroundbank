@@ -1,5 +1,5 @@
 export const accountPageSelectors = {
-        accountMenuLink: {
+    accountMenuLink: {
         type: 'role',
         role: 'link',
         name: 'Accounts'
@@ -17,12 +17,12 @@ export const accountPageSelectors = {
     },
 
     accountTable: {
-        type: 'locator',
+        type: 'css',
         value: 'table'
     },
 
     accountRows: {
-        type: 'locator',
+        type: 'css',
         value: 'tbody tr'
     },
 
