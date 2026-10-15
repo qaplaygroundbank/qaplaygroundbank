@@ -2,7 +2,7 @@ import { test } from '../../fixtures/baseFixture.js';
 import appConfig from '../../config/app.config.js';
 import billPayData from '../../testData/billPayData.json' assert { type: 'json' };
 
-test.describe('Bill Pay', () => {
+test.describe('@smoke @profile Bill Pay', () => {
 
     test.beforeEach(async ({ loginPage, billPayPage }) => {
 
@@ -30,7 +30,7 @@ test.describe('Bill Pay', () => {
 
     });
 
-    test('Verify Add Biller flow', async ({ billPayPage }) => {
+    test('@smoke @profile Verify Add Biller flow', async ({ billPayPage }) => {
 
         await billPayPage.clickAddBiller();
 
@@ -46,7 +46,7 @@ test.describe('Bill Pay', () => {
         );
     });
 
-    test('Verify payment date selection', async ({ billPayPage }) => {
+    test('@smoke @profile Verify payment date selection', async ({ billPayPage }) => {
 
         await billPayPage.selectFromAccount(
             billPayData.standardUser.fromAccount
