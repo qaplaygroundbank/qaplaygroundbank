@@ -4,33 +4,40 @@ import billPayData from '../../testData/billPayData.json' with { type: 'json' };
 
 test.describe('Bill Pay', () => {
 
-    test('Verify successful bill payment @smoke', async ({
-        loginPage,
-        billPayPage
-    }) => {
-
+    test.beforeEach(async ({ loginPage, billPayPage }) => {
         const environment =
             process.env.QA_PLAYGROUND_ENV || 'qa';
 
         const credentials =
             appConfig.getUiCredentials(environment);
 
-        await loginPage.openLoginPage();
+        // Login 
 
+        await loginPage.openLoginPage();
         await loginPage.login(
             credentials.username,
             credentials.password
         );
 
+        // Navigate to Bill Pay
         await billPayPage.navigateToBillPay();
-
         await billPayPage.verifyBillPayPageLoaded();
 
-        await billPayPage.payBill(billPayData.standardUser);
-
-        await billPayPage.verifyBillPaymentSuccess();
-
-        await billPayPage.logout()
     });
+
+    test.afterEach(async ({ billPayPage }) => {
+        await billPayPage.logout()
+
+    }),
+
+        test('Verify successful bill payment', { tag: ['@smoke', '@regression', '@BillPay'] }, async ({
+            loginPage,
+            billPayPage
+        }) => {
+
+            await billPayPage.payBill(billPayData.standardUser);
+            await billPayPage.verifyBillPaymentSuccess();
+
+        });
 
 });
