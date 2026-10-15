@@ -1,23 +1,59 @@
+import dotenv from 'dotenv';
+import { test, expect } from '../fixtures/baseFixture.js';
+import appConfig from '../../config/app.config.js';
 
-import 'dotenv/config';
-import { test, expect } from '@playwright/test';
+dotenv.config({ path: 'projects/uiproject/tests/.env' });
 
-async function login(page) {
+test.describe('Transfer ', () => {
 
-    const username = process.env.BANK_USERNAME;
-    const password = process.env.BANK_PASSWORD;
-    await page.goto('https://qaplayground.com/bank');
+    test('Transfering Funds from Savings to Credit Account @smoke', async ({
+        loginPage,
+        billPayPage
+    }) => {
 
+        const environment =
+            process.env.QA_PLAYGROUND_ENV || 'qa';
+
+        const credentials =
+            appConfig.getUiCredentials(environment);
+
+        await loginPage.openLoginPage();
+
+        await loginPage.login(
+            credentials.username,
+            credentials.password
+        );
+
+        await billPayPage.navigateToBillPay();
+
+        await billPayPage.verifyBillPayPageLoaded();
+
+        await billPayPage.payBill(billPayData.standardUser);
+
+        await billPayPage.verifyBillPaymentSuccess();
+
+        await billPayPage.logout()
+    });
+
+});
+
+
+
+test('Transfering Funds from Savings to Credit Account', async({ loginPage}) => {
+
+    const username = process.env.UI_QA_USERNAME;
+    const password = process.env.UI_QA_PASSWORD;
+    const appnUrl = process.env.UI_QA_LOGIN_URL;
+    
+    if(!appnUrl || !username || !password) {
+        throw new Error('One or more required environment variables are not set');
+    }
+
+    await page.goto(appnUrl);
     await page.getByPlaceholder('Enter username').fill(username);
     await page.getByPlaceholder('Enter password').fill(password);
 
     await page.getByRole('button', {name : 'Sign In'}).click();
-}
-
-test('Create Account Type As Credit', async({ page }) => {
-
-
-    await login(page);
 
     //await page.pause();
     await page.getByTestId('sidebar-link-accounts').click();
