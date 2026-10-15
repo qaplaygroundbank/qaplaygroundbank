@@ -1,0 +1,21 @@
+{
+  "positiveTransferData": {
+    "amount": "96.00",
+	"fromAccount": "12345",
+	"toAccount": "12456",
+    "successMessage": "Transfer Complete!"
+  },
+  "zeroValueTransferData": {
+    "amount": "0.00",
+	"fromAccount": "12345",
+	"toAccount": "12456",
+    "successMessage": "Transfer Complete!"
+  },
+  "blankTransferAmount": {
+    "amount": "",
+	"fromAccount": "12345",
+	"toAccount": "12456",
+    "successMessage": "Transfer Successful",
+	"expectedErrorMessage": "An internal error has occurred and has been logged."
+  }
+}
