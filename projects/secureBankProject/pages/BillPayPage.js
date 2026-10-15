@@ -21,6 +21,8 @@ class BillPayPage extends BasePage {
     this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
     this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
     this.amountValidationError = page.getByText('Please enter a valid amount.');
+    this.amountValidationMessage = resolveLocator(page, billPaySelectors.amountValidationMessage);
+    this.closeConfirmPaymentPopup = resolveLocator(page, billPaySelectors.closeConfirmPaymentPopup);
   }
 
   async navigateToBillPay() {
@@ -104,6 +106,17 @@ class BillPayPage extends BasePage {
         VALIDATIONS.BILL_PAY_CONFIRMATION_URL
       );
   }
+  
+  // Verify zero amount is rejected.
+  async verifyZeroAmountValidation() {
+    await expect(this.amountValidationMessage).toHaveText('Please enter a valid amount.');
+  }
+  
+  // Verify a valid positive bill amount is accepted.
+  async closeConfirmPaymentDialog() {
+     await this.closeConfirmPaymentPopup.click();
+    }
+
 }
 
 export default BillPayPage;
