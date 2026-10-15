@@ -1,15 +1,15 @@
 import { Option } from 'commander';
-import { runUiProject } from './runner.js';
+import { secureBankProject } from './runner.js';
 import { addGlobalOptions } from '../../cli/options.js';
 
-function registerUiProject(program) {
-    const uiCommand = program
-        .command('ui')
+function registerSecureProject(program) {
+    const command = program
+        .command('securebank')
         .description('Run UI automation project');
 
-    addGlobalOptions(uiCommand);
+    addGlobalOptions(command);
 
-    uiCommand
+    command
         .addOption(
             new Option(
                 '--browser <browser>',
@@ -25,12 +25,12 @@ function registerUiProject(program) {
         )
         .option(
             '--test-file <file>',
-            'Run a specific UI test file'
+            'Run a specific secureBank UI test file'
         );
 
-    uiCommand.action(async (options) => {
-        await runUiProject(options);
+    command.action(async (options) => {
+        await secureBankProject(options);
     });
 }
 
-export { registerUiProject };
+export { registerSecureProject };
