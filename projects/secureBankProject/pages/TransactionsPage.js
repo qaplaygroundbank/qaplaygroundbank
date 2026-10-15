@@ -22,7 +22,7 @@ export class TransactionsPage extends BasePage {
     this.searchInput = page.getByTestId('all-txn-search-input');
     this.accountDropdown = page.getByTestId('all-txn-account-select');
     this.typeFilter = page.getByTestId('all-txn-type-filter');
-    this.transactionsTable = page.getByTestId('all-fdasfa-table');
+    this.transactionsTable = page.getByTestId('all-transactions-table');
     this.transactionRows = page.getByTestId('all-txn-row');
 
   }
