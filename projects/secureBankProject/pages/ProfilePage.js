@@ -80,7 +80,6 @@ class ProfilePage extends BasePage {
         await this.phoneInput.clear();
         await this.phoneInput.fill(newPhoneNumber);
         await expect(this.phoneInput).toHaveValue(newPhoneNumber);
-        console.log('New Phone Number:', newPhoneNumber);
     }
 
     async tapOnSaveProfileChanges() {
@@ -99,8 +98,6 @@ class ProfilePage extends BasePage {
         await this.page.reload();
         const actualPhone = await this.phone.textContent();
         expect(actualPhone).toBe(newPhoneNumber);
-        console.log("ActualPhone", actualPhone);
-        console.log("ExpectedPhone", newPhoneNumber);
 
     }
 }
