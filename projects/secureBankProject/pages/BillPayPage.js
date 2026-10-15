@@ -20,6 +20,7 @@ class BillPayPage extends BasePage {
     this.confirmPaymentHeading = resolveLocator(page, billPaySelectors.confirmPaymentHeading);
     this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
     this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
+    this.amountValidationError = page.getByText('Please enter a valid amount.');
   }
 
   async navigateToBillPay() {
@@ -75,6 +76,19 @@ class BillPayPage extends BasePage {
     await this.clickReviewPayment();
     await this.verifyConfirmPaymentPopup();
     await this.clickConfirmPayment();
+  }
+
+  async verifyBillPaymentErrorMessage(billData) {
+    await this.selectFromAccount(billData.fromAccount);
+    await this.searchBiller(billData.biller);
+    await this.selectBiller();
+    await this.enterAmount(billData.amount);
+    await this.clickReviewPayment();
+
+    await expect(this.amountValidationError)
+      .toBeVisible();
+
+  
   }
 
   async verifyBillPaymentSuccess() {
