@@ -9,6 +9,21 @@
     "InvalidEmailId": {
         "Email": "xyz"
     },
+    "MissingDomainEmail": {
+        "Email": "admin@"
+    },
+
+    "AlphabeticPhone": {
+        "Phone": "abcdefghij"
+    },
+
+    "TemporaryProfileData": {
+        "FirstName": "TestFirst",
+        "LastName": "TestLast",
+        "Email": "temporary.profile@example.com",
+        "Phone": "(415) 555-0101",
+        "Address": "100 Test Avenue, Bengaluru, KA 560001"
+    },
     "editProfile": {
         "phone": "(918) 366-1010",
         "successMessage": "Profile updated successfully."

@@ -11,7 +11,6 @@ export const test = base.extend({
     billPayPage: async ({ page }, use) => {
         await use(new BillPayPage(page));
     },
-
     profilePage: async ({ page }, use) => {
         await use(new ProfilePage(page));
     }
