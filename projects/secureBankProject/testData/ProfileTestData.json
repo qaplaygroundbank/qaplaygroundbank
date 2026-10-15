@@ -1,13 +1,21 @@
 {
-    "ValidData": {
-        "FirstName": "Alex",
-        "LastName": "Morgan",
-        "Email": "alex.morgan@example.com",
-        "Phone": "(415) 555-0101",
-        "Address": "123 Market Street, San Francisco, CA 94105"
-    },
+  "ValidData": {
+    "FirstName": "Alex",
+    "LastName": "Morgan",
+    "Email": "alex.morgan@example.com",
+    "Phone": "(415) 555-0101",
+    "Address": "123 Market Street, San Francisco, CA 94105"
+  },
 
-    "InvalidEmailId": {
-        "Email": "xyz"
-    }
+  "InvalidEmailId": {
+    "Email": "xyz"
+  },
+
+  "profile_update": {
+    "firstName": "jose",
+    "lastName": "kumar",
+    "email": "josekumar@example.com",
+    "phone": "(415) 555-0101",
+    "address": "Nillos Street, San Francisco, CA 94105"
+  }
 }

@@ -15,6 +15,7 @@ test.describe('Profile', () => {
         page = await context.newPage();
         loginPage = new LoginPage(page);
         profilePage = new ProfilePage(page);
+
         await loginPage.openLoginPage();
         await loginPage.login(process.env.UI_QA_USERNAME, process.env.UI_QA_PASSWORD);
         await profilePage.navigateToProfile();

@@ -1,6 +1,11 @@
-// Profile page selectors
+// Profile Page Selectors
+// Module: Profile
+
 const profilePageSelectors = {
-    // Profile menu link
+
+    // PROF-001 - Verify User Can Successfully Access The Profile Page
+
+    // Profile navigation menu
     profileLink: {
         type: 'testId',
         value: 'sidebar-link-profile'
@@ -30,30 +35,100 @@ const profilePageSelectors = {
         value: 'edit-profile-btn'
     },
 
-    // Profile details
+    // PROF-002 - Verify User Profile Information Is Displayed Correctly
+
+    // Username displayed on profile page
+    username: {
+        type: 'testId',
+        value: 'profile-username'
+    },
+
+    // First name displayed on profile page
+    firstName: {
+        type: 'testId',
+        value: 'profile-first-name'
+    },
+
+    // Last name displayed on profile page
+    lastName: {
+        type: 'testId',
+        value: 'profile-last-name'
+    },
+
+    // Email displayed on profile page
     email: {
+        type: 'testId',
+        value: 'profile-email'
+    },
+
+    // Phone number displayed on profile page
+    phone: {
+        type: 'testId',
+        value: 'profile-phone'
+    },
+
+    // Address displayed on profile page
+    address: {
+        type: 'testId',
+        value: 'profile-address'
+    },
+
+    // PROF-012 - Verify Phone Boundary Length Validation
+
+    // First Name input field
+    firstNameInput: {
+        type: 'testId',
+        value: 'profile-first-name-input'
+    },
+
+    // Last Name input field
+    lastNameInput: {
+        type: 'testId',
+        value: 'profile-last-name-input'
+    },
+
+    // Email input field
+    emailInput: {
         type: 'testId',
         value: 'profile-email-input'
     },
 
-    // Submit Button
-    submitButton: {
-    type: 'testId',
-    value: 'save-profile-btn'
+    // Phone input field
+    phoneInput: {
+        type: 'testId',
+        value: 'profile-phone-input'
     },
 
-    // Profile Error
-    profileErrorMessage: {
-    type: 'testId',
-    value: 'profile-error'
+    // Address input field
+    addressInput: {
+        type: 'testId',
+        value: 'profile-address-input'
     },
 
-    //Success Message
-    profileSuccessMessage: {
-    type:'testID',
-    value: 'profile-save-success'
-}
-    
+    // Save Changes button
+    saveProfileButton: {
+        type: 'testId',
+        value: 'save-profile-btn'
+    },
+
+    // Cancel Changes button
+    cancelEditProfileButton: {
+        type: 'testId',
+        value: 'cancel-edit-profile-btn'
+    },
+
+    // Phone validation error message
+    phoneValidationError: {
+        type: 'testId',
+        value: 'profile-error'
+    },
+
+    // Phone validation error message
+    profileSaveSuccessMessage: {
+        type: 'testId',
+        value: 'profile-save-success'
+    }
+
 };
 
 export default profilePageSelectors;
