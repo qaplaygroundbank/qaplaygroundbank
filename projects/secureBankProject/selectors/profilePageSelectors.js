@@ -50,10 +50,19 @@ const profilePageSelectors = {
 
     //Success Message
     profileSuccessMessage: {
-    type:'testID',
+    type: 'testId',
     value: 'profile-save-success'
-}
+    },
     
+    phoneInput: {
+        type: "testId",
+        value: "profile-phone-input"
+    },
+
+    phone: {
+        type: 'testId',
+        value: 'profile-phone'
+    }
 };
 
 export default profilePageSelectors;

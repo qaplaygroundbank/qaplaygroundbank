@@ -1,6 +1,6 @@
-# UI Automation Project
+# SecureBank UI Automation Project
 
-This project contains the Playwright browser tests for QA Playground Bank. It is executed through the repository's shared CLI and uses its own Playwright configuration, page objects, fixtures, selectors, and test data.
+This project contains Playwright browser tests for the QA Playground SecureBank application. It is executed through the repository's shared CLI and uses its own Playwright configuration, page objects, fixtures, selectors, and test data.
 
 ## Prerequisites and setup
 
@@ -9,7 +9,7 @@ Run these commands from the repository root:
 ```bash
 npm ci
 npx playwright install
-npm run cli -- ui --help
+npm run cli -- securebank --help
 ```
 
 The UI project loads environment configuration from the root `.env` file when present. See the root [README](../../readme.md#configuration-and-secrets) for the complete variable list and secret-handling guidance.
@@ -21,44 +21,44 @@ All commands below run from the repository root.
 Run the default smoke suite:
 
 ```bash
-npm run cli -- ui
+npm run cli -- securebank
 ```
 
 Choose an environment and suite:
 
 ```bash
-npm run cli -- ui --env qa --suite smoke
-npm run cli -- ui --env qa --suite regression
+npm run cli -- securebank --env qa --suite smoke
+npm run cli -- securebank --env qa --suite regression
 ```
 
 Select a browser:
 
 ```bash
-npm run cli -- ui --env qa --suite regression --browser chromium
-npm run cli -- ui --env qa --suite regression --browser firefox
-npm run cli -- ui --env qa --suite regression --browser webkit
+npm run cli -- securebank --env qa --suite regression --browser chromium
+npm run cli -- securebank --env qa --suite regression --browser firefox
+npm run cli -- securebank --env qa --suite regression --browser webkit
 ```
 
-Run one test file. `--test-file` is relative to `projects/uiproject/`:
+Run one test file. `--test-file` is relative to `projects/secureBankProject/`:
 
 ```bash
-npm run cli -- ui --env qa --suite regression --test-file tests/loginTest.spec.js
+npm run cli -- securebank --env qa --suite regression --test-file tests/loginTest.spec.js
 ```
 
 Show the browser while tests run:
 
 ```bash
-npm run cli -- ui --env qa --suite smoke --headed
+npm run cli -- securebank --env qa --suite smoke --headed
 ```
 
 Equivalent Makefile examples:
 
 ```bash
-make ui
-make ui ENV=qa SUITE=smoke
-make ui ENV=qa SUITE=regression BROWSER=chromium
-make ui TEST_FILE=tests/loginTest.spec.js
-make ui HEADED=true
+make securebank
+make securebank ENV=qa SUITE=smoke
+make securebank ENV=qa SUITE=regression BROWSER=chromium
+make securebank TEST_FILE=tests/loginTest.spec.js
+make securebank HEADED=true
 ```
 
 ### Suite filtering
@@ -66,7 +66,7 @@ make ui HEADED=true
 The runner treats `regression` as all tests. Other suite values are interpreted as tags. For example, `--suite payments` selects tests marked with `@payments`. Multiple tags can be comma-separated:
 
 ```bash
-npm run cli -- ui --env qa --suite smoke,payments
+npm run cli -- securebank --env qa --suite smoke,payments
 ```
 
 Ensure the requested tags exist in the test files. A test without a matching tag may not be selected by a tag-filtered run.
@@ -87,21 +87,24 @@ Create a root `.env` file for local use and keep it out of version control. In G
 
 ## Project layout
 
-```text
-projects/uiproject/
-├── cli.js                     # Registers the UI CLI command
-├── runner.js                  # Builds and launches the Playwright command
+projects/secureBankProject/
+├── cli.js                          # Registers the SecureBank CLI command
+├── runner.js                       # Builds and launches the Playwright command
 ├── config/
-│   ├── app.config.js          # Environment URLs and credentials
-│   └── uiproject.config.js    # UI Playwright projects and reporter
-├── data/                      # UI test data
+│   ├── app.config.js               # Environment URLs and credentials
+│   └── secureBankProject.config.js # SecureBank Playwright projects and reporter
+├── testData/                       # SecureBank test data
 ├── fixtures/
-│   └── baseFixture.js         # Shared test fixture and LoginPage fixture
-├── pages/                     # Page Object classes
-├── selectors/                 # Centralized selectors
-├── tests/                     # Playwright test specifications
-└── utils/                     # UI-specific utilities
-```
+│   └── baseFixture.js              # Shared fixtures and Page Object fixtures
+├── pages/                          # Page Object classes
+├── selectors/                      # Centralized selectors
+├── tests/                          # Playwright test specifications
+│   ├── login/
+│   ├── billPay/
+│   └── profile/
+└── utils/                          # SecureBank-specific utilities
+``
+
 
 ## Test implementation guidelines
 
