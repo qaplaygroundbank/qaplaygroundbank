@@ -21,6 +21,8 @@ class BillPayPage extends BasePage {
     this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
     this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
     this.cancelPaymentButton = resolveLocator(page, billPaySelectors.cancelPaymentButton);
+    this.amountValidationMessage = resolveLocator(page, billPaySelectors.amountValidationMessage);
+    this.closeConfirmPaymentPopup = resolveLocator(page, billPaySelectors.closeConfirmPaymentPopup);
   }
 
   async navigateToBillPay() {
@@ -101,21 +103,32 @@ class BillPayPage extends BasePage {
     await expect(this.cancelPaymentButton).toBeVisible();
     await expect(this.cancelPaymentButton).toBeEnabled();
     await this.cancelPaymentButton.click();
- }
+  }
 
   async verifyPaymentCancelled() {
     await expect(this.page).toHaveURL(/\/bank\/dashboard$/);
 
     await expect(
-        this.page.getByRole('heading', {
-            name: /Welcome back/
-        })
+      this.page.getByRole('heading', {
+        name: /Welcome back/
+      })
     ).toBeVisible();
 
     await expect(this.successHeading).toBeHidden();
-
     await expect(this.referenceNumber).toBeHidden();
- }
+  }
+
+  // Development: Verify zero amount is rejected.
+  async verifyZeroAmountValidation() {
+    await expect(this.amountValidationMessage)
+      .toHaveText('Please enter a valid amount.');
+  }
+
+  // Development: Close the confirmation payment dialog.
+  async closeConfirmPaymentDialog() {
+    await this.closeConfirmPaymentPopup.click();
+  }
+
 }
 
 export default BillPayPage;

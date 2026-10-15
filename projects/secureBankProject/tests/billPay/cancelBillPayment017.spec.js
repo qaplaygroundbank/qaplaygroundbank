@@ -2,7 +2,7 @@ import { test } from '../../fixtures/baseFixture.js';
 import appConfig from '../../config/app.config.js';
 import billPayData from '../../testData/billPayData.json' with { type: 'json' };
 
-test.describe('Bill Pay', () => {
+test.describe('Bill Pay Cancel bill', () => {
 
     test('BP-017 - Cancel bill payment without creating a payment @smoke',
         async ({ loginPage, billPayPage }) => {
