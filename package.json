@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "commander": "^15.0.0",
-    "dotenv": "^18.0.7"
+    "dotenv": "^18.0.8"
   }
 }
