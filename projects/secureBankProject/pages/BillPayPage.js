@@ -111,7 +111,6 @@ class BillPayPage extends BasePage {
   }
   async verifyBillerAdded(billerName) {
     await expect(this.page.getByText(billerName)).toBeVisible();
-    console.log(`Biller Added Successfully: ${billerName}`)
   }
   async selectPaymentDate(date) {
     await this.paymentDateInput.click();
@@ -119,7 +118,6 @@ class BillPayPage extends BasePage {
   }
   async verifyPaymentDate(date) {
     await expect(this.paymentDateInput).toHaveValue(date);
-    console.log(`Payment Date Selected Successfully: ${date}`);
   }
 }
 
