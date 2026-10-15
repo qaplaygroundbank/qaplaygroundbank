@@ -4,12 +4,12 @@ import TransferPage from '../../pages/TransferPage.js';
 import testData from '../../testData/transferFundsData.json' assert { type: 'json' };
  
 test.describe('Transfer Money Positive Flow', () => {
-  let loginPage;
+  // let loginPage;
   let transferPage;
  
   // test.beforeEach sits outside the test() block
   test.beforeEach(async ({ page }) => {
-    loginPage = new LoginPage(page);
+    const loginPage = new LoginPage(page);
     transferPage = new TransferPage(page);
  
     // 1. Login to application
