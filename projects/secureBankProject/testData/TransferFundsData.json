@@ -1,0 +1,15 @@
+{
+  "validTransferToday": {
+    "amount": "250.00",
+    "dateOption": "today"
+  },
+  "validTransferScheduled": {
+      "amount": "250.00",
+    "dateOption": "schedule"
+  },
+  "invalidTransferZeroAmount": {
+    "amount": "0.00",
+    "dateOption": "today",
+    "expectedErrorMessage": "Please enter a valid amount."
+  }
+}
