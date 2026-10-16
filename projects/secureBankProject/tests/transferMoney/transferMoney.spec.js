@@ -29,26 +29,23 @@ test.describe('Transfer Money Page Tests', () => {
     await transferLink.click();
 
     await expect(transferPage.pageHeading).toBeVisible();
-    await expect(transferPage.pageHeading)
-      .toHaveText('Transfer Money');
+    await expect(transferPage.pageHeading).toHaveText('Transfer Money');
   });
+  test('TM-001: Transfer Money Validations @transferMoney @regression  ', async () => {
 
-  test('TM-001: Open Transfer Money and verify required controls  @regression ',async () => {
+    await expect(transferPage.fromAccountSelect).toBeVisible();
+    await expect(transferPage.toAccountSelect).toBeVisible();
+    await expect(transferPage.amountInput).toBeVisible();
 
-      await expect(transferPage.fromAccountSelect).toBeVisible();
-      await expect(transferPage.toAccountSelect).toBeVisible();
-      await expect(transferPage.amountInput).toBeVisible();
+    await expect(transferPage.transferDateTodayRadio).toBeVisible();
+    await expect(transferPage.transferDateScheduleRadio).toBeVisible();
 
-      await expect(transferPage.transferDateTodayRadio).toBeVisible();
-      await expect(transferPage.transferDateScheduleRadio).toBeVisible();
-
-      await expect(transferPage.reviewTransferButton).toBeVisible();
-      await expect(transferPage.cancelButton).toBeVisible();
-    }
+    await expect(transferPage.reviewTransferButton).toBeVisible();
+    await expect(transferPage.cancelButton).toBeVisible();
+  }
   );
 
-  
-test('TM-002: Select From Account and verify the selected account @smoke',async ({ page }) => {
+  test('TM-002: Transfer Money - Select From Account @transferMoney @smoke ', async ({ page }) => {
 
     await expect(transferPage.fromAccountSelect).toBeVisible();
 
@@ -67,6 +64,6 @@ test('TM-002: Select From Account and verify the selected account @smoke',async 
       .toHaveText(/acc-savings-1/);
 
   }
-);
+  );
 
 });
