@@ -11,6 +11,14 @@ const dashboardPageSelectors = {
         type: 'testId',
         value: 'sidebar-user-info'
     },
+    // The actual username label inside the sidebar user card:
+    // <span class="truncate text-xs text-slate-600 ...">standard_user</span>
+    // (userInfo also contains the avatar initials, e.g. "ST", so exact-match
+    // assertions must use this, not the whole userInfo container).
+    sidebarUsername: {
+        type: 'css',
+        value: '[data-testid="sidebar-user-info"] span.truncate'
+    },
     statCards: {
         type: 'testId',
         value: 'dashboard-stat-cards'

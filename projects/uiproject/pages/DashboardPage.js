@@ -16,6 +16,7 @@ class DashboardPage {
     this.dashboardContainer = resolveLocator(page, dashboardSelectors.dashboardContainer);
     this.welcomeMessage = resolveLocator(page, dashboardSelectors.welcomeMessage);
     this.userInfo = resolveLocator(page, dashboardSelectors.userInfo);
+    this.sidebarUsername = resolveLocator(page, dashboardSelectors.sidebarUsername);
     this.statCards = resolveLocator(page, dashboardSelectors.statCards);
     // Every statistic card in the section (generic `stat-card` test id).
     this.statCardItems = this.statCards.getByTestId(dashboardSelectors.statCard.value);
@@ -34,6 +35,17 @@ class DashboardPage {
     });
   }
 
+
+  // Returns the trimmed sidebar username (e.g. "standard_user" from
+  // <span class="truncate text-xs text-slate-600 ...">standard_user</span>
+  // inside `sidebar-user-info`), so specs can assert it equals the login user.
+  // NOTE: reads only the `span.truncate` label — the `sidebar-user-info`
+  // container also holds avatar initials ("ST"), so reading the container
+  // would return "STstandard_user".
+  async getSidebarUsername() {
+    const raw = await this.sidebarUsername.textContent();
+    return (raw ?? '').trim();
+  }
 
   // Each card renders its label in the first <p> and its value in the second <p>.
   accountSummaryLabel(card) {

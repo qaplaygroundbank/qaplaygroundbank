@@ -39,8 +39,14 @@ test.describe('Dashboard', () => {
     await expect(page).toHaveURL(/\/bank\/dashboard/);
     await expect(dashboardPage.dashboardContainer).toBeVisible();
     await expect(dashboardPage.welcomeMessage).toContainText('Welcome back');
-    await expect(dashboardPage.userInfo).toHaveText(new RegExp(`^\\S*${credentials.username}$`));
-// You have to asset about logged in user.
+    await expect(dashboardPage.userInfo).toBeVisible();
+    // Verify the name shown in the sidebar
+    // (<span class="truncate text-xs text-slate-600 ...">standard_user</span>
+    // inside `sidebar-user-info`) is the same as the logged-in user.
+    // NOTE: `sidebar-user-info` also contains avatar initials ("ST"), so the
+    // exact match must target `sidebarUsername`, not the whole container.
+    await expect(dashboardPage.sidebarUsername).toHaveText(credentials.username);
+    expect(await dashboardPage.getSidebarUsername()).toBe(credentials.username);
 
     // Verify the dashboard UI loaded with no blocking error
     await expect(dashboardPage.statCards).toBeVisible();
@@ -58,7 +64,6 @@ test.describe('Dashboard', () => {
     const credentials = appConfig.getUiCredentials(
       process.env.QA_PLAYGROUND_ENV || 'qa'
     );
-    const username = credentials.username;
     const formatter = createCurrencyFormatter(dashboardTestData.appConfig);
 
     await loginPage.openLoginPage();
@@ -66,13 +71,31 @@ test.describe('Dashboard', () => {
 
     await expect(page).toHaveURL(/\/bank\/dashboard/);
     await expect(dashboardPage.dashboardContainer).toBeVisible();
-    await expect(dashboardPage.userInfo).toHaveText(
-      new RegExp(`^\\S*${username}$`)
-    );
+    await expect(dashboardPage.userInfo).toBeVisible();
+    // Verify the name shown in the sidebar
+    // (<span class="truncate text-xs text-slate-600 ...">standard_user</span>
+    // inside `sidebar-user-info`) is the same as the logged-in user.
+    // NOTE: `sidebar-user-info` also contains avatar initials ("ST"), so the
+    // exact match must target `sidebarUsername`, not the whole container.
+    await expect(dashboardPage.sidebarUsername).toHaveText(credentials.username);
+    expect(await dashboardPage.getSidebarUsername()).toBe(credentials.username);
 
     await expect(dashboardPage.statCards).toBeVisible();
     await expect(dashboardPage.accountSummaryCards).toHaveCount(4);
+
+    // Expected account summary cards in dashboard display order.
+    const expectedCardLabels = ['Total Net Worth', 'Net Change', 'Income', 'Expenses'];
+    const actualCardLabels = [];
+
     for (const card of await dashboardPage.accountSummaryCards.all()) {
+      // Assert card name (label = first <p> in the card).
+      const label = dashboardPage.accountSummaryLabel(card);
+      await expect(label).toBeVisible();
+      const labelText = ((await label.textContent()) ?? '').trim();
+      expect(labelText).not.toBe('');
+      actualCardLabels.push(labelText);
+
+      // Assert card value (value = second <p> in the card).
       const value = dashboardPage.accountSummaryValue(card);
       await expect(value).toBeVisible();
 
@@ -82,6 +105,9 @@ test.describe('Dashboard', () => {
       expect(parseCurrencyValue(text)).not.toBeNaN();
       expect(matchesCurrencyFormat(text, formatter)).toBe(true);
     }
+
+    // Verify the cards displayed are exactly the expected cards, in order.
+    expect(actualCardLabels).toEqual(expectedCardLabels);
   });
 
     //Test case-03-account balance is displayed with valid currency format
