@@ -33,7 +33,7 @@ test.describe('Transfer Money Page Tests', () => {
       .toHaveText('Transfer Money');
   });
 
-  test('TM-001: Open Transfer Money and verify required controls  @smoke ',async () => {
+  test('TM-001: Open Transfer Money and verify required controls  @regression ',async () => {
 
       await expect(transferPage.fromAccountSelect).toBeVisible();
       await expect(transferPage.toAccountSelect).toBeVisible();
