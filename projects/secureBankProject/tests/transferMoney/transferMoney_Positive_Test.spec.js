@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import TransferPage from '../../pages/TransferPage.js';
-import testData from '../../testData/transferFundsData.json' assert { type: 'json' };
+import testData from '../../testData/TransferFundsData.json' assert { type: 'json' };
  
 test.describe('Transfer Money Positive Flow', () => {
   // let loginPage;

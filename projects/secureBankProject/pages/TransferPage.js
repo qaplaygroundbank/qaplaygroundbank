@@ -49,6 +49,7 @@ class TransferPage extends BasePage {
    * Automatically selects the first available option for 'From Account'
    * and the second available option for 'To Account'
    */
+
   async autoSelectAccounts() {
     // 1. Open 'From Account' dropdown and select the first item
     await this.fromAccountSelect.click();
@@ -85,7 +86,140 @@ class TransferPage extends BasePage {
       await this.transferDateTodayRadio.check();
     }
   }
- 
+   // ─────────────────────────────────────────────────────────────
+  // Distinct, dropdown-scoped account selection
+  // (added alongside autoSelectAccounts(), which is left unchanged)
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Opens a dropdown and returns ONLY the options that belong to it.
+   * Uses aria-controls when available, else the currently open listbox,
+   * instead of a page-wide getByRole('option').
+   */
+  async getScopedOptions(selectLocator) {
+    await selectLocator.click();
+
+    const listId = await selectLocator.getAttribute('aria-controls');
+    const list = listId
+      ? this.page.locator(`[id="${listId}"]`)
+      : this.page.getByRole('listbox').last();
+
+    const options = list.getByRole('option');
+    await options.first().waitFor({ state: 'visible' });
+    return options;
+  }
+
+  /**
+   * Selects the first option in the given dropdown whose text differs
+   * from `excludeText`, then verifies the dropdown shows that value.
+   * @returns {Promise<string>} the selected account text
+   */
+  // async selectAccountScoped(selectLocator, excludeText = null) {
+  //   const options = await this.getScopedOptions(selectLocator);
+  //   const texts = (await options.allInnerTexts()).map((t) => t.trim());
+
+  //   const index = texts.findIndex((t) => t && t !== excludeText);
+  //   if (index === -1) {
+  //     await this.page.keyboard.press('Escape'); // close dropdown
+  //     throw new Error(
+  //       `No selectable account found. Options: [${texts.join(', ')}], excluded: "${excludeText}"`
+  //     );
+  //   }
+
+  //   const selectedText = texts[index];
+  //   await options.nth(index).click();
+
+  //   // Verify the dropdown now displays the chosen account (auto-waits, no expect needed)
+  //   await selectLocator.filter({ hasText: selectedText }).waitFor({ state: 'visible' });
+
+  //   return selectedText;
+  // }
+
+  async selectAccountScoped(selectLocator, excludeText = null) {
+  const options = await this.getScopedOptions(selectLocator);
+  const optionTexts = (await options.allInnerTexts()).map(text => text.trim());
+
+  const index = optionTexts.findIndex(
+    text => text && text !== excludeText
+  );
+
+  if (index === -1) {
+    await this.page.keyboard.press('Escape');
+
+    throw new Error(
+      `No distinct account available. Options: [${optionTexts.join(', ')}]`
+    );
+  }
+
+  const selectedOption = options.nth(index);
+  const selectedText = optionTexts[index];
+
+  // Capture the option's machine-readable value before clicking.
+  const expectedValue =
+    await selectedOption.getAttribute('data-value') ??
+    await selectedOption.getAttribute('value');
+
+  await selectedOption.click();
+
+  /*
+   * This custom combobox stores its selected value in the associated
+   * hidden textbox. The textbox appears immediately after the combobox
+   * in the page snapshot.
+   */
+  const hiddenInput = selectLocator.locator('xpath=following-sibling::input[1]');
+
+  if (expectedValue) {
+    await hiddenInput.waitFor({ state: 'attached' });
+
+    const actualValue = await hiddenInput.inputValue();
+
+    if (actualValue !== expectedValue) {
+      throw new Error(
+        `Account selection failed. Expected "${expectedValue}", but found "${actualValue}".`
+      );
+    }
+  } else {
+    // Fallback: verify that the dropdown no longer has its initial value.
+    await this.page.waitForFunction(
+      input => Boolean(input?.value?.trim()),
+      await hiddenInput.elementHandle()
+    );
+  }
+
+  return selectedText;
+}
+  /**
+   * Selects different From and To accounts, each scoped to its own dropdown.
+   * @returns {Promise<{from: string, to: string}>}
+   */
+  async autoSelectDistinctAccounts() {
+    const from = await this.selectAccountScoped(this.fromAccountSelect);
+    const to = await this.selectAccountScoped(this.toAccountSelect, from);
+
+    if (from === to) {
+      throw new Error(`From and To accounts must differ, but both are "${from}"`);
+    }
+    return { from, to };
+  }
+
+  /**
+   * Same as fillTransferForm(), but uses the distinct-account selection.
+   * @param {Object} data - Contains amount and dateOption
+   */
+  async fillTransferFormWithDistinctAccounts({ amount, dateOption = 'today' }) {
+    const accounts = await this.autoSelectDistinctAccounts();
+
+    await this.amountInput.fill(String(amount));
+
+    if (dateOption.toLowerCase() === 'schedule') {
+      await this.transferDateScheduleRadio.check();
+    } else {
+      await this.transferDateTodayRadio.check();
+    }
+    return accounts;
+  }
+
+
   /**
    * Click Review Transfer CTA button
    */
@@ -99,6 +233,8 @@ class TransferPage extends BasePage {
   async confirmTransfer() {
     await this.confirmTransferButton.click();
   }
+
+  
 }
  
 export default TransferPage;
