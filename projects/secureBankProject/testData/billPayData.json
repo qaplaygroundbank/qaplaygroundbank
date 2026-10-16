@@ -3,12 +3,11 @@
         "fromAccount": "Everyday Checking",
         "biller": "Electric",
         "amount": "500",
-        "memo": "Monthly bill payment"
+        "memo": "Monthly bill payment",
+        "paymentDate": "2026-10-14"
     },
-        "negativeAmountUser": {
-        "fromAccount": "Everyday Checking",
-        "biller": "Electric",
-        "amount": "-500",
-        "memo": "Monthly bill payment"
-    }
+    "addBiller": {
+    "billerName": "City Electric Co",
+    "accountNumber": "ACC-0042"
+  }
 }

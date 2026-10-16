@@ -69,17 +69,37 @@ const billPaySelectors = {
         type: 'testId',
         value: 'bill-pay-ref-id'
     },
+    // ADD NEW SELECTORS HERE
+    addBillerButton: {
+        type: 'role',
+        role: 'button',
+        name: 'Add'
+    },
+    
+    addBillerHeading: {
+        type: 'role',
+        role: 'heading',
+        name: 'Add New Biller'
+    },
+    newBillerNameInput: {
+    type: 'placeholder',
+    value: 'e.g. City Electric Co.'
+    },
 
-    amountValidationMessage: {
-        type: 'testId',
-        value: 'bill-pay-error'
-},
+    accountReferenceInput: {
+        type: 'placeholder',
+        value: 'e.g. ACC-0042'
+    },
 
-    closeConfirmPaymentPopup: {
+    submitAddBillerButton: {
+        type: 'role',
+        role: 'button',
+        name: 'Add Biller'
+    },
 
-       type: 'css',
-       value: '[data-slot="dialog-close"]'
-
+    paymentDateInput: {
+    type: 'label',
+    value: 'Payment Date'
 }
 
 };

@@ -20,9 +20,12 @@ class BillPayPage extends BasePage {
     this.confirmPaymentHeading = resolveLocator(page, billPaySelectors.confirmPaymentHeading);
     this.successHeading = resolveLocator(page, billPaySelectors.successHeading);
     this.referenceNumber = resolveLocator(page, billPaySelectors.referenceNumber);
-    this.amountValidationError = page.getByText('Please enter a valid amount.');
-    this.amountValidationMessage = resolveLocator(page, billPaySelectors.amountValidationMessage);
-    this.closeConfirmPaymentPopup = resolveLocator(page, billPaySelectors.closeConfirmPaymentPopup);
+    this.addBillerButton = resolveLocator(page, billPaySelectors.addBillerButton);
+    this.addBillerHeading = resolveLocator(page,billPaySelectors.addBillerHeading);
+    this.newBillerNameInput = resolveLocator(page,billPaySelectors.newBillerNameInput);
+    this.accountReferenceInput = resolveLocator(page,billPaySelectors.accountReferenceInput);
+    this.submitAddBillerButton = resolveLocator(page,billPaySelectors.submitAddBillerButton);
+    this.paymentDateInput = resolveLocator(page,billPaySelectors.paymentDateInput);
   }
 
   async navigateToBillPay() {
@@ -106,17 +109,29 @@ class BillPayPage extends BasePage {
         VALIDATIONS.BILL_PAY_CONFIRMATION_URL
       );
   }
-  
-  // Verify zero amount is rejected.
-  async verifyZeroAmountValidation() {
-    await expect(this.amountValidationMessage).toHaveText('Please enter a valid amount.');
+  async clickAddBiller() {
+    await this.addBillerButton.click();
   }
-  
-  // Verify a valid positive bill amount is accepted.
-  async closeConfirmPaymentDialog() {
-     await this.closeConfirmPaymentPopup.click();
-    }
 
+  async verifyAddBillerPageDisplayed() {
+    await expect(this.addBillerHeading)
+        .toBeVisible();
+  }
+  async addNewBiller(billerName, accountNumber) {
+    await this.newBillerNameInput.fill(billerName);
+    await this.accountReferenceInput.fill(accountNumber);
+    await this.submitAddBillerButton.click();
+  }
+  async verifyBillerAdded(billerName) {
+    await expect(this.page.getByText(billerName)).toBeVisible();
+  }
+  async selectPaymentDate(date) {
+    await this.paymentDateInput.click();
+    await this.paymentDateInput.fill(date);
+  }
+  async verifyPaymentDate(date) {
+    await expect(this.paymentDateInput).toHaveValue(date);
+  }
 }
 
 export default BillPayPage;
