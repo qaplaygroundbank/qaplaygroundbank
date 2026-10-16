@@ -21,6 +21,7 @@ test.describe('Money Transactions', () => {
         await loginPage.login(credentials.username, credentials.password);
         await expect(page).toHaveURL(VALIDATIONS.DASHBOARD_URL, {
             timeout: 10000
+        
         });
     });
 
