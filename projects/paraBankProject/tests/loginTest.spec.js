@@ -14,7 +14,6 @@ test.describe('Bank Login', () => {
             credentials.username,
             credentials.password
         );
-
         await expect(page).toHaveURL(VALIDATIONS.WELCOMEPAGE_URL);
     });
 
