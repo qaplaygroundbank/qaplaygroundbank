@@ -11,5 +11,7 @@ export const URLS = {
 
 export const VALIDATIONS = {
     DASHBOARD_URL: /dashboard/,
-    BILL_PAY_CONFIRMATION_URL: /bill-pay\/confirmation/
+    BILL_PAY_CONFIRMATION_URL: /bill-pay\/confirmation/,
+    PROFILE_URL : /profile/,
+    PROFILE_TITLE: /Profile & Settings/
 };

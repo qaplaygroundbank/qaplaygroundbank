@@ -15,7 +15,7 @@ class TransferPage extends BasePage{
     this.fromAccountError = resolveLocator(page, transferPageSelectors.fromAccountError);
         //Transfer page
     this.navTransfer = resolveLocator(page, transferPageSelectors.navTransfer);
-
+    
     this.toAccountSelect = resolveLocator(page, transferPageSelectors.toAccountSelect);
     this.amountInput = resolveLocator(page, transferPageSelectors.amountInput);
     this.memoInput = resolveLocator(page, transferPageSelectors.memoInput);
