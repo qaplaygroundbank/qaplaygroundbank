@@ -94,6 +94,10 @@ class ProfilePage extends BasePage {
         await this.submitButton.click();
     }
 
+    async saveChangebuttonIsEnabled() {
+        await expect(this.submitButton).toBeEnabled();
+    }
+
     async verifyProfileUpdateSuccessMessage(successMessage) {
         await expect(this.profileSuccessMessage).toBeVisible();
         await expect(this.profileSuccessMessage).toHaveText(successMessage);
@@ -113,13 +117,13 @@ class ProfilePage extends BasePage {
     }
 
     async clearEmailField() {
-        const emailInput = await this.email;
-        await emailInput.clear();
+        await this.email.clear();
+
     }
 
     async clearPhoneField() {
-        const phonenumber = await this.phoneInput;
-        await phonenumber.clear();
+        await this.phoneInput.clear();
+
     }
 
     async enterPhoneNumber(phoneNumber) {
@@ -128,8 +132,7 @@ class ProfilePage extends BasePage {
 
 
     async verifyEmailErrorMessage(expectedErrorMessage) {
-        const actualErrorMessage = await this.profileErrorMessage.textContent();
-        expect(actualErrorMessage).toBe(expectedErrorMessage);
+        await expect(this.profileErrorMessage).toHaveText(expectedErrorMessage);
     }
 
     async verifyPhoneErrorMessage(expectedPhoneErrorMessage) {

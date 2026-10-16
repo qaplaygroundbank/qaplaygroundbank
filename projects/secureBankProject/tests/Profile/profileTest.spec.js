@@ -71,6 +71,7 @@ test.describe('Profile', () => {
          
         await profilePage.tapOnSaveProfileChanges();
         await profilePage.verifyEmailErrorMessage(ProfileTestData.InvalidEmailId.EMailErrorMessage);
+        await profilePage.saveChangebuttonIsEnabled();
 
     });
 
