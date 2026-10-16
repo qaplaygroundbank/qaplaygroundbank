@@ -9,7 +9,10 @@
   "scripts": {
     "cli": "node bin/qaplayground.js",
     "test": "playwright test",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "ui": "node bin/qaplayground.js securebank --env qa --suite smoke",
+    "ui:dashboard": "playwright test projects/secureBankProject/tests/dashboard.spec.js --config projects/secureBankProject/config/secureBankProject.config.js --project chromium --reporter list",
+    "ui:headed": "node bin/qaplayground.js securebank --env qa --suite smoke --headed"
   },
   "keywords": [
     "playwright",
