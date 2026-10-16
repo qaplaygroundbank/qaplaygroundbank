@@ -4,7 +4,17 @@
     "locale": "en-US",
     "netWorthCardLabel": "Net Worth"
   },
+  "loginCredentials": {
+    "username": "standard_user",
+    "password": "bank_sauce"
+  },
   "standardUser": {
-    "expectedDashboardNetWorth": "$17,050.00"
+    "expectedDashboardNetWorth": "$17,050.00",
+    "expectedCardLabelsInOrder": [
+      "Total Net Worth",
+      "Net Change",
+      "Income",
+      "Expenses"
+    ]
   }
 }
