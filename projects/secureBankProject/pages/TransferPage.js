@@ -15,7 +15,7 @@ class TransferPage extends BasePage {
     this.fromAccountSelect = resolveLocator(page, transferPageSelectors.fromAccountSelect);
     this.toAccountSelect = resolveLocator(page, transferPageSelectors.toAccountSelect);
     this.amountInput = resolveLocator(page, transferPageSelectors.amountInput);
-    // this.memoInput = resolveLocator(page, transferPageSelectors.memoInput);
+    this.memoInput = resolveLocator(page, transferPageSelectors.memoInput);
  
     // Radios & Buttons
     this.transferDateTodayRadio = resolveLocator(page, transferPageSelectors.transferDateTodayRadio);
@@ -23,7 +23,8 @@ class TransferPage extends BasePage {
     this.reviewTransferButton = resolveLocator(page, transferPageSelectors.reviewTransferButton);
     this.confirmTransferButton = resolveLocator(page, transferPageSelectors.confirmTransferButton);
     this.cancelButton = resolveLocator(page, transferPageSelectors.cancelButton);
- 
+    this.confirmModalLocator = resolveLocator(page, transferPageSelectors.confirmModal);
+    this.confirmModalAmount = resolveLocator(page, transferPageSelectors.confirmModalAmount);
     // Feedback
     this.successMessage = page.getByTestId('transfer-success-heading');
 
@@ -43,6 +44,10 @@ class TransferPage extends BasePage {
    */
   async openTransferPage() {
     await this.navigate(URLS?.TRANSFER_PAGE || '/bank/transfer');
+  }
+    //nav Transfer
+  async openTransferMoney() {
+    await this.navTransfer.click();
   }
  
   /**
@@ -75,15 +80,31 @@ class TransferPage extends BasePage {
  
     await this.amountInput.fill(String(amount));
  
-    // if (memo) {
-    //   await this.memoInput.fill(memo);
-    // }
+    if (memo) {
+      await this.memoInput.fill(memo);
+    }
  
     if (dateOption.toLowerCase() === 'schedule') {
       await this.transferDateScheduleRadio.check();
     } else {
       await this.transferDateTodayRadio.check();
     }
+  }
+  /**
+   * Confirm Transfer Modal Dialog
+   */
+  async confirmModalLoad(timeout = 5000){
+    await this.confirmModalLocator.waitFor({state: 'visible', timeout});
+  }
+  /**
+   * Confirm Transfer Amount 
+   */
+  async getConfirmModalAmountText(){
+    if(await this.confirmModalAmount.count()>0){
+      return (await this.confirmModalAmount.first().innerText()).trim();
+    }
+    return '';
+
   }
  
   /**

@@ -75,6 +75,17 @@ const transferPageSelectors = {
     type: 'testId',
     value: 'transfer-error-message',
   },
+
+  //Confirmation modal (specific selectors)
+  confirmModal: { 
+    type: 'role', 
+    role: 'dialog', 
+    name: 'Confirm Transfer', 
+  },
+  confirmModalAmount:{
+    type:'xpath',
+    value: ".//*[normalize-space(text())='Amount']/following-sibling::*[1]"
+  },
 };
  
 export default transferPageSelectors;
