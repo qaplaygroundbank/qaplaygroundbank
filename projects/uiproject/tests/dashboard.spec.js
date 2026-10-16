@@ -20,24 +20,25 @@ test.afterEach(async ({ page }) => {
 
 test.describe('Dashboard', () => {
 
-  test('Verify dashboard is displayed after successful authentication', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    const credentials = appConfig.getUiCredentials(
+  let loginPage;
+  let dashboardPage;
+  let credentials;
+
+  test.beforeEach(async ({ page }) => {
+    loginPage = new LoginPage(page);
+    dashboardPage = new DashboardPage(page);
+    credentials = appConfig.getUiCredentials(
       process.env.QA_PLAYGROUND_ENV || 'qa'
     );
 
-    // Step 1: Open the login page and check the fields are displayed
+    // One-time login for all dashboard tests.
     await loginPage.openLoginPage();
-    await expect(loginPage.usernameInput).toBeVisible();
-    await expect(loginPage.passwordInput).toBeVisible();
-
-    // Steps 2 & 3: Enter valid credentials and click Sign In
     await loginPage.login(credentials.username, credentials.password);
-
-    // Step 4: Verify the user is redirected to the dashboard
     await expect(page).toHaveURL(/\/bank\/dashboard/);
     await expect(dashboardPage.dashboardContainer).toBeVisible();
+  });
+
+  test('Verify dashboard is displayed after successful authentication', async ({ page }) => {
     await expect(dashboardPage.welcomeMessage).toContainText('Welcome back');
     await expect(dashboardPage.userInfo).toBeVisible();
     // Verify the name shown in the sidebar
@@ -59,18 +60,9 @@ test.describe('Dashboard', () => {
   });
 
   test('Verify account summary/cards are displayed for the logged-in customer', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    const credentials = appConfig.getUiCredentials(
-      process.env.QA_PLAYGROUND_ENV || 'qa'
-    );
     const formatter = createCurrencyFormatter(dashboardTestData.appConfig);
 
-    await loginPage.openLoginPage();
-    await loginPage.login(credentials.username, credentials.password);
-
     await expect(page).toHaveURL(/\/bank\/dashboard/);
-    await expect(dashboardPage.dashboardContainer).toBeVisible();
     await expect(dashboardPage.userInfo).toBeVisible();
     // Verify the name shown in the sidebar
     // (<span class="truncate text-xs text-slate-600 ...">standard_user</span>
@@ -113,20 +105,11 @@ test.describe('Dashboard', () => {
     //Test case-03-account balance is displayed with valid currency format
 
   test('Account balance is displayed with valid currency format', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const dashboardPage = new DashboardPage(page);
-    const credentials = appConfig.getUiCredentials(
-      process.env.QA_PLAYGROUND_ENV || 'qa'
-    );
     const appConfigData = dashboardTestData.appConfig;
     const formatter = createCurrencyFormatter(appConfigData);
 
 
-    await loginPage.openLoginPage();
-    await loginPage.login(credentials.username, credentials.password);
-
     await expect(page).toHaveURL(/\/bank\/dashboard/);
-    await expect(dashboardPage.dashboardContainer).toBeVisible();
     await expect(dashboardPage.accountSummaryCards).toHaveCount(4);
 
     const cards = await dashboardPage.accountSummaryCards.all();
