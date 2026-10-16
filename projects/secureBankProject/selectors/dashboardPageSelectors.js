@@ -45,6 +45,13 @@ const dashboardPageSelectors = {
     errorMessage: {
         type: 'role',
         role: 'alert'
+    },
+    // Visible blocking-error alerts, excluding the Next.js route announcer
+    // (`#__next-route-announcer__`, e.g. "Welcome back, Alex") which is also
+    // role="alert" but is not an error.
+    blockingErrorAlert: {
+        type: 'css',
+        value: '[role="alert"]:not(#__next-route-announcer__)'
     }
 };
 
