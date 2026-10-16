@@ -64,3 +64,18 @@ Do not place secrets in test files, README examples, or committed `.env` files.
 The manual workflow offers `api` as a project choice and passes the selected environment and suite to the CLI. At present, that invocation reaches the placeholder runner. Update this README when real API execution is implemented so the documented commands, configuration variables, and test/report behavior reflect the actual implementation.
 
 For common setup, CLI options, environment handling, contribution workflow, and CI details, see the [root README](../../readme.md).
+
+## How to run this project 
+Installation of the allure-mocha report
+npm install --save-dev allure-mocha allure-js-commons
+npm install --save-dev allure-commandline
+
+command to run
+npx mocha .\tests\posts.test.js
+
+Run and generate the allure report
+npx mocha .\tests\posts.test.js --reporter allure-mocha
+allure generate allure-results -o allure-report --clean
+Below command will serve the allure report in the browser 
+npx allure open allure-report
+

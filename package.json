@@ -21,7 +21,12 @@
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.64.0",
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "allure-commandline": "^2.46.1",
+    "allure-js-commons": "^3.13.0",
+    "allure-mocha": "^3.13.0",
+    "mochawesome": "^8.1.1",
+    "mochawesome-report-generator": "^6.3.2"
   },
   "dependencies": {
     "chai": "^6.3.0",
