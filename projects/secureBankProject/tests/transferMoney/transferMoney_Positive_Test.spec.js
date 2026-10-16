@@ -22,7 +22,7 @@ test.describe('Transfer Money Positive Flow', () => {
   });
  
   // Now define the test() block
-  test('Complete money transfer with auto-selected accounts and verify success', async ({ page }) => {
+  test('Complete money transfer with auto-selected accounts and verify success @smoke', async ({ page }) => {
     const data = testData.validTransferToday;
  
     // 2. Click Transfer on the left menu
@@ -47,7 +47,7 @@ test.describe('Transfer Money Positive Flow', () => {
     });
   });
 
-   test('Should display error message when transfer amount is 0', async ({ page }) => {
+   test('Should display error message when transfer amount is 0 @regression', async ({ page }) => {
     const data = testData.invalidTransferZeroAmount;
  
     // 2. Open Transfer Page via sidebar menu[span_14](start_span)
