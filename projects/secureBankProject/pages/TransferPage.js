@@ -52,7 +52,20 @@ class TransferPage extends BasePage {
   async autoSelectAccounts() {
     // 1. Open 'From Account' dropdown and select the first item
     await this.fromAccountSelect.click();
-    await this.page.getByRole('option').first().click();
+   const fromOption = this.page.getByRole('option').first();
+const accountText = await fromOption.innerText();
+await fromOption.click();
+ 
+const balanceMatch = accountText.match(
+  /\$\s*([\d,]+(?:\.\d{2})?)/
+);
+ 
+if (!balanceMatch) {
+  throw new Error('Available balance not found');
+}
+ 
+
+ 
  
     // 2. Open 'To Account' dropdown and select the second item
     await this.toAccountSelect.click();
@@ -64,6 +77,7 @@ class TransferPage extends BasePage {
     } else {
       await toOptions.first().click();
     }
+    return Number(balanceMatch[1].replace(/,/g, ''));
   }
  
   /**
@@ -71,9 +85,9 @@ class TransferPage extends BasePage {
    * @param {Object} data - Contains amount,  and dateOption
    */
   async fillTransferForm({ amount, dateOption = 'today' }) {
-    await this.autoSelectAccounts();
+  const balance = await this.autoSelectAccounts();
  
-    await this.amountInput.fill(String(amount));
+  await this.amountInput.fill(String(amount ?? balance));
  
     // if (memo) {
     //   await this.memoInput.fill(memo);
