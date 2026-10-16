@@ -38,6 +38,94 @@ class ProfilePage extends BasePage {
         ).toBeEnabled();
     }
 
+    // Verify Profile page is displayed
+    async verifyProfilePageVisible() {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.profilePage.value)
+        ).toBeVisible();
+    }
+
+    // Verify Username
+    async verifyUsername(username) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.username.value)
+        ).toHaveText(username);
+    }
+
+    // Verify First Name
+    async verifyFirstName(firstName) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.firstName.value)
+        ).toHaveText(firstName);
+    }
+
+    // Verify Last Name
+    async verifyLastName(lastName) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.lastName.value)
+        ).toHaveText(lastName);
+    }
+
+    // Verify Email
+    async verifyEmail(email) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.email.value)
+        ).toHaveText(email);
+    }
+
+    // Verify Phone
+    async verifyPhone(phone) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.phone.value)
+        ).toHaveText(phone);
+    }
+
+    // Verify Address
+    async verifyAddress(address) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.address.value)
+        ).toHaveText(address);
+    }
+
+    // Click Edit Profile button
+    async clickEditProfile() {
+        await this.page
+            .getByTestId(profilePageSelectors.editProfileButton.value)
+            .click();
+    }
+
+    // Verify Profile Email
+    async verifyProfileEmail(email) {
+        await expect(
+            this.page.getByTestId(profilePageSelectors.profileEmail.value)).toHaveText(email);
+    }
+
+    // Enter Phone Number
+    async enterPhone(phoneNumber) {
+        await this.phoneInput.clear();
+        await this.phoneInput.fill(phoneNumber);
+    }
+
+    // Click Save Profile button
+    async clickSaveProfile() {
+        await this.page
+            .getByTestId(profilePageSelectors.submitButton.value)
+            .click();
+    }
+
+    // Verify Phone Input Value
+    async verifyPhoneValue(expectedPhone) {
+        await expect(this.phoneInput).toHaveValue(expectedPhone);
+    }
+
+    // Verify Phone Validation Message
+    async verifyPhoneValidationMessage() {
+    await expect(
+        this.page.getByTestId(
+            profilePageSelectors.phoneValidationError.value)
+            ).toHaveText(VALIDATIONS.PHONE_VALIDATION_MESSAGE);
+    }
+
     async verifyValidEmail(validEmail) {
         await this.page.getByTestId(profilePageSelectors.editProfileButton.value).click();
         const emailInput = this.page.getByTestId(profilePageSelectors.email.value);

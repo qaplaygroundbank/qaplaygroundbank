@@ -9,8 +9,16 @@
     "InvalidEmailId": {
         "Email": "xyz"
     },
+
+    "PhoneData": {
+    "ValidPhone": "(415) 555-0101",
+    "InvalidPhone": "12345",
+    "AboveMaxPhone": "12345678901234567890"
+    },
+    
     "editProfile": {
         "phone": "(918) 366-1010",
         "successMessage": "Profile updated successfully."
     }
+
 }
