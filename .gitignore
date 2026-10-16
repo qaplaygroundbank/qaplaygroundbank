@@ -3,9 +3,24 @@
 .env.*
 !.env.example
 
+
+  # Playwright generated test artifacts
+/test-results/
+/playwright-report/
+/screenshots/
+ 
+# Screenshots inside project test folders
+**/screenshots/
+**/test-results/
+ 
+# Playwright authentication and cache
+/playwright/.cache/
+/playwright/.auth/
+
+
 # Playwright
 node_modules/
-/test-results/
+
 /playwright-report/
 /blob-report/
 /playwright/.cache/

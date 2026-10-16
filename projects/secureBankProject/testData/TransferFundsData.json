@@ -1,0 +1,26 @@
+{
+  "validTransferToday": {
+    "amount": "250.00",
+    "dateOption": "today"
+  },
+  "validTransferScheduled": {
+      "amount": "250.00",
+    "dateOption": "schedule"
+  },
+  "invalidTransferZeroAmount": {
+    "amount": "0.00",
+    "dateOption": "today",
+    "expectedErrorMessage": "Please enter a valid amount."
+  },
+  "transferNegativeAmount": {
+    "amount": "-240.00",
+    "dateOption": "today",
+    "expectedErrorMessage": "Please enter a valid amount."
+  },
+   "transferHighAmount": {
+    "amount": "24000.00",
+    "dateOption": "today",
+    "expectedErrorMessage": "Insufficient funds."
+  }
+}
+
