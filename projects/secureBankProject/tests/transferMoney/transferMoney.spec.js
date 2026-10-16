@@ -35,7 +35,7 @@ test.describe('Transfer Money Page Tests', () => {
 
     await expect(transferPage.fromAccountSelect).toBeVisible();
     await expect(transferPage.toAccountSelect).toBeVisible();
-    await expect(transferPage.amountInput).toBeVisible();
+    await expect(transferPage.amountInput).toBeVisible(); 
 
     await expect(transferPage.transferDateTodayRadio).toBeVisible();
     await expect(transferPage.transferDateScheduleRadio).toBeVisible();
