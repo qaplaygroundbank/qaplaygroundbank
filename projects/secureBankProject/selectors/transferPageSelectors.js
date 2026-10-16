@@ -26,6 +26,12 @@ const transferPageSelectors = {
     role: 'combobox',
     name: 'To Account',
   },
+    //To Account Selected Value
+  toAccountSelectedValue: {
+    type: 'css',
+    value: '[data-testid="transfer-to-select"] [data-slot="select-value"]',
+  },
+
   // Amount input
   amountInput: {
     type: 'role',

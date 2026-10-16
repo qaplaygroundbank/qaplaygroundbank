@@ -17,6 +17,9 @@ class TransferPage extends BasePage{
     this.navTransfer = resolveLocator(page, transferPageSelectors.navTransfer);
     
     this.toAccountSelect = resolveLocator(page, transferPageSelectors.toAccountSelect);
+          //To Account Selected Value
+    this.toAccountSelectedValue = resolveLocator(page, transferPageSelectors.toAccountSelectedValue);
+    
     this.amountInput = resolveLocator(page, transferPageSelectors.amountInput);
     this.memoInput = resolveLocator(page, transferPageSelectors.memoInput);
     // Transfer Date Radio Buttons
@@ -25,6 +28,7 @@ class TransferPage extends BasePage{
     // CTA Buttons
     this.reviewTransferButton = resolveLocator(page, transferPageSelectors.reviewTransferButton);
     this.cancelButton = resolveLocator(page, transferPageSelectors.cancelButton);
+        
   }
   async openTransferPage() {
     await this.navigate(URLS.TRANSFER_PAGE || '/bank/transfer');
@@ -35,13 +39,10 @@ class TransferPage extends BasePage{
   async selectToAccount(account) {
     await this.toAccountSelect.selectOption(account);
   }
-  //nav Transfer
-  async openTransferMoney() {
+  //nav Transfer Tab
+  async openTransferTab() {
     await this.navTransfer.click();
   }
-  //   async openTransferPage2() {
-  //   await this.navTransfer.click();
-  // }
 
   //ChooseFrom Account
   async chooseFromAccount(account) {
@@ -53,6 +54,7 @@ async chooseToAccount(account) {
     await this.toAccountSelect.click();
     await this.page.getByRole('option', { name: account }).click();
 }
+
   async enterAmount(amount) {
     await this.amountInput.fill(String(amount));
   }
