@@ -1,0 +1,10 @@
+{
+  "appConfig": {
+    "currency": "USD",
+    "locale": "en-US",
+    "netWorthCardLabel": "Net Worth"
+  },
+  "standardUser": {
+    "expectedDashboardNetWorth": "$17,050.00"
+  }
+}

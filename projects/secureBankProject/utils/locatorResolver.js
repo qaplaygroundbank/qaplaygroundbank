@@ -57,13 +57,14 @@ function resolveLocator(page, selector) {
                 );
             }
 
+            // "name" is optional: a role-only locator such as getByRole('alert')
+            // has no accessible name. When a name is supplied it is matched
+            // (optionally with exact matching) as before.
             if (
                 typeof selector.name !== 'string' ||
                 !selector.name.trim()
             ) {
-                throw new Error(
-                    'Invalid role locator: "name" is required.'
-                );
+                return page.getByRole(selector.role);
             }
 
             return page.getByRole(selector.role, {
