@@ -15,8 +15,8 @@ test.describe('Transfer Money Page Tests', () => {
     const username = process.env.UI_QA_USERNAME;
     const password = process.env.UI_QA_PASSWORD;
 
-    expect(username, 'UI_QA_USERNAME is not configured').toBeTruthy();
-    expect(password, 'UI_QA_PASSWORD is not configured').toBeTruthy();
+    expect(username, 'UI_QA_USERNAME is  not configured').toBeTruthy();
+    expect(password, 'UI_QA_PASSWORD is  not configured').toBeTruthy();
 
     await loginPage.login(username, password);
 
@@ -45,7 +45,7 @@ test.describe('Transfer Money Page Tests', () => {
   }
   );
 
-  test('TM-002: Transfer Money - Select From Account @transferMoney @smoke ', async ({ page }) => {
+  test('TM-002: Transfer Money -Select From Account @transferMoney @smoke ', async ({ page }) => {
 
     await expect(transferPage.fromAccountSelect).toBeVisible();
 
