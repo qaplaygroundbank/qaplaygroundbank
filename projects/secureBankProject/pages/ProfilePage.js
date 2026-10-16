@@ -8,13 +8,20 @@ class ProfilePage extends BasePage {
     constructor(page) {
         super(page);
 
-        this.profileLink = resolveLocator(page, profilePageSelectors.profileLink)
-        this.profilePageTitle = resolveLocator(page, profilePageSelectors.profilePageTitle)
-        this.editProfileButton = resolveLocator(page, profilePageSelectors.editProfileButton)
-        this.phoneInput = resolveLocator(page, profilePageSelectors.phoneInput)
-        this.submitButton = resolveLocator(page, profilePageSelectors.submitButton)
-        this.profileSuccessMessage = resolveLocator(page, profilePageSelectors.profileSuccessMessage)
-        this.phone = resolveLocator(page, profilePageSelectors.phone)
+        this.profileLink = resolveLocator(page, profilePageSelectors.profileLink);
+        this.profilePageTitle = resolveLocator(page, profilePageSelectors.profilePageTitle);
+        this.editProfileButton = resolveLocator(page, profilePageSelectors.editProfileButton);
+        this.phoneInput = resolveLocator(page, profilePageSelectors.phoneInput);
+        this.submitButton = resolveLocator(page, profilePageSelectors.submitButton);
+        this.profileSuccessMessage = resolveLocator(page, profilePageSelectors.profileSuccessMessage);
+        this.phone = resolveLocator(page, profilePageSelectors.phone);
+        this.email = resolveLocator(page, profilePageSelectors.email);
+        this.profileErrorMessage = resolveLocator(page, profilePageSelectors.profileErrorMessage);
+    }
+
+    async getVisibleText(locator) {
+        const text = await locator.textContent();
+        return text ? text.trim() : '';
     }
 
     // Navigate to Profile page
@@ -100,5 +107,39 @@ class ProfilePage extends BasePage {
         expect(actualPhone).toBe(newPhoneNumber);
 
     }
+
+    async enterEmail(requiredEmail) {
+        await this.email.fill(requiredEmail);
+    }
+
+    async clearEmailField() {
+        const emailInput = await this.email;
+        await emailInput.clear();
+    }
+
+    async clearPhoneField() {
+        const phonenumber = await this.phoneInput;
+        await phonenumber.clear();
+    }
+
+    async enterPhoneNumber(phoneNumber) {
+        await this.phoneInput.fill(phoneNumber);
+    }
+
+
+    async verifyEmailErrorMessage(expectedErrorMessage) {
+        const actualErrorMessage = await this.profileErrorMessage.textContent();
+        expect(actualErrorMessage).toBe(expectedErrorMessage);
+    }
+
+    async verifyPhoneErrorMessage(expectedPhoneErrorMessage) {
+        const regexMatch = /^\/(.*)\/$/.exec(expectedPhoneErrorMessage);
+        const expectedText = regexMatch
+            ? new RegExp(regexMatch[1])
+            : expectedPhoneErrorMessage;
+
+        await expect(this.profileErrorMessage).toHaveText(expectedText);
+    }
+
 }
 export default ProfilePage;
