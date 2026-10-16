@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 import LoginPage from '../../pages/LoginPage.js';
 import ProfilePage from '../../pages/ProfilePage.js';
 import ProfileTestData from '../../testData/ProfileTestData.json' with { type: 'json' };
+import { VALIDATIONS } from '../../utils/constants.js';
+
 
 test.describe('Profile', () => {
     let context;
@@ -30,9 +32,35 @@ test.describe('Profile', () => {
         await profilePage.verifyInvalidEmail(ProfileTestData.InvalidEmailId.Email);
     });
 
+
+
+    // PROF-003 - Verify valid profile changes can be saved.
+    test('PROF-003 Verify valid profile changes can be saved.', { tag: ['@smoke', '@profile'] }, async ({ page }) => {
+        -
+            // Navigate to Profile page
+            await profilePage.navigateToProfile();
+
+        // Verify Profile page details
+        await profilePage.verifyProfileUrl();
+        await profilePage.verifyProfileTitle();
+
+        //Click on EditProfilebutton
+        await profilePage.tapOnEditProfileButton();
+        await profilePage.updateMobileNumber(ProfileTestData.editProfile.phone);
+        await profilePage.tapOnSaveProfileChanges();
+        await profilePage.verifyProfileUpdateSuccessMessage(ProfileTestData.editProfile.successMessage);
+        await profilePage.refeshPageAndValidateupdatedPhoneNumber(ProfileTestData.editProfile.phone);
+
+
+    });
+
     // Logout and close browser session after all Profile tests
     test.afterAll(async () => {
         await loginPage.logout();
         await context.close();
     });
+
+
+
+
 });
