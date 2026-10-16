@@ -33,6 +33,12 @@ class DashboardPage {
     this.errorMessage = resolveLocator(page, dashboardSelectors.errorMessage).filter({
       hasText: /\S/
     });
+
+    // Blocking-error alerts only: excludes the Next.js route announcer and
+    // requires visible text, so an empty alert region never fails the check.
+    this.blockingErrorAlert = resolveLocator(page, dashboardSelectors.blockingErrorAlert).filter({
+      hasText: /\S/
+    });
   }
 
 
@@ -64,6 +70,19 @@ class DashboardPage {
   // Convenience accessor for a labelled card's value locator.
   accountSummaryValueByLabel(label) {
     return this.accountSummaryValue(this.accountSummaryCardByLabel(label));
+  }
+
+  // Returns the trimmed labels of all account summary cards, in DOM order.
+  // Each card renders its label in the first <p> element, so this is used by
+  // specs to assert the expected card labels appear in the correct order.
+  async getAccountSummaryLabelsInOrder() {
+    const cards = await this.accountSummaryCards.all();
+    return Promise.all(
+      cards.map(async (card) => {
+        const text = await card.locator('p').first().textContent();
+        return (text ?? '').trim();
+      })
+    );
   }
 
   async isAccountSummaryValueDisplayedWithoutOverlap(value) {
@@ -108,6 +127,12 @@ class DashboardPage {
 
       return fitsCard && doesNotOverlapText;
     });
+  }
+
+  // Log out of the application by clicking the topbar logout button.
+  // Reuses the existing `logoutButton` locator defined from the selectors file.
+  async logout() {
+    await this.logoutButton.click();
   }
 }
 
