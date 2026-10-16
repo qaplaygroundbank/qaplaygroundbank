@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
-async function runUiProject(options) {
+async function paraBankProject(options) {
     const browser = options.browser || 'chromium';
     const headed = options.headed || false;
     const suite = options.suite || 'smoke';
@@ -24,7 +24,7 @@ async function runUiProject(options) {
 
     const configFile = path.resolve(
         __dirname,
-        'config/uiproject.config.js'
+        'config/paraBankProject.config.js'
     );
 
     const args = [
@@ -42,7 +42,7 @@ async function runUiProject(options) {
         args.push(testFile);
         logger.info(`Test File   : ${testFile}`);
     } else {
-        logger.info('Test File   : All configured UI tests');
+        logger.info('Test File   : All configured ParaBank tests');
     }
 
     // Configure Playwright and browser selection.
@@ -123,4 +123,4 @@ async function runUiProject(options) {
     });
 }
 
-export { runUiProject };
+export { paraBankProject };
