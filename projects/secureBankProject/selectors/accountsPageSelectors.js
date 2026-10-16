@@ -34,7 +34,31 @@ export const accountPageSelectors = {
     viewButton: {
         type: 'text',
         value: 'View'
-    }
+    },
+     accountTitle: {
+        type: 'text',
+        value: 'My Accounts'
+    },
+    // added by vivek
+    checkingAccount: {
+        type: 'text',
+        value: 'Everyday Checking'
+    },
+    
+
+    accountBalance: {
+        type: 'css',
+        value: 'table'
+    },
+    checkingAccount: {
+         type: 'text',
+         value: 'Everyday Checking'
+},
+    savingsAccount: {
+        type: 'text',
+        value: 'High-Yield Savings'
+}
+//end here
 };
 
 export default accountPageSelectors;
