@@ -83,6 +83,19 @@ class BillPayPage extends BasePage {
     await this.clickConfirmPayment();
   }
 
+  async verifyBillPaymentErrorMessage(billData) {
+    await this.selectFromAccount(billData.fromAccount);
+    await this.searchBiller(billData.biller);
+    await this.selectBiller();
+    await this.enterAmount(billData.amount);
+    await this.clickReviewPayment();
+
+    await expect(this.amountValidationError)
+      .toBeVisible();
+
+  
+  }
+
   async verifyBillPaymentSuccess() {
 
     await expect(this.successHeading)
