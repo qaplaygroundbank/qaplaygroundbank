@@ -114,26 +114,7 @@ class TransferPage extends BasePage {
    * from `excludeText`, then verifies the dropdown shows that value.
    * @returns {Promise<string>} the selected account text
    */
-  // async selectAccountScoped(selectLocator, excludeText = null) {
-  //   const options = await this.getScopedOptions(selectLocator);
-  //   const texts = (await options.allInnerTexts()).map((t) => t.trim());
-
-  //   const index = texts.findIndex((t) => t && t !== excludeText);
-  //   if (index === -1) {
-  //     await this.page.keyboard.press('Escape'); // close dropdown
-  //     throw new Error(
-  //       `No selectable account found. Options: [${texts.join(', ')}], excluded: "${excludeText}"`
-  //     );
-  //   }
-
-  //   const selectedText = texts[index];
-  //   await options.nth(index).click();
-
-  //   // Verify the dropdown now displays the chosen account (auto-waits, no expect needed)
-  //   await selectLocator.filter({ hasText: selectedText }).waitFor({ state: 'visible' });
-
-  //   return selectedText;
-  // }
+  
 
   async selectAccountScoped(selectLocator, excludeText = null) {
   const options = await this.getScopedOptions(selectLocator);
