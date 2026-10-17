@@ -21,12 +21,22 @@ class AccountsPage extends BasePage {
             page,
             accountPageSelectors.addAccountButton
         );
-
-        this.accountTable = resolveLocator(
+        // added here by  vivek 
+        this.accountBalance = resolveLocator(
             page,
-            accountPageSelectors.accountTable
+        accountPageSelectors.accountBalance
+        );
+        this.checkingAccount = resolveLocator(
+            page,
+            accountPageSelectors.checkingAccount
         );
 
+        this.savingsAccount = resolveLocator(
+            page,
+            accountPageSelectors.savingsAccount
+        );
+        // end here 
+       
         this.accountRows = resolveLocator(
             page,
             accountPageSelectors.accountRows
@@ -60,8 +70,17 @@ class AccountsPage extends BasePage {
     async verifyVisible() {
         await expect(this.accountPageTitle).toBeVisible();
         await expect(this.addAccountButton).toBeVisible();
-        await expect(this.accountTable).toBeVisible();
+        //added by vivek
+        await expect(this.accountRows.first()).toBeVisible();
+        //end here
     }
+    // added by vivek
+    async verifyAccountDetails() {
+    await expect(this.checkingAccount).toBeVisible();
+    await expect(this.savingsAccount).toBeVisible();
+    }
+    
+    // end here
 
     async clickAddAccount() {
         await this.addAccountButton.click();
@@ -78,6 +97,13 @@ class AccountsPage extends BasePage {
     async clickFirstViewAccount() {
         await this.viewButton.first().click();
     }
+   async getAccountRowsCount() {
+    return await this.accountRows.count();
+}
+
+async getAccountDetails() {
+    return await this.accountRows.allTextContents();
+}
 }
 
 export default AccountsPage;

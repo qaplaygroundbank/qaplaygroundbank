@@ -15,6 +15,7 @@ export const test = base.extend({
     accountsPage: async ({ page }, use) => {
         await use(new AccountsPage(page));
     }
+    
 });
 
 export { expect };
