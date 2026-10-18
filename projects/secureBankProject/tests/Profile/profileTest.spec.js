@@ -37,8 +37,8 @@ test.describe('Profile', () => {
     // PROF-003 - Verify valid profile changes can be saved.
     test('PROF-003 Verify valid profile changes can be saved.', { tag: ['@smoke', '@profile'] }, async ({ page }) => {
         -
-            // Navigate to Profile page
-            await profilePage.navigateToProfile();
+        // Navigate to Profile page
+        await profilePage.navigateToProfile();
 
         // Verify Profile page details
         await profilePage.verifyProfileUrl();
@@ -53,6 +53,59 @@ test.describe('Profile', () => {
 
 
     });
+
+     // PROF-004 - Verify mandatory field validation.
+    test('PROF-004 Verify mandatory field validation.', { tag: ['@profile'] }, async () => {
+       
+         // Navigate to Profile page
+        await profilePage.navigateToProfile();
+
+        // Verify Profile page details
+        await profilePage.verifyProfileUrl();
+        await profilePage.verifyProfileTitle();
+
+        //Click on EditProfilebutton
+        await profilePage.tapOnEditProfileButton();
+        
+        await profilePage.clearEmailField();
+         
+        await profilePage.tapOnSaveProfileChanges();
+        await profilePage.verifyEmailErrorMessage(ProfileTestData.InvalidEmailId.EMailErrorMessage);
+        await profilePage.saveChangebuttonIsEnabled();
+
+    });
+
+    // PROF-013 - Verify unsafe input cannot execute or corrupt UI.
+    test('PROF-013 Verify unsafe input cannot execute or corrupt UI.', { tag: ['@profile'] }, async () => {
+   
+          // Navigate to Profile page
+        await profilePage.navigateToProfile();
+
+        // Verify Profile page details
+        await profilePage.verifyProfileUrl();
+        await profilePage.verifyProfileTitle();
+
+        //Click on EditProfilebutton
+        await profilePage.tapOnEditProfileButton();
+        
+        //Clear phone field and enter Script 
+        await profilePage.clearPhoneField();
+        await profilePage.enterPhoneNumber(ProfileTestData.htmlCode.scriptInput);
+        await profilePage.tapOnSaveProfileChanges();
+        await profilePage.verifyPhoneErrorMessage(ProfileTestData.editProfile.PhoneErrorMsg);
+        
+        await profilePage.clearPhoneField();
+        await profilePage.enterPhoneNumber(ProfileTestData.editProfile.phone);
+        await profilePage.clearEmailField();
+        await profilePage.enterEmail(ProfileTestData.htmlCode.scriptInput);
+        await profilePage.tapOnSaveProfileChanges();
+        await profilePage.verifyEmailErrorMessage(ProfileTestData.InvalidEmailId.EMailErrorMessage);
+
+
+    });
+
+
+
 
     // Logout and close browser session after all Profile tests
     test.afterAll(async () => {
