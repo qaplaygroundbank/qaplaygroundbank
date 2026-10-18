@@ -1,3 +1,4 @@
+
 import { expect } from "chai";
 import PostsApi from "../api/PostsApi.js";
 import postData from "../testdata/postData.js";
@@ -8,8 +9,7 @@ describe("JSONPlaceholder Posts API - POM Framework", function () {
 
     describe("GET Operations", function () {
 
-        it("should get all posts", async function () {
-
+        it("@smoke @regression should get all posts", async function () {
             const response = await postsApi.getAllPosts();
 
             expect(response.status).to.equal(200);
@@ -19,11 +19,8 @@ describe("JSONPlaceholder Posts API - POM Framework", function () {
             console.log("Total Posts:", response.body.length);
         });
 
-
-        it("should get post by ID", async function () {
-
+        it("@regression should get post by ID", async function () {
             const postId = 1;
-
             const response = await postsApi.getPostById(postId);
 
             expect(response.status).to.equal(200);
@@ -35,13 +32,9 @@ describe("JSONPlaceholder Posts API - POM Framework", function () {
             console.log("Post:", response.body);
         });
 
-
-        it("should get posts by User ID", async function () {
-
+        it("@smoke @regression should get posts by User ID", async function () {
             const userId = 1;
-
-            const response =
-                await postsApi.getPostsByUserId(userId);
+            const response = await postsApi.getPostsByUserId(userId);
 
             expect(response.status).to.equal(200);
             expect(response.body).to.be.an("array");
@@ -59,97 +52,66 @@ describe("JSONPlaceholder Posts API - POM Framework", function () {
 
     });
 
-
     describe("POST Operation", function () {
 
-        it("should create a new post", async function () {
-
-            const response =
-                await postsApi.createPost(postData.newPost);
+        it("@smoke @regression should create a new post", async function () {
+            const response = await postsApi.createPost(postData.newPost);
 
             expect(response.status).to.equal(201);
-
-            expect(response.body.title)
-                .to.equal(postData.newPost.title);
-
-            expect(response.body.body)
-                .to.equal(postData.newPost.body);
-
-            expect(response.body.userId)
-                .to.equal(postData.newPost.userId);
-
-            expect(response.body)
-                .to.have.property("id");
+            expect(response.body.title).to.equal(postData.newPost.title);
+            expect(response.body.body).to.equal(postData.newPost.body);
+            expect(response.body.userId).to.equal(postData.newPost.userId);
+            expect(response.body).to.have.property("id");
 
             console.log("Created Post:", response.body);
         });
 
     });
 
-
     describe("PUT Operation", function () {
 
-        it("should update an existing post", async function () {
-
+        it("@regression should update an existing post", async function () {
             const postId = 1;
-
-            const response =
-                await postsApi.updatePost(
-                    postId,
-                    postData.updatePost
-                );
+            const response = await postsApi.updatePost(
+                postId,
+                postData.updatePost
+            );
 
             expect(response.status).to.equal(200);
-
-            expect(response.body.id)
-                .to.equal(postId);
-
-            expect(response.body.title)
-                .to.equal(postData.updatePost.title);
+            expect(response.body.id).to.equal(postId);
+            expect(response.body.title).to.equal(postData.updatePost.title);
 
             console.log("Updated Post:", response.body);
         });
 
     });
 
-
     describe("PATCH Operation", function () {
 
-        it("should partially update a post", async function () {
-
+        it("@regression should partially update a post", async function () {
             const postId = 1;
-
-            const response =
-                await postsApi.patchPost(
-                    postId,
-                    postData.patchPost
-                );
+            const response = await postsApi.patchPost(
+                postId,
+                postData.patchPost
+            );
 
             expect(response.status).to.equal(200);
-
-            expect(response.body.title)
-                .to.equal(postData.patchPost.title);
+            expect(response.body.title).to.equal(postData.patchPost.title);
 
             console.log("Patched Post:", response.body);
         });
 
     });
 
-
     describe("DELETE Operation", function () {
 
-        it("should delete a post", async function () {
-
+        it("@regression should delete a post", async function () {
             const postId = 1;
-
-            const response =
-                await postsApi.deletePost(postId);
+            const response = await postsApi.deletePost(postId);
 
             expect(response.status).to.equal(200);
 
-            console.log(
-                `Post ${postId} delete request successful`
-            );
+            console.log(`Post ${postId} delete request successful`);
         });
 
     });
