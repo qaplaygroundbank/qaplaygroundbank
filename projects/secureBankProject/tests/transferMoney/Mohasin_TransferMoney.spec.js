@@ -24,8 +24,21 @@ test('Verify Transfer Money Review Details', async ({ page }) => {
   const popup = page.getByRole('dialog');
  await expect(popup.getByText('Everyday Checking')).toBeVisible();
   await expect(popup.getByText('High-Yield Savings')).toBeVisible();
-  await expect(popup.getByText('$250.00')).toBeVisible();
-  const today = new Date().toLocaleDateString('en-CA');
+  const expectedAmount = Number(testData.validTransferToday.amount)
+  .toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  });
+
+  await expect(popup.getByText(expectedAmount)).toBeVisible();
+const parts = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Kolkata',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+}).formatToParts(new Date());
+const getPart = type => parts.find(part => part.type === type).value;
+const today = `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
   await expect(popup.getByText(today)).toBeVisible();
 });
 
