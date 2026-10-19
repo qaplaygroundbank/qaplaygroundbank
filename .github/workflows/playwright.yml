@@ -6,22 +6,12 @@ on:
       project:
         description: 'Select project to run'
         required: true
-        default: 'ui'
+        default: 'securebank'
         type: choice
         options:
-          - ui
+          - securebank
+          - parabank
           - api
-          - migration
-
-      environment:
-        description: 'Environment'
-        required: true
-        default: 'qa'
-        type: choice
-        options:
-          - dev
-          - qa
-          - stage
 
       suite:
         description: 'Test suite'
@@ -51,24 +41,30 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
+        if: ${{ inputs.project == 'securebank' || inputs.project == 'parabank' }}
         run: npx playwright install --with-deps
 
       - name: Run automation
-        run: npm run cli -- ${{ inputs.project }} --env ${{ inputs.environment }} --suite ${{ inputs.suite }}
+        run: npm run cli -- ${{ inputs.project }} --env qa --suite ${{ inputs.suite }}
         env:
-          QA_PLAYGROUND_ENV: ${{ inputs.environment }}
+          QA_PLAYGROUND_ENV: qa
+          UI_QA_USERNAME: ${{ inputs.project == 'securebank' && secrets.UI_QA_USERNAME || inputs.project == 'parabank' && secrets.PARABANK_QA_USERNAME || '' }}
+          UI_QA_PASSWORD: ${{ inputs.project == 'securebank' && secrets.UI_QA_PASSWORD || inputs.project == 'parabank' && secrets.PARABANK_QA_PASSWORD || '' }}
 
-          # Application URL is configuration, not a secret.
-          UI_QA_LOGIN_URL: https://qaplayground.com/bank/login
-
-          # Pass credentials only for a QA UI execution.
-          UI_QA_USERNAME: ${{ inputs.project == 'ui' && inputs.environment == 'qa' && secrets.UI_QA_USERNAME || '' }}
-          UI_QA_PASSWORD: ${{ inputs.project == 'ui' && inputs.environment == 'qa' && secrets.UI_QA_PASSWORD || '' }}
-
-      - name: Upload Playwright report
-        if: ${{ !cancelled() }}
+      - name: Upload SecureBank or API report
+        if: ${{ !cancelled() && inputs.project != 'parabank' }}
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: ${{ inputs.project }}-report
+          path: reports/${{ inputs.project }}/qa/${{ inputs.suite }}/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload ParaBank report
+        if: ${{ !cancelled() && inputs.project == 'parabank' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: parabank-report
           path: playwright-report/
+          if-no-files-found: warn
           retention-days: 30
