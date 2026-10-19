@@ -24,7 +24,8 @@ class TransferPage extends BasePage {
     this.confirmTransferButton = resolveLocator(page, transferPageSelectors.confirmTransferButton);
     this.cancelButton = resolveLocator(page, transferPageSelectors.cancelButton);
     this.confirmModalLocator = resolveLocator(page, transferPageSelectors.confirmModal);
-    this.confirmModalAmount = resolveLocator(page, transferPageSelectors.confirmModalAmount);
+    this.confirmModalSummary = resolveLocator(page, transferPageSelectors.confirmModalSummary);
+    this.confirmModalAmount = this.confirmModalSummary.locator('div').nth(2).locator('span').last();
     // Feedback
     this.successMessage = page.getByTestId('transfer-success-heading');
 
@@ -75,12 +76,12 @@ class TransferPage extends BasePage {
    * Fills transfer details with auto-selected accounts
    * @param {Object} data - Contains amount,  and dateOption
    */
-  async fillTransferForm({ amount, dateOption = 'today' }) {
+  async fillTransferForm({ amount, memo='', dateOption = 'today' }) {
     await this.autoSelectAccounts();
  
     await this.amountInput.fill(String(amount));
  
-    if (memo) {
+    if (memo?.trim()) {
       await this.memoInput.fill(memo);
     }
  

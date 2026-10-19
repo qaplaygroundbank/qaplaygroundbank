@@ -26,7 +26,7 @@ test.describe('TM-014 & TM-015 Test Case', () => {
 
         // 3. Navigate to the Transfer page via UI sidebar interaction
         await transferPage.clickTransferMenu();
-        await transferPage.openTransferPage();
+        //await transferPage.openTransferPage();
 
         // Confirm the page initialization structural check
         await expect(transferPage.pageHeading).toBeVisible();
@@ -44,7 +44,7 @@ test.describe('TM-014 & TM-015 Test Case', () => {
         await transferPage.fillTransferForm(data);
 
         // Step 5: Click Transfer Button
-        await transferPage.clickReviewTransfer();
+        await transferPage.clickReview();
 
         // Step 6: Confirm Transfer dialog
         await transferPage.confirmModalLoad();
@@ -64,7 +64,7 @@ test.describe('TM-014 & TM-015 Test Case', () => {
         //await transferPage.memoInput.fill('');
 
         //Click review button
-        await transferPage.clickReviewTransfer();
+        await transferPage.clickReview();
 
         //Confirmation Page Load Verification
         await transferPage.confirmModalLoad();

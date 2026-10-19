@@ -82,9 +82,9 @@ const transferPageSelectors = {
     role: 'dialog', 
     name: 'Confirm Transfer', 
   },
-  confirmModalAmount:{
-    type:'xpath',
-    value: ".//*[normalize-space(text())='Amount']/following-sibling::*[1]"
+  confirmModalSummary:{
+    type:'testId',
+    value: 'transfer-confirm-summary',
   },
 };
  

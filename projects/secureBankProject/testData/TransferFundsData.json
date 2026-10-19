@@ -17,6 +17,7 @@
   },
   "memoOptional":{
     "amount" : "101.00",
-    "memo" : ""
+    "memo" : "",
+    "dateOption": "today"
   }
 }
