@@ -92,7 +92,7 @@ class ProfilePage extends BasePage {
             profilePageSelectors.addressInput
         );
 
-        // Buttons and messages
+        // Buttons
         this.submitButton = resolveLocator(
             page,
             profilePageSelectors.submitButton
@@ -103,6 +103,7 @@ class ProfilePage extends BasePage {
             profilePageSelectors.cancelEditProfileButton
         );
 
+        // Validation and success messages
         this.profileErrorMessage = resolveLocator(
             page,
             profilePageSelectors.profileErrorMessage
@@ -119,12 +120,32 @@ class ProfilePage extends BasePage {
         await this.profileLink.click();
     }
 
+    // Verify Profile page URL
+    async verifyProfileUrl() {
+        await expect(
+            this.page
+        ).toHaveURL(
+            VALIDATIONS.PROFILE_URL
+        );
+    }
+
+    // Verify Profile page title
+    async verifyProfileTitle() {
+        await expect(
+            this.profilePageTitle
+        ).toHaveText(
+            VALIDATIONS.PROFILE_TITLE
+        );
+    }
+
+    // Verify Personal Information section
     async verifyPersonalInfoSection() {
         await expect(
             this.personalInfoSection
         ).toBeVisible();
     }
 
+    // Verify Edit Profile button
     async verifyEditProfileButton() {
         await expect(
             this.editProfileButton
@@ -135,123 +156,185 @@ class ProfilePage extends BasePage {
         ).toBeEnabled();
     }
 
+    // Click Edit Profile
     async clickEditProfile() {
         await this.editProfileButton.click();
     }
 
+    // Click Save Changes
     async clickSaveChanges() {
         await this.submitButton.click();
     }
+
+    // Click Cancel without saving
+    async clickCancelEditProfile() {
+        await this.cancelEditProfileButton.click();
+    }
+
+    // Read a Profile value from view mode or Edit mode
     async _readFieldValue(
         displayLocator,
-        inputLocator
+        inputLocator,
+        fieldName
     ) {
-        const inputVisible =
-            await inputLocator
-                .isVisible()
-                .catch(() => false);
+        const inputCount =
+            await inputLocator.count();
 
-        if (inputVisible) {
-            return inputLocator.inputValue();
+        if (inputCount > 0) {
+            const inputVisible =
+                await inputLocator.isVisible();
+
+            if (inputVisible) {
+                return inputLocator.inputValue();
+            }
         }
 
         const displayCount =
             await displayLocator.count();
 
         if (displayCount > 0) {
-            return displayLocator.textContent();
+            const displayVisible =
+                await displayLocator.isVisible();
+
+            if (displayVisible) {
+                const displayedValue =
+                    await displayLocator.textContent();
+
+                return displayedValue?.trim() ?? '';
+            }
         }
 
-        return inputLocator.inputValue();
+        throw new Error(
+            `${fieldName} is unavailable in both view mode and edit mode.`
+        );
     }
 
+    // Read First Name value
     async getFirstNameValue() {
         return this._readFieldValue(
             this.firstName,
-            this.firstNameInput
+            this.firstNameInput,
+            'First Name'
         );
     }
 
+    // Read Last Name value
     async getLastNameValue() {
         return this._readFieldValue(
             this.lastName,
-            this.lastNameInput
+            this.lastNameInput,
+            'Last Name'
         );
     }
 
+    // Read Email value
     async getEmailValue() {
         return this._readFieldValue(
             this.email,
-            this.emailInput
+            this.emailInput,
+            'Email'
         );
     }
 
+    // Read Phone value
     async getPhoneValue() {
         return this._readFieldValue(
             this.phone,
-            this.phoneInput
+            this.phoneInput,
+            'Phone'
         );
     }
 
+    // Read Address value
     async getAddressValue() {
         return this._readFieldValue(
             this.address,
-            this.addressInput
+            this.addressInput,
+            'Address'
         );
     }
 
+    // Return First Name input locator
     getFirstNameInput() {
         return this.firstNameInput;
     }
 
+    // Return Last Name input locator
     getLastNameInput() {
         return this.lastNameInput;
     }
 
+    // Return Email input locator
     getEmailInput() {
         return this.emailInput;
     }
 
+    // Return Phone input locator
     getPhoneInput() {
         return this.phoneInput;
     }
 
+    // Return Address input locator
     getAddressInput() {
         return this.addressInput;
     }
 
-    async enterFirstName(value) {
-        await this.firstNameInput.fill(value);
-    }
-
-    async enterLastName(value) {
-        await this.lastNameInput.fill(value);
-    }
-
-    async enterEmail(value) {
-        await this.emailInput.fill(value);
-    }
-
-    async enterPhone(value) {
-        await this.phoneInput.fill(value);
-    }
-
-    async enterAddress(value) {
-        await this.addressInput.fill(value);
-    }
-
+    // Return Save Changes button locator
     getSaveChangesButton() {
         return this.submitButton;
     }
 
-    getEmailValidationMessage() {
+    // Return Cancel button locator
+    getCancelEditProfileButton() {
+        return this.cancelEditProfileButton;
+    }
+
+    // Return success-message locator
+    getProfileSuccessMessage() {
+        return this.profileSuccessMessage;
+    }
+
+    // Return error-message locator
+    getProfileErrorMessage() {
+        return this.profileErrorMessage;
+    }
+
+    // Enter First Name
+    async enterFirstName(value) {
+        await this.firstNameInput.fill(value);
+    }
+
+    // Enter Last Name
+    async enterLastName(value) {
+        await this.lastNameInput.fill(value);
+    }
+
+    // Enter Email
+    async enterEmail(value) {
+        await this.emailInput.fill(value);
+    }
+
+    // Enter Phone
+    async enterPhone(value) {
+        await this.phoneInput.fill(value);
+    }
+
+    // Enter Address
+    async enterAddress(value) {
+        await this.addressInput.fill(value);
+    }
+
+    // Read Email validation message
+    async getEmailValidationMessage() {
         return this.profileErrorMessage.textContent();
     }
 
+    // Return Phone validation-message locator
     getPhoneValidationMessage() {
         return this.profileErrorMessage;
     }
 
+    // Verify that a valid Email can be saved
     async verifyValidEmail(validEmail) {
         await this.clickEditProfile();
 
@@ -271,6 +354,7 @@ class ProfilePage extends BasePage {
         );
     }
 
+    // Verify that an invalid Email is rejected
     async verifyInvalidEmail(invalidEmail) {
         await this.clickEditProfile();
 
@@ -285,57 +369,78 @@ class ProfilePage extends BasePage {
             'Please enter a valid email address.'
         );
     }
-    // Return Cancel Edit Profile button
-    getCancelEditProfileButton() {
-        return this.cancelEditProfileButton;
-    }
 
-    // Click Cancel without saving
-    async clickCancelEditProfile() {
-        await this.cancelEditProfileButton.click();
-    }
-
-    // Verify Profile page URL
-    async verifyProfileUrl() {
-        await expect(this.page).toHaveURL(VALIDATIONS.PROFILE_URL);
-    }
-
-
-    // Verify Profile page title
-    async verifyProfileTitle() {
-        await expect(this.profilePageTitle).toHaveText(VALIDATIONS.PROFILE_TITLE);
-    }
-
-    //click on Edit button
+    // Click Edit Profile for PROF-003
     async tapOnEditProfileButton() {
         await this.editProfileButton.click();
     }
 
+    // Update Phone number
     async updateMobileNumber(newPhoneNumber) {
-        const oldPhoneNumber = await this.phoneInput.inputValue();
-        console.log('Old Phone Number:', oldPhoneNumber);
+        const oldPhoneNumber =
+            await this.phoneInput.inputValue();
+
+        console.log(
+            'Old Phone Number:',
+            oldPhoneNumber
+        );
+
         await this.phoneInput.clear();
-        await this.phoneInput.fill(newPhoneNumber);
-        await expect(this.phoneInput).toHaveValue(newPhoneNumber);
+        await this.phoneInput.fill(
+            newPhoneNumber
+        );
+
+        await expect(
+            this.phoneInput
+        ).toHaveValue(
+            newPhoneNumber
+        );
     }
 
+    // Click Save Profile Changes
     async tapOnSaveProfileChanges() {
-        await expect(this.submitButton).toBeVisible();
+        await expect(
+            this.submitButton
+        ).toBeVisible();
+
         await this.submitButton.click();
     }
 
-    async verifyProfileUpdateSuccessMessage(successMessage) {
-        await expect(this.profileSuccessMessage).toBeVisible();
-        await expect(this.profileSuccessMessage).toHaveText(successMessage);
-        //success message should disappear after 5 seconds
-        await expect(this.profileSuccessMessage).toBeHidden({ timeout: 5000 });
+    // Verify success message
+    async verifyProfileUpdateSuccessMessage(
+        successMessage
+    ) {
+        await expect(
+            this.profileSuccessMessage
+        ).toBeVisible();
+
+        await expect(
+            this.profileSuccessMessage
+        ).toHaveText(
+            successMessage
+        );
+
+        // Success message should disappear
+        await expect(
+            this.profileSuccessMessage
+        ).toBeHidden({
+            timeout: 5000
+        });
     }
 
-    async refeshPageAndValidateupdatedPhoneNumber(newPhoneNumber) {
-        await this.page.reload();
-        const actualPhone = await this.phone.textContent();
-        expect(actualPhone).toBe(newPhoneNumber);
+    // Refresh and verify updated Phone number
+    async refreshPageAndValidateUpdatedPhoneNumber(
+    newPhoneNumber) 
+    {
+    await this.page.reload();
 
+    const actualPhone =
+        await this.getPhoneValue();
+
+    expect(actualPhone).toBe(
+        newPhoneNumber
+    );
     }
 }
+
 export default ProfilePage;

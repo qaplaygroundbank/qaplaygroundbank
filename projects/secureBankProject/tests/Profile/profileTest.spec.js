@@ -4,7 +4,7 @@ import ProfilePage from '../../pages/ProfilePage.js';
 import ProfileTestData from '../../testData/ProfileTestData.json'
     with { type: 'json' };
 
-test.describe.serial('Profile Tests', () => {
+test.describe('Profile Tests', () => {
     let loginPage;
     let profilePage;
 
@@ -67,37 +67,100 @@ test.describe.serial('Profile Tests', () => {
         }
     );
 
-    test(
-        'PROF-11 Verify alphabetic characters are rejected in Phone field',
-        { tag: ['@smoke', '@profile'] },
-        async ({ page }) => {
-            const alphabeticPhone = ProfileTestData.AlphabeticPhone.Phone;
+test(
+    'PROF-11 Verify alphabetic characters are rejected in Phone field',
+    { tag: ['@smoke', '@profile'] },
+    async ({ page }) => {
 
-            await profilePage.clickEditProfile();
-            const originalPhone = await profilePage.getPhoneValue();
+        const alphabeticPhone =
+            ProfileTestData.AlphabeticPhone.Phone;
 
-            console.log('Original Phone value:', originalPhone);
-            await profilePage.enterPhone(alphabeticPhone);
-            await expect(profilePage.getPhoneInput()).toHaveValue(alphabeticPhone);
+        // Open Edit mode
+        await profilePage.clickEditProfile();
 
-            await profilePage.clickSaveChanges();
-            await expect(profilePage.getPhoneValidationMessage()).toBeVisible();
+        // Store the original Phone value
+        const originalPhone =
+            await profilePage.getPhoneValue();
 
-            const phoneValidationMessage = await profilePage
+        console.log(
+            'Original Phone value:',
+            originalPhone
+        );
+
+        // Enter alphabetic characters
+        await profilePage.enterPhone(alphabeticPhone);
+
+        // Verify the invalid test data was entered
+        await expect(
+            profilePage.getPhoneInput()
+        ).toHaveValue(
+            alphabeticPhone
+        );
+
+        // Attempt to save the invalid Phone value
+        await profilePage.clickSaveChanges();
+
+        // Verify the validation message is visible
+        await expect(profilePage.getPhoneValidationMessage()).toBeVisible();
+
+        // Read the actual validation message
+        const phoneValidationMessage =
+            await profilePage
                 .getPhoneValidationMessage()
                 .textContent();
 
-            console.log('Phone validation message:', phoneValidationMessage);
-            expect(phoneValidationMessage).toContain(
-                'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
-            );
+        console.log(
+            'Phone validation message:',
+            phoneValidationMessage
+        );
 
-            await expect(profilePage.getSaveChangesButton()).toBeVisible();
-            await page.reload();
-            await profilePage.clickEditProfile();
-            await expect(profilePage.getPhoneInput()).toHaveValue(originalPhone);
-        }
-    );
+        // Verify the correct validation message
+        expect(phoneValidationMessage).toContain(
+            'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
+        );
+
+        // Verify Save was blocked and Edit mode remains open
+        await expect(profilePage.getSaveChangesButton()).toBeVisible();
+
+        // Reload to clear the invalid edit state
+        await page.reload();
+
+        // Verify the Profile returned to view mode
+        await profilePage.verifyEditProfileButton();
+
+        // Verify the old validation error is cleared
+        await expect(profilePage.getPhoneValidationMessage()).toBeHidden();
+
+        // Reopen Edit mode
+        await profilePage.clickEditProfile();
+
+        // Verify the invalid Phone value was not persisted
+        await expect(
+            profilePage.getPhoneInput()
+        ).toHaveValue(
+            originalPhone
+        );
+
+        // Verify the Phone field can be edited again
+        await expect(
+            profilePage.getPhoneInput()
+        ).toBeEditable();
+
+        // Read the Phone value after recovery
+        const phoneAfterReload =
+            await profilePage.getPhoneValue();
+
+        console.log(
+            'Phone value after reload:',
+            phoneAfterReload
+        );
+
+        // Confirm that the original value remains
+        expect(phoneAfterReload).toBe(
+            originalPhone
+        );
+    }
+);
 
     test(
         'PROF-15 Verify Cancel discards unsaved Profile changes',
@@ -151,7 +214,7 @@ test.describe.serial('Profile Tests', () => {
             await profilePage.verifyProfileUpdateSuccessMessage(
                 ProfileTestData.editProfile.successMessage
             );
-            await profilePage.refeshPageAndValidateupdatedPhoneNumber(
+            await profilePage.refreshPageAndValidateUpdatedPhoneNumber(
                 ProfileTestData.editProfile.phone
             );
         }
