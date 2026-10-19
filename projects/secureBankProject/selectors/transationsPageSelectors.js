@@ -1,4 +1,5 @@
-constructor(page) {
+constructor(page) ; {
+
     super(page);
 
     // Navigation
