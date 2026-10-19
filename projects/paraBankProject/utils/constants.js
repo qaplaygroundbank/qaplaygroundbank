@@ -1,13 +1,11 @@
 import appConfig from '../config/app.config.js';
 
-const environment =
-    process.env.QA_PLAYGROUND_ENV || 'qa';
+export function getLoginUrl() {
+    const environment = process.env.QA_PLAYGROUND_ENV || 'qa';
+    const uiConfig = appConfig.getUiConfig(environment);
+    return uiConfig.loginUrl;
+}
 
-const uiConfig = appConfig.getUiConfig(environment);
-
-export const URLS = {
-    LOGIN_PAGE: uiConfig.loginUrl
-};
 export const VALIDATIONS = {
-    WELCOMEPAGE_URL: /overview/,
+    WELCOMEPAGE_URL: /overview/
 };

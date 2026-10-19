@@ -16,6 +16,16 @@ const loginPageSelectors = {
     loginButton: {
         type: 'css',
         value: 'input[type="submit"][value="Log In"]'
+    },
+
+    welcomeMessage: {
+        type: 'css',
+        value: '.smallText'
+    },
+
+    logoutLink: {
+        type: 'css',
+        value: 'a[href="logout.htm"]'
     }
 
 };
