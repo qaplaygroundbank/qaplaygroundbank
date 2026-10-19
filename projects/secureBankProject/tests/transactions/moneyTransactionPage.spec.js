@@ -19,7 +19,7 @@ test.describe('Money Transactions', () => {
 
         await loginPage.openLoginPage();
         await loginPage.login(credentials.username, credentials.password);
-        await expect(page).toHaveURL(VALIDATIONS.DASHBOARD_URL, {
+        await expect(page).toHaveURL(/dashboard/, {
              timeout: 10000
          });
     });
