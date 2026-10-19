@@ -171,6 +171,54 @@ test.describe('Profile Tests', () => {
     );
 
     test(
+        'PROF-004 Verify mandatory field validation.',
+        { tag: ['@profile'] },
+        async () => {
+            await profilePage.verifyProfileUrl();
+            await profilePage.verifyProfileTitle();
+            await profilePage.tapOnEditProfileButton();
+            await profilePage.clearEmailField();
+            await profilePage.tapOnSaveProfileChanges();
+            await profilePage.verifyEmailErrorMessage(
+                ProfileTestData.InvalidEmailId.EMailErrorMessage
+            );
+            await profilePage.saveChangebuttonIsEnabled();
+        }
+    );
+
+    test(
+        'PROF-013 Verify unsafe input cannot execute or corrupt UI.',
+        { tag: ['@profile'] },
+        async () => {
+            await profilePage.verifyProfileUrl();
+            await profilePage.verifyProfileTitle();
+            await profilePage.tapOnEditProfileButton();
+
+            await profilePage.clearPhoneField();
+            await profilePage.enterPhoneNumber(
+                ProfileTestData.htmlCode.scriptInput
+            );
+            await profilePage.tapOnSaveProfileChanges();
+            await profilePage.verifyPhoneErrorMessage(
+                ProfileTestData.editProfile.PhoneErrorMsg
+            );
+
+            await profilePage.clearPhoneField();
+            await profilePage.enterPhoneNumber(
+                ProfileTestData.editProfile.phone
+            );
+            await profilePage.clearEmailField();
+            await profilePage.enterEmail(
+                ProfileTestData.htmlCode.scriptInput
+            );
+            await profilePage.tapOnSaveProfileChanges();
+            await profilePage.verifyEmailErrorMessage(
+                ProfileTestData.InvalidEmailId.EMailErrorMessage
+            );
+        }
+    );
+
+    test(
         'PROF-15 Verify Cancel discards unsaved Profile changes',
         { tag: ['@smoke', '@profile'] },
         async () => {

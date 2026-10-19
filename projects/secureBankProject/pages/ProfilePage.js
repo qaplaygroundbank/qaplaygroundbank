@@ -115,6 +115,11 @@ class ProfilePage extends BasePage {
         );
     }
 
+    async getVisibleText(locator) {
+        const text = await locator.textContent();
+        return text ? text.trim() : '';
+    }
+
     // Navigate to Profile page
     async navigateToProfile() {
         await this.profileLink.click();
@@ -479,6 +484,10 @@ class ProfilePage extends BasePage {
         });
     }
 
+    async saveChangebuttonIsEnabled() {
+        await expect(this.submitButton).toBeEnabled();
+    }
+
     // Refresh and verify updated Phone number
     async refreshPageAndValidateUpdatedPhoneNumber(
     newPhoneNumber) 
@@ -492,6 +501,34 @@ class ProfilePage extends BasePage {
         newPhoneNumber
     );
     }
+
+    async clearEmailField() {
+        await this.emailInput.clear();
+    }
+
+    async clearPhoneField() {
+        await this.phoneInput.clear();
+
+    }
+
+    async enterPhoneNumber(phoneNumber) {
+        await this.phoneInput.fill(phoneNumber);
+    }
+
+
+    async verifyEmailErrorMessage(expectedErrorMessage) {
+        await expect(this.profileErrorMessage).toHaveText(expectedErrorMessage);
+    }
+
+    async verifyPhoneErrorMessage(expectedPhoneErrorMessage) {
+        const regexMatch = /^\/(.*)\/$/.exec(expectedPhoneErrorMessage);
+        const expectedText = regexMatch
+            ? new RegExp(regexMatch[1])
+            : expectedPhoneErrorMessage;
+
+        await expect(this.profileErrorMessage).toHaveText(expectedText);
+    }
+
 }
 
 export default ProfilePage;
