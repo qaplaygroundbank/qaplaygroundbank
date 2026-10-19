@@ -1,3 +1,4 @@
+
 import { Option } from 'commander';
 import { secureBankProject } from './runner.js';
 import { addGlobalOptions } from '../../cli/options.js';
@@ -26,11 +27,20 @@ function registerSecureProject(program) {
         .option(
             '--test-file <file>',
             'Run a specific secureBank UI test file'
+        )
+        .option(
+            '--reporters <formats>',
+            'Comma-separated report formats: html,allure,excel',
+            'html'
         );
 
     command.action(async (options) => {
-        await secureBankProject(options);
-    });
+    const exitCode = await secureBankProject(options);
+
+    if (exitCode !== 0) {
+        process.exitCode = exitCode;
+    }
+});
 }
 
 export { registerSecureProject };

@@ -46,7 +46,7 @@ cd qaplaygroundbank
 Install the dependencies recorded in `package-lock.json`:
 
 ```bash
-npm ci
+npm install
 ```
 
 Install Playwright browser binaries for local development:
