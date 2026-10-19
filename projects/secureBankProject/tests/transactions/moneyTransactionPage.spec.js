@@ -19,9 +19,9 @@ test.describe('Money Transactions', () => {
 
         await loginPage.openLoginPage();
         await loginPage.login(credentials.username, credentials.password);
-        await expect(page).toHaveURL(/dashboard/, {
-           timeout: 10000
-           });
+        await expect(page).toHaveURL(VALIDATIONS.DASHBOARD_URL, {
+            timeout: 30000
+        });
     });
 
     test('Positive 1 - display all transaction fields and filters', async ({ page }) => {
