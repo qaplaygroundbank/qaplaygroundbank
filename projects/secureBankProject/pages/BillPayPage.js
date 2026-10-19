@@ -148,6 +148,19 @@ class BillPayPage extends BasePage {
     await this.closeConfirmPaymentPopup.click();
   }
 
+  async verifyInsufficientBalanceErrorMessage(billData) {
+    await this.selectFromAccount(billData.fromAccount);
+    await this.searchBiller(billData.biller);
+    await this.selectBiller();
+    await this.enterAmount(billData.amount);
+    await this.clickReviewPayment();
+    await this.verifyConfirmPaymentPopup();
+    await this.clickConfirmPayment();
+
+    await expect(this.amountValidationMessage)
+      .toContainText('Insufficient funds.');
+  }
+
 }
 
 export default BillPayPage;
