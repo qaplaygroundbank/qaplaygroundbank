@@ -26,9 +26,18 @@ test.describe('Profile Tests', () => {
         'PROF-05 Verify a valid Email can be entered and saved',
         { tag: ['@smoke', '@profile'] },
         async () => {
-            await profilePage.verifyValidEmail(
-                ProfileTestData.ValidData.Email
-            );
+            const originalEmail = await profilePage.getEmailValue();
+
+            try {
+                await profilePage.verifyValidEmail(
+                    ProfileTestData.ValidData.Email
+                );
+            } finally {
+                await profilePage.restoreProfileField(
+                    'email',
+                    originalEmail
+                );
+            }
         }
     );
 
@@ -67,100 +76,99 @@ test.describe('Profile Tests', () => {
         }
     );
 
-test(
-    'PROF-11 Verify alphabetic characters are rejected in Phone field',
-    { tag: ['@smoke', '@profile'] },
-    async ({ page }) => {
+    test(
+        'PROF-11 Verify alphabetic characters are rejected in Phone field',
+        { tag: ['@smoke', '@profile'] },
+        async ({ page }) => {
+            const alphabeticPhone =
+                ProfileTestData.AlphabeticPhone.Phone;
 
-        const alphabeticPhone =
-            ProfileTestData.AlphabeticPhone.Phone;
+            // Open Edit mode
+            await profilePage.clickEditProfile();
 
-        // Open Edit mode
-        await profilePage.clickEditProfile();
+            // Store the original Phone value
+            const originalPhone =
+                await profilePage.getPhoneValue();
 
-        // Store the original Phone value
-        const originalPhone =
-            await profilePage.getPhoneValue();
+            console.log(
+                'Original Phone value:',
+                originalPhone
+            );
 
-        console.log(
-            'Original Phone value:',
-            originalPhone
-        );
+            // Enter alphabetic characters
+            await profilePage.enterPhone(alphabeticPhone);
 
-        // Enter alphabetic characters
-        await profilePage.enterPhone(alphabeticPhone);
+            // Verify the invalid test data was entered
+            await expect(
+                profilePage.getPhoneInput()
+            ).toHaveValue(
+                alphabeticPhone
+            );
 
-        // Verify the invalid test data was entered
-        await expect(
-            profilePage.getPhoneInput()
-        ).toHaveValue(
-            alphabeticPhone
-        );
+            // Attempt to save the invalid Phone value
+            await profilePage.clickSaveChanges();
 
-        // Attempt to save the invalid Phone value
-        await profilePage.clickSaveChanges();
+            // Verify the validation message is visible
+            await expect(profilePage.getPhoneValidationMessage()).toBeVisible();
 
-        // Verify the validation message is visible
-        await expect(profilePage.getPhoneValidationMessage()).toBeVisible();
+            // Read the actual validation message
+            const phoneValidationMessage =
+                await profilePage
+                    .getPhoneValidationMessage()
+                    .textContent();
 
-        // Read the actual validation message
-        const phoneValidationMessage =
-            await profilePage
-                .getPhoneValidationMessage()
-                .textContent();
+            console.log(
+                'Phone validation message:',
+                phoneValidationMessage
+            );
 
-        console.log(
-            'Phone validation message:',
-            phoneValidationMessage
-        );
+            // Verify the correct validation message
+            expect(phoneValidationMessage).toContain(
+                'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
+            );
 
-        // Verify the correct validation message
-        expect(phoneValidationMessage).toContain(
-            'Phone must be in format (XXX) XXX-XXXX or +1XXXXXXXXXX.'
-        );
+            // Verify Save was blocked and Edit mode remains open
+            await expect(profilePage.getSaveChangesButton()).toBeVisible();
 
-        // Verify Save was blocked and Edit mode remains open
-        await expect(profilePage.getSaveChangesButton()).toBeVisible();
+            // Reload to clear the invalid edit state
+            await page.reload();
 
-        // Reload to clear the invalid edit state
-        await page.reload();
+            // Verify the Profile returned to view mode
+            await profilePage.verifyEditProfileButton();
 
-        // Verify the Profile returned to view mode
-        await profilePage.verifyEditProfileButton();
+            // Verify the old validation error is cleared
+            await expect(profilePage.getPhoneValidationMessage()).toBeHidden();
 
-        // Verify the old validation error is cleared
-        await expect(profilePage.getPhoneValidationMessage()).toBeHidden();
+            // Reopen Edit mode
+            await profilePage.clickEditProfile();
 
-        // Reopen Edit mode
-        await profilePage.clickEditProfile();
+            // Verify the invalid Phone value was not persisted
+            await expect(
+                profilePage.getPhoneInput()
+            ).toHaveValue(
+                originalPhone
+            );
 
-        // Verify the invalid Phone value was not persisted
-        await expect(
-            profilePage.getPhoneInput()
-        ).toHaveValue(
-            originalPhone
-        );
+            // Verify the Phone field can be edited again
+            await expect(
+                profilePage.getPhoneInput()
+            ).toBeEditable();
 
-        // Verify the Phone field can be edited again
-        await expect(
-            profilePage.getPhoneInput()
-        ).toBeEditable();
+            // Read the Phone value after recovery
+            const phoneAfterReload =
+                await profilePage.getPhoneValue();
 
-        // Read the Phone value after recovery
-        const phoneAfterReload =
-            await profilePage.getPhoneValue();
+            console.log(
+                'Phone value after reload:',
+                phoneAfterReload
+            );
 
-        console.log(
-            'Phone value after reload:',
-            phoneAfterReload
-        );
-
-        // Confirm that the original value remains
-        expect(phoneAfterReload).toBe(
-            originalPhone
-        );
-    }
-);
+            // Confirm that the original value remains
+            expect(phoneAfterReload).toBe(
+                originalPhone
+            );
+        }
+    );
 
     test(
         'PROF-15 Verify Cancel discards unsaved Profile changes',
@@ -204,19 +212,28 @@ test(
         'PROF-003 Verify valid profile changes can be saved',
         { tag: ['@smoke', '@profile'] },
         async () => {
-            await profilePage.verifyProfileUrl();
-            await profilePage.verifyProfileTitle();
-            await profilePage.tapOnEditProfileButton();
-            await profilePage.updateMobileNumber(
-                ProfileTestData.editProfile.phone
-            );
-            await profilePage.tapOnSaveProfileChanges();
-            await profilePage.verifyProfileUpdateSuccessMessage(
-                ProfileTestData.editProfile.successMessage
-            );
-            await profilePage.refreshPageAndValidateUpdatedPhoneNumber(
-                ProfileTestData.editProfile.phone
-            );
+            const originalPhone = await profilePage.getPhoneValue();
+
+            try {
+                await profilePage.verifyProfileUrl();
+                await profilePage.verifyProfileTitle();
+                await profilePage.tapOnEditProfileButton();
+                await profilePage.updateMobileNumber(
+                    ProfileTestData.editProfile.phone
+                );
+                await profilePage.tapOnSaveProfileChanges();
+                await profilePage.verifyProfileUpdateSuccessMessage(
+                    ProfileTestData.editProfile.successMessage
+                );
+                await profilePage.refreshPageAndValidateUpdatedPhoneNumber(
+                    ProfileTestData.editProfile.phone
+                );
+            } finally {
+                await profilePage.restoreProfileField(
+                    'phone',
+                    originalPhone
+                );
+            }
         }
     );
 });

@@ -118,6 +118,8 @@ class ProfilePage extends BasePage {
     // Navigate to Profile page
     async navigateToProfile() {
         await this.profileLink.click();
+        await expect(this.profilePageTitle).toBeVisible();
+        await expect(this.personalInfoSection).toBeVisible();
     }
 
     // Verify Profile page URL
@@ -177,36 +179,85 @@ class ProfilePage extends BasePage {
         inputLocator,
         fieldName
     ) {
-        const inputCount =
-            await inputLocator.count();
-
-        if (inputCount > 0) {
-            const inputVisible =
-                await inputLocator.isVisible();
-
-            if (inputVisible) {
-                return inputLocator.inputValue();
+        await expect.poll(
+            async () => (
+                await inputLocator.isVisible() ||
+                await displayLocator.isVisible()
+            ),
+            {
+                message:
+                    `${fieldName} should be visible in view mode or edit mode.`
             }
+        ).toBe(true);
+
+        if (await inputLocator.isVisible()) {
+            return inputLocator.inputValue();
         }
 
-        const displayCount =
-            await displayLocator.count();
+        const displayedValue =
+            await displayLocator.textContent();
 
-        if (displayCount > 0) {
-            const displayVisible =
-                await displayLocator.isVisible();
+        return displayedValue?.trim() ?? '';
+    }
 
-            if (displayVisible) {
-                const displayedValue =
-                    await displayLocator.textContent();
-
-                return displayedValue?.trim() ?? '';
+    _getProfileFieldLocators(fieldName) {
+        const fields = {
+            firstName: {
+                display: this.firstName,
+                input: this.firstNameInput
+            },
+            lastName: {
+                display: this.lastName,
+                input: this.lastNameInput
+            },
+            email: {
+                display: this.email,
+                input: this.emailInput
+            },
+            phone: {
+                display: this.phone,
+                input: this.phoneInput
+            },
+            address: {
+                display: this.address,
+                input: this.addressInput
             }
+        };
+        const field = fields[fieldName];
+
+        if (!field) {
+            throw new Error(
+                `Unsupported profile field "${fieldName}".`
+            );
         }
 
-        throw new Error(
-            `${fieldName} is unavailable in both view mode and edit mode.`
+        return field;
+    }
+
+    async getProfileFieldValue(fieldName) {
+        const field = this._getProfileFieldLocators(fieldName);
+
+        return this._readFieldValue(
+            field.display,
+            field.input,
+            fieldName
         );
+    }
+
+    async restoreProfileField(fieldName, originalValue) {
+        const field = this._getProfileFieldLocators(fieldName);
+
+        if (!(await field.input.isVisible())) {
+            await this.clickEditProfile();
+        }
+
+        await field.input.fill(originalValue);
+        await this.clickSaveChanges();
+        await expect(this.profileSuccessMessage).toBeVisible();
+        await this.page.reload();
+        await expect.poll(
+            () => this.getProfileFieldValue(fieldName)
+        ).toBe(originalValue);
     }
 
     // Read First Name value
