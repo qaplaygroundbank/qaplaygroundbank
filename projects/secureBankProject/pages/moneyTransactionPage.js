@@ -90,4 +90,8 @@ class MoneyTransactionPage extends BasePage {
     }
 }
 
+<<<<<<< HEAD
 export default MoneyTransactionPage;
+=======
+export default MoneyTransactionPage;
+>>>>>>> baf7503a9121132fd8b29bd1ae5d8d31e52c9f40
