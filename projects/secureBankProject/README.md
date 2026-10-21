@@ -274,9 +274,13 @@ npm run cli -- securebank --env qa --suite smoke --reporters excel
 The generated workbook is:
 
 ```text
-reports/securebank/qa/smoke/securebank-report.xlsx
+reports/securebank/qa/smoke/ui-report.xlsx
 ```
+Open the excel report using:
 
+```bash
+Start-Process ".\reports\securebank\qa\smoke\ui-report.xlsx"
+```
 The workbook contains two worksheets:
 
 - **Summary:** Project, environment, suite, execution date, and test counts.
