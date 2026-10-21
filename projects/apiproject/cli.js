@@ -9,8 +9,19 @@ function registerApiProject(program) {
 
     addGlobalOptions(apiCommand);
 
+    apiCommand
+        .option(
+            '--reporters <formats>',
+            'Comma-separated report formats: html,allure,excel',
+            'html'
+        );
+
     apiCommand.action(async (options) => {
-        await runApiProject(options);
+        const exitCode = await runApiProject(options);
+
+        if (exitCode !== 0) {
+            process.exitCode = exitCode;
+        }
     });
 }
 
