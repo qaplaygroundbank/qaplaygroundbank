@@ -13,11 +13,8 @@ class ExcelReporter {
     onTestEnd(test, result) {
         this.results.set(test.id, {
             title: test.title,
-            suite: test.titlePath().slice(0, -1).join(' > '),
             project: test.parent.project()?.name || '',
             status: result.status,
-            duration: result.duration,
-            retries: result.retry,
             error: result.errors.map(({ message }) => message).filter(Boolean).join('\n')
         });
     }
@@ -28,52 +25,139 @@ class ExcelReporter {
         workbook.created = new Date();
 
         const results = [...this.results.values()];
-        const summary = workbook.addWorksheet('Summary');
-        summary.columns = [
-            { header: 'Metric', key: 'metric', width: 24 },
-            { header: 'Count', key: 'count', width: 14 }
-        ];
-        summary.addRows([
-            { metric: 'Total tests', count: results.length },
-            { metric: 'Passed', count: results.filter(({ status }) => status === 'passed').length },
-            { metric: 'Failed', count: results.filter(({ status }) => status === 'failed').length },
-            { metric: 'Timed out', count: results.filter(({ status }) => status === 'timedOut').length },
-            { metric: 'Skipped', count: results.filter(({ status }) => status === 'skipped').length },
-            { metric: 'Interrupted', count: results.filter(({ status }) => status === 'interrupted').length }
-        ]);
-        this.styleHeader(summary);
+        const passed = results.filter(({ status }) => status === 'passed').length;
+        const failed = results.filter(({ status }) =>
+            ['failed', 'timedOut', 'interrupted'].includes(status)
+        ).length;
+        const browserNames = [...new Set(results.map(({ project }) => project).filter(Boolean))];
+        const browser = browserNames.length > 0 ? browserNames.join(', ') : 'N/A';
+        const report = workbook.addWorksheet('Execution Report');
 
-        const details = workbook.addWorksheet('Test Results');
-        details.columns = [
-            { header: 'Test', key: 'title', width: 58 },
-            { header: 'Suite', key: 'suite', width: 60 },
-            { header: 'Project', key: 'project', width: 16 },
-            { header: 'Status', key: 'status', width: 14 },
-            { header: 'Duration (ms)', key: 'duration', width: 18 },
-            { header: 'Retries', key: 'retries', width: 12 },
-            { header: 'Error', key: 'error', width: 80 }
+        report.columns = [
+            { width: 9 },
+            { width: 50 },
+            { width: 36 },
+            { width: 31 },
+            { width: 14 }
         ];
-        details.addRows(results);
-        details.views = [{ state: 'frozen', ySplit: 1 }];
-        details.autoFilter = {
-            from: 'A1',
-            to: 'G1'
+        report.mergeCells('A1:E1');
+        report.getCell('A1').value = 'SECUREBANK | TEST EXECUTION REPORT';
+        report.getRow(1).height = 30;
+        report.getCell('A1').font = {
+            bold: true,
+            size: 16,
+            color: { argb: 'FFFFFFFF' }
         };
-        this.styleHeader(details);
+        report.getCell('A1').fill = this.fill('FF17365D');
+        report.getCell('A1').alignment = { vertical: 'middle' };
+
+        const metadata = [
+            ['Application', 'SecureBank'],
+            ['Framework', 'Playwright JavaScript'],
+            ['Browser', browser],
+            ['Execution date', new Date()]
+        ];
+        metadata.forEach(([label, value], index) => {
+            const row = index + 3;
+            report.getCell(`A${row}`).value = label;
+            report.getCell(`B${row}`).value = value;
+            report.getCell(`A${row}`).font = { bold: true };
+            report.getCell(`A${row}`).alignment = { vertical: 'middle' };
+            report.getCell(`B${row}`).alignment = { vertical: 'middle' };
+        });
+        report.getCell('B6').numFmt = 'dd-mmm-yy';
+
+        [
+            ['Executed', results.length],
+            ['Passed', passed],
+            ['Failed', failed],
+            ['Pass rate', results.length ? passed / results.length : 0]
+        ].forEach(([label, value], index) => {
+            const row = index + 3;
+            report.getCell(`D${row}`).value = label;
+            report.getCell(`E${row}`).value = value;
+            report.getCell(`D${row}`).font = { bold: true };
+        });
+        report.getCell('E6').numFmt = '0%';
+
+        const headerRow = 8;
+        const headers = ['S.No.', 'Test Case', 'Expected Result', 'Actual Result', 'Status'];
+        headers.forEach((header, index) => {
+            const cell = report.getCell(headerRow, index + 1);
+            cell.value = header;
+            cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+            cell.fill = this.fill('FF1F4E78');
+            cell.alignment = { vertical: 'middle', wrapText: true };
+        });
+        report.getRow(headerRow).height = 24;
+
+        results.forEach((result, index) => {
+            const rowNumber = headerRow + index + 1;
+            const isPassed = result.status === 'passed';
+            const status = isPassed
+                ? 'PASS'
+                : result.status === 'skipped'
+                    ? 'SKIPPED'
+                    : result.status.toUpperCase();
+            const row = report.getRow(rowNumber);
+
+            row.values = [
+                index + 1,
+                result.title,
+                'Expected behavior for this test case is satisfied.',
+                isPassed
+                    ? 'All test assertions passed.'
+                    : result.error || `Test ended with status: ${result.status}.`,
+                status
+            ];
+            row.height = 42;
+            row.alignment = { vertical: 'middle', wrapText: true };
+            row.getCell(1).alignment = {
+                vertical: 'middle',
+                horizontal: 'right'
+            };
+            row.getCell(5).alignment = {
+                vertical: 'middle',
+                horizontal: 'center'
+            };
+            row.getCell(5).font = {
+                bold: true,
+                color: { argb: isPassed ? 'FF188038' : 'FFB42318' }
+            };
+            row.getCell(5).fill = this.fill(isPassed ? 'FFD9EAD3' : 'FFFCE4D6');
+        });
+
+        const evidenceRow = headerRow + results.length + 2;
+        report.getCell(`A${evidenceRow}`).value = 'Evidence';
+        report.getCell(`A${evidenceRow}`).font = { bold: true };
+        report.mergeCells(`B${evidenceRow}:E${evidenceRow}`);
+        report.getCell(`B${evidenceRow}`).value =
+            'Playwright HTML Report and Allure Report';
+        report.getCell(`B${evidenceRow}`).alignment = { wrapText: true };
+
+        report.views = [{ state: 'frozen', ySplit: headerRow }];
+        report.autoFilter = {
+            from: `A${headerRow}`,
+            to: `E${headerRow + results.length}`
+        };
+        report.pageSetup = {
+            orientation: 'landscape',
+            fitToPage: true,
+            fitToWidth: 1,
+            fitToHeight: 0
+        };
+        report.printArea = `A1:E${evidenceRow}`;
 
         await mkdir(path.dirname(this.outputFile), { recursive: true });
         await workbook.xlsx.writeFile(this.outputFile);
     }
 
-    styleHeader(sheet) {
-        const header = sheet.getRow(1);
-        header.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-        header.fill = {
+    fill(color) {
+        return {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FF1F4E78' }
+            fgColor: { argb: color }
         };
-        header.commit();
     }
 }
 

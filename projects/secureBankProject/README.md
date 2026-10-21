@@ -134,7 +134,7 @@ Generated report files are written to the repository root:
 | Playwright HTML | `playwright-report/` |
 | Allure raw results | `allure-results/` |
 | Allure HTML | `allure-report/` |
-| Excel summary and test details | `excel-report/securebank-test-results.xlsx` |
+| Excel execution report | `excel-report/securebank-test-execution-report.xlsx` |
 
 Generate the Allure HTML dashboard after a test run:
 
@@ -148,7 +148,7 @@ Open the Playwright HTML report from the repository root:
 npm run report
 ```
 
-The Excel workbook is produced automatically at the end of each test run. It contains a summary sheet and a detailed test-results sheet with status, duration, retries, and errors.
+The Excel workbook is produced automatically at the end of each test run. Its `Execution Report` sheet uses a presentation-ready layout with run metadata, execution totals, pass rate, and a numbered test-case table showing expected result, actual result, and status.
 
 Install an individual browser if needed:
 

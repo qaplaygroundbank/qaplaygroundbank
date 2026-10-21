@@ -35,7 +35,7 @@ export default defineConfig({
             {
                 outputFile: path.join(
                     repositoryRoot,
-                    'excel-report/securebank-test-results.xlsx'
+                    'excel-report/securebank-test-execution-report.xlsx'
                 )
             }
         ]
