@@ -37,7 +37,7 @@ test.describe('Bill Pay', () => {
     });
 
     test(
-        '@billpay BP-015 Verify invalid amount is not accepted',
+        '@regression @billpay BP-015 Verify invalid amount is not accepted',
         async ({
             billPayPage,
             page
@@ -67,7 +67,7 @@ test.describe('Bill Pay', () => {
     );
 
     test(
-        '@billpay BP-016 Verify Confirm Bill Payment popup is displayed',
+        '@smoke @billpay BP-016 Verify Confirm Bill Payment popup is displayed',
         async ({
             billPayPage
         }) => {
