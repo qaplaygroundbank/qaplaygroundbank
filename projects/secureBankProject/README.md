@@ -42,7 +42,7 @@ npm run cli -- securebank --env qa --suite regression --browser webkit
 Run one test file. `--test-file` is relative to `projects/secureBankProject/`:
 
 ```bash
-npm run cli -- securebank --env qa --suite regression --test-file tests/loginTest.spec.js
+npm run cli -- securebank --env qa --suite regression --test-file tests/login/loginTest.spec.js
 ```
 
 Show the browser while tests run:
@@ -121,11 +121,34 @@ projects/secureBankProject/
 
 The UI configuration defines Playwright projects for Chromium, Firefox, and WebKit. The runner selects one browser per invocation using `--browser`; run the command separately for each browser when cross-browser validation is required.
 
-The UI configuration uses the HTML reporter. Open the latest generated report from the repository root with:
+Each SecureBank test run generates Playwright HTML, Allure results, and an Excel workbook. For example, run only the transaction tests from the repository root:
+
+```bash
+npm run cli -- securebank --env qa --suite regression --browser chromium --test-file tests/transactions/moneyTransactionPage.spec.js
+```
+
+Generated report files are written to the repository root:
+
+| Format | Output |
+|---|---|
+| Playwright HTML | `playwright-report/` |
+| Allure raw results | `allure-results/` |
+| Allure HTML | `allure-report/` |
+| Excel summary and test details | `excel-report/securebank-test-results.xlsx` |
+
+Generate the Allure HTML dashboard after a test run:
+
+```bash
+npm run report:allure
+```
+
+Open the Playwright HTML report from the repository root:
 
 ```bash
 npm run report
 ```
+
+The Excel workbook is produced automatically at the end of each test run. It contains a summary sheet and a detailed test-results sheet with status, duration, retries, and errors.
 
 Install an individual browser if needed:
 

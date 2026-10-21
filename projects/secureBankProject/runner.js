@@ -2,11 +2,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
+import { rm } from 'node:fs/promises';
 import logger from '../../commonlib/logger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
+
+function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 async function secureBankProject(options) {
     const browser = options.browser || 'chromium';
@@ -26,6 +31,15 @@ async function secureBankProject(options) {
         __dirname,
         'config/secureBankProject.config.js'
     );
+    const allureResultsDirectory = path.resolve(
+        __dirname,
+        '../../allure-results'
+    );
+
+    await rm(allureResultsDirectory, {
+        recursive: true,
+        force: true
+    });
 
     const args = [
         require.resolve('@playwright/test/cli'),
@@ -38,8 +52,27 @@ async function secureBankProject(options) {
             __dirname,
             options.testFile
         );
+        const relativeTestFile = path.relative(
+            path.resolve(__dirname, 'tests'),
+            testFile
+        );
 
-        args.push(testFile);
+        if (
+            path.isAbsolute(relativeTestFile) ||
+            relativeTestFile === '..' ||
+            relativeTestFile.startsWith(`..${path.sep}`)
+        ) {
+            throw new Error(
+                'The test file must be inside projects/secureBankProject/tests.'
+            );
+        }
+
+        const testFilePattern = relativeTestFile
+            .split(path.sep)
+            .map(escapeRegExp)
+            .join('.*');
+
+        args.push(testFilePattern);
         logger.info(`Test File   : ${testFile}`);
     } else {
         logger.info('Test File   : All configured UI tests');

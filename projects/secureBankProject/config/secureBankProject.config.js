@@ -1,5 +1,10 @@
 
 import { defineConfig, devices } from '@playwright/test';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const configDirectory = path.dirname(fileURLToPath(import.meta.url));
+const repositoryRoot = path.resolve(configDirectory, '../../..');
 
 export default defineConfig({
     testDir: '../tests',
@@ -12,7 +17,29 @@ export default defineConfig({
 
     workers: process.env.CI ? 1 : undefined,
 
-    reporter: 'html',
+    reporter: [
+        ['list'],
+        [
+            'html',
+            {
+                outputFolder: path.join(repositoryRoot, 'playwright-report'),
+                open: 'never'
+            }
+        ],
+        [
+            'allure-playwright',
+            { resultsDir: path.join(repositoryRoot, 'allure-results') }
+        ],
+        [
+            path.join(configDirectory, '../reporters/excelReporter.js'),
+            {
+                outputFile: path.join(
+                    repositoryRoot,
+                    'excel-report/securebank-test-results.xlsx'
+                )
+            }
+        ]
+    ],
 
     use: {
         trace: 'on-first-retry'

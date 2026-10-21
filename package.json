@@ -9,7 +9,8 @@
   "scripts": {
     "cli": "node bin/qaplayground.js",
     "test": "playwright test",
-    "report": "playwright show-report"
+    "report": "playwright show-report",
+    "report:allure": "allure generate allure-results --clean --output allure-report"
   },
   "keywords": [
     "playwright",
@@ -21,7 +22,10 @@
   "type": "module",
   "devDependencies": {
     "@playwright/test": "^1.64.0",
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "allure": "^3.21.0",
+    "allure-playwright": "^3.14.0",
+    "exceljs": "^4.4.0"
   },
   "dependencies": {
     "chai": "^6.3.0",
