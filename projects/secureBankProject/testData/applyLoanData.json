@@ -1,0 +1,10 @@
+{
+  "dialogTitle": "Apply for a Loan",
+  "pageTitle": "Apply for a Loan",
+  "defaultLoanTypeText": "Select loan type",
+  "defaultTermLengthText": "36",
+  "defaultInterestRate": "5.0",
+  "defaultAccountText": "Select account",
+  "loanAmountPlaceholder": "0.00",
+  "purposePlaceholder": "What will this loan be used for?"
+}
