@@ -113,6 +113,12 @@ For example, run the login tests:
 npm run cli -- securebank --env qa --suite regression --test-file tests/login/loginTest.spec.js
 ```
 
+Run the password visibility test:
+
+```bash
+npm run cli -- securebank --env qa --suite regression --test-file tests/login/passwordVisibilityTest.spec.js
+```
+
 Run the bill payment tests:
 
 ```bash

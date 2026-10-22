@@ -8,6 +8,9 @@ class LoginPage extends BasePage {
         super(page);
         this.usernameInput = resolveLocator(page, loginPageSelectors.usernameInput);
         this.passwordInput = resolveLocator(page, loginPageSelectors.passwordInput);
+        this.passwordVisibilityToggle = page.getByRole('button', {
+            name: /^(Show|Hide) password$/
+        });
         this.loginButton = resolveLocator(page, loginPageSelectors.loginButton);
     }
 
@@ -19,6 +22,10 @@ class LoginPage extends BasePage {
         await this.usernameInput.fill(username);
         await this.passwordInput.fill(password);
         await this.loginButton.click();
+    }
+
+    async togglePasswordVisibility() {
+        await this.passwordVisibilityToggle.click();
     }
 }
 
