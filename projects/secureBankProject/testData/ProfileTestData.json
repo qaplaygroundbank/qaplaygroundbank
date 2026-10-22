@@ -1,0 +1,22 @@
+{
+    "ValidData": {
+        "FirstName": "Alex",
+        "LastName": "Morgan",
+        "Email": "alex.morgan@example.com",
+        "Phone": "(415) 555-0101",
+        "Address": "123 Market Street, San Francisco, CA 94105"
+    },
+    "InvalidEmailId": {
+        "Email": "xyz",
+        "EMailErrorMessage": "Please enter a valid email address."
+    },
+    "editProfile": {
+        "phone": "(918) 366-1010",
+        "successMessage": "Profile updated successfully.",
+        "PhoneErrorMsg": "/^Phone must be in format/"
+    },
+
+    "htmlCode":{
+       "scriptInput": "<script>  function showAlert() {  alert(\"Hello! This is an alert message.\");          } </script>  "
+    }
+}
