@@ -45,6 +45,16 @@ Run one test file. `--test-file` is relative to `projects/uiproject/`:
 npm run cli -- ui --env qa --suite regression --test-file tests/loginTest.spec.js
 ```
 
+Run the locked-account login scenario:
+
+```bash
+npm run cli -- ui --env qa --suite regression --test-file tests/login/lockedAccountLogin.spec.js
+```
+
+This scenario uses the demo `locked_user` credentials in
+`testData/lockedAccountData.json` and verifies the suspension message appears
+while the browser remains on the login page.
+
 Show the browser while tests run:
 
 ```bash
