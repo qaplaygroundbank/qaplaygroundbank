@@ -1,16 +1,21 @@
 {
-    "search": {
-        "matchingDescription": "Whole Foods",
-        "matchingTransactionDescription": "Whole Foods Market",
-        "singleMatchDescription": "Uber",
-        "creditDescription": "Direct Deposit",
-        "noMatchDescription": "xyz",
-        "punctuationOnlyDescription": "!@#$%^&*",
-        "emptyDescription": ""
+    "searchTransaction": {
+        "searchText": "Whole Foods",
+        "expectedDescription": "Whole Foods Market"
+    },
+    "singleResultTransaction": {
+        "searchText": "Uber"
+    },
+    "noMatchingTransaction": {
+        "searchText": "xyz"
+    },
+    "punctuationOnlySearch": {
+        "searchText": "!@#$%^&*"
     },
     "accounts": {
         "checking": "Everyday Checking",
         "savings": "High-Yield Savings",
+        "allAccountsOption": "All accounts",
         "options": [
             "All accounts",
             "Everyday Checking",
@@ -19,10 +24,15 @@
     },
     "transactionTypes": {
         "credit": "credits",
-        "debit": "debits",
-        "all": "all"
+        "debit": "debits"
     },
-    "expected": {
+    "creditTransaction": {
+        "searchText": "Direct Deposit"
+    },
+    "emptySearch": {
+        "searchText": ""
+    },
+    "expectedResults": {
         "noResultsMessage": "No transactions match your filters.",
         "noTransactionsPagination": "No transactions",
         "firstPagePagination": "Showing 1–10 of 18",
@@ -31,7 +41,9 @@
         "firstPageRowCount": 10,
         "lastPageRowCount": 8,
         "singleResultRowCount": 1,
-        "defaultTransactionCount": 18,
-        "downloadedCsvExtensionPattern": "\\.csv$"
+        "totalTransactionCount": 18
+    },
+    "csv": {
+        "fileExtension": ".csv"
     }
 }
