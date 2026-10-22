@@ -1,0 +1,11 @@
+{
+    "TM003":{
+        "amount":"100",
+        "fromAccountDefaultText":"Select account"
+    },
+    "TM004":{
+        "fromAccount":"Everyday Checking",
+        "toAccount":"High-Yield Savings",
+        "defaultAccountText":"Select account"
+    }
+}
