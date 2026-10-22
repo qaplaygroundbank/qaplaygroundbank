@@ -1,0 +1,37 @@
+{
+    "search": {
+        "matchingDescription": "Whole Foods",
+        "matchingTransactionDescription": "Whole Foods Market",
+        "singleMatchDescription": "Uber",
+        "creditDescription": "Direct Deposit",
+        "noMatchDescription": "xyz",
+        "punctuationOnlyDescription": "!@#$%^&*",
+        "emptyDescription": ""
+    },
+    "accounts": {
+        "checking": "Everyday Checking",
+        "savings": "High-Yield Savings",
+        "options": [
+            "All accounts",
+            "Everyday Checking",
+            "High-Yield Savings"
+        ]
+    },
+    "transactionTypes": {
+        "credit": "credits",
+        "debit": "debits",
+        "all": "all"
+    },
+    "expected": {
+        "noResultsMessage": "No transactions match your filters.",
+        "noTransactionsPagination": "No transactions",
+        "firstPagePagination": "Showing 1–10 of 18",
+        "lastPagePagination": "Showing 11–18 of 18",
+        "singleResultPagination": "Showing 1–1 of 1",
+        "firstPageRowCount": 10,
+        "lastPageRowCount": 8,
+        "singleResultRowCount": 1,
+        "defaultTransactionCount": 18,
+        "downloadedCsvExtensionPattern": "\\.csv$"
+    }
+}
