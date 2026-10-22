@@ -72,6 +72,19 @@ class DashboardPage {
     return this.accountSummaryValue(this.accountSummaryCardByLabel(label));
   }
 
+  // Returns the trimmed value text of a single account summary card found by
+  // its visible label (e.g. "Income" -> "+$5,592.67"). Returns an empty string
+  // when no card matches the label, so specs can fail with a clear message
+  // instead of a locator timeout.
+  async getAccountSummaryValueByLabel(label) {
+    const cards = this.accountSummaryCardByLabel(label);
+    if ((await cards.count()) === 0) {
+      return '';
+    }
+    const raw = await this.accountSummaryValue(cards.first()).textContent();
+    return (raw ?? '').trim();
+  }
+
   // Returns the trimmed labels of all account summary cards, in DOM order.
   // Each card renders its label in the first <p> element, so this is used by
   // specs to assert the expected card labels appear in the correct order.

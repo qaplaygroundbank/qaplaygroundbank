@@ -10,11 +10,18 @@
   },
   "standardUser": {
     "expectedDashboardNetWorth": "$17,050.00",
+    "referenceDate": "2026-06-22T12:00:00Z",
     "expectedCardLabelsInOrder": [
       "Total Net Worth",
       "Net Change",
       "Income",
       "Expenses"
-    ]
+    ],
+    "expectedCardValues": {
+      "Total Net Worth": 17050,
+      "Net Change": 4631.2,
+      "Income": 5592.67,
+      "Expenses": -961.47
+    }
   }
 }

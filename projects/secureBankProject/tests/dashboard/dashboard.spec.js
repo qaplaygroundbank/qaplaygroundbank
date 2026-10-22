@@ -14,6 +14,73 @@ import {
 const credentials = dashboardTestData.loginCredentials;
 const formatter = createCurrencyFormatter(dashboardTestData.appConfig);
 
+// The Net Change / Income / Expenses cards are scoped by the application to the
+// current calendar month. The seeded transactions belong to June 2026, so the
+// browser clock is pinned to a reference date inside that month; otherwise
+// those cards legitimately read $0.00 and their expected values would change
+// every month. The reference date lives in the shared test data file.
+const referenceDate = dashboardTestData.standardUser.referenceDate;
+
+/**
+ * Pins the browser clock to the seeded reference date so the month-scoped
+ * summary cards always expose the same values. Must be called before the first
+ * navigation, because the dashboard computes those cards on load.
+ */
+async function pinClockToReferenceDate(page) {
+  expect(
+    referenceDate,
+    'standardUser.referenceDate must be set so the month-scoped cards stay deterministic'
+  ).toBeTruthy();
+  await page.clock.setFixedTime(new Date(referenceDate));
+}
+
+/**
+ * Asserts that every account summary card displays the expected *number*.
+ *
+ * The expected numbers are read from the shared test data file
+ * (`standardUser.expectedCardValues`, keyed by the card label), so re-seeding
+ * the demo data only requires a JSON update. The comparison is done on the
+ * parsed number rather than the raw text, so the assertion stays independent
+ * of the currency symbol, the grouping separators and the sign placement
+ * ("$17,050.00" and "17,050.00" both parse to 17050, and "-$961.47" parses
+ * to -961.47).
+ *
+ * @param {import('../../pages/DashboardPage.js').default} dashboardPage
+ * @param {string[]} labels Labels of the cards that must be checked.
+ */
+async function expectCardValuesToMatchExpected(dashboardPage, labels) {
+  const expectedCardValues = dashboardTestData.standardUser.expectedCardValues;
+
+  for (const label of labels) {
+    const expectedNumber = expectedCardValues[label];
+    expect(
+      expectedNumber,
+      `No expected value is defined for the stat card "${label}" in the test data`
+    ).toBeDefined();
+
+    // Exactly one card must carry the label, otherwise the lookup below could
+    // silently read the wrong card.
+    const card = dashboardPage.accountSummaryCardByLabel(label);
+    await expect(
+      card,
+      `Expected exactly one account summary card for "${label}"`
+    ).toHaveCount(1);
+
+    const displayed = await dashboardPage.getAccountSummaryValueByLabel(label);
+    const displayedNumber = parseCurrencyValue(displayed);
+
+    expect(
+      Number.isNaN(displayedNumber),
+      `Stat card "${label}" displays "${displayed}", which is not a number`
+    ).toBe(false);
+
+    expect(
+      displayedNumber,
+      `Stat card "${label}" displays "${displayed}" (${displayedNumber}), which does not match the expected value ${expectedNumber}`
+    ).toBe(expectedNumber);
+  }
+}
+
 test.describe('Dashboard', () => {
   let loginPage;
   let dashboardPage;
@@ -28,7 +95,7 @@ test.describe('Dashboard', () => {
   });
 
   // TC01 - Dashboard loads after valid login
-  test('TC01 - Dashboard loads after valid login @smoke', async ({ page }) => {
+  test('TC01 - Dashboard loads after valid login', { tag: ['@smoke', '@regression'] }, async ({ page }) => {
     // Login process for this test separately.
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
@@ -54,10 +121,14 @@ test.describe('Dashboard', () => {
   });
 
   // TC02 - Dashboard shows account summary
-  test('TC02 - Dashboard shows account summary @regression', async ({ page }) => {
+  test('TC02 - Dashboard shows account summary', { tag: ['@regression'] }, async ({ page }) => {
     // Login process for this test separately.
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
+
+    // Pin the clock so the month-scoped cards expose the seeded transactions
+    // and the expected values below stay valid on any day the suite runs.
+    await pinClockToReferenceDate(page);
 
     await loginPage.openLoginPage();
     await loginPage.login(credentials.username, credentials.password);
@@ -91,15 +162,25 @@ test.describe('Dashboard', () => {
       expect(value).not.toBe('', `Account summary balance for "${label}" must not be blank`);
       expect(Number.isNaN(parseCurrencyValue(value))).toBe(false, `Account summary balance "${value}" for "${label}" is not numeric`);
     }
+
+    // Verify each card displays the expected value (not just a populated one),
+    // so a wrong amount is caught here as well.
+    await expectCardValuesToMatchExpected(dashboardPage, expectedLabels);
   });
 
   // TC03 - Account balance is displayed with valid currency format
-  test('TC03 - Account balance is displayed with valid currency format @regression', async ({
+  test('TC03 - Account balance is displayed with valid currency format', { tag: ['@regression'] }, async ({
     page
   }) => {
     // Login process for this test separately.
     loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
+
+    // Pin the browser clock to the reference date from the shared test data
+    // *before* the first navigation, so the month-scoped cards expose the
+    // seeded transactions and the expected values stay valid on any day the
+    // suite runs.
+    await pinClockToReferenceDate(page);
 
     await loginPage.openLoginPage();
     await loginPage.login(credentials.username, credentials.password);
@@ -109,6 +190,33 @@ test.describe('Dashboard', () => {
 
     const cards = await dashboardPage.accountSummaryCards.all();
     expect(cards.length).toBeGreaterThan(0, 'Expected at least one account summary card');
+
+    // Verify the net worth stat card shows the expected balance for the
+    // logged-in customer. The expected value is read from the shared test data
+    // file (never hard-coded here), so a change to the seeded account balances
+    // only needs a JSON update.
+    const netWorthLabel = dashboardTestData.appConfig.netWorthCardLabel;
+    const netWorthCard = dashboardPage.accountSummaryCardByLabel(netWorthLabel);
+    await expect(
+      netWorthCard,
+      `Expected exactly one account summary card for "${netWorthLabel}"`
+    ).toHaveCount(1);
+
+    const expectedNetWorth = dashboardTestData.standardUser.expectedDashboardNetWorth;
+    const displayedNetWorth = (
+      (await dashboardPage.accountSummaryValue(netWorthCard).textContent()) ?? ''
+    ).trim();
+
+    expect(
+      displayedNetWorth,
+      `Displayed net worth "${displayedNetWorth}" does not match the expected value "${expectedNetWorth}"`
+    ).toBe(expectedNetWorth);
+
+    // Verify every stat card displays the expected *number*, not just a
+    // correctly formatted string.
+    const displayedLabels = await dashboardPage.getAccountSummaryLabelsInOrder();
+    expect(displayedLabels.length).toBeGreaterThan(0, 'Expected at least one stat card label');
+    await expectCardValuesToMatchExpected(dashboardPage, displayedLabels);
 
     for (const card of cards) {
       const valueLocator = dashboardPage.accountSummaryValue(card);
