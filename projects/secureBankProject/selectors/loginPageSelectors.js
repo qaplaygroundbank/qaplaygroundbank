@@ -1,12 +1,12 @@
 
 const loginPageSelectors = {
   // Username input
-    userNameTextBox: {
+    usernameInput: {
         type: 'testId',
         value: 'login-username-input'
     },
     // Password input
-    passwordTextBox: {
+    passwordInput: {
         type: 'testId',
         value: 'login-password-input'
     },

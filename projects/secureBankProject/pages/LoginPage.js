@@ -7,8 +7,8 @@ import { resolveLocator } from '../utils/locatorResolver.js';
 class LoginPage extends BasePage {
     constructor(page) {
         super(page);
-        this.userNameTextBox = resolveLocator(page, loginPageSelectors.userNameTextBox);
-        this.passwordTextBox = resolveLocator(page, loginPageSelectors.passwordTextBox);
+        this.usernameInput = resolveLocator(page, loginPageSelectors.usernameInput);
+        this.passwordInput = resolveLocator(page, loginPageSelectors.passwordInput);
         this.loginButton = resolveLocator(page, loginPageSelectors.loginButton);
     }
 
@@ -17,8 +17,8 @@ class LoginPage extends BasePage {
     }
 
     async login(username, password) {
-        await this.userNameTextBox.fill(username);
-        await this.passwordTextBox.fill(password);
+        await this.usernameInput.fill(username);
+        await this.passwordInput.fill(password);
         await this.loginButton.click();
     }
 }

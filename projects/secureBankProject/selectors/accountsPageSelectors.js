@@ -4,6 +4,7 @@ export const accountPageSelectors = {
         role: 'link',
         name: 'Accounts'
     },
+    
 
     accountPageTitle: {
         type: 'text',
@@ -44,21 +45,18 @@ export const accountPageSelectors = {
         type: 'text',
         value: 'Everyday Checking'
     },
-    
-
     accountBalance: {
-        type: 'css',
-        value: 'table'
-    },
-    checkingAccount: {
-         type: 'text',
-         value: 'Everyday Checking'
+    type: 'testId',
+    value: 'account-row-balance'
 },
+   
     savingsAccount: {
         type: 'text',
         value: 'High-Yield Savings'
 }
 //end here
 };
+
+
 
 export default accountPageSelectors;

@@ -1,14 +1,27 @@
 import { test, expect } from '../../fixtures/baseFixture.js';
-
+import appConfig from '../../config/app.config.js';
+import accountsData from '../../testData/accountsData.json' assert { type: 'json' };
 test.describe('Account Module Tests', () => {
 
-
-test(
+   test(
     'ACC-004: Verify account balance is displayed @smoke',
     async ({ page, loginPage, accountsPage }) => {
 
-        const username = process.env.UI_QA_USERNAME;
-        const password = process.env.UI_QA_PASSWORD;
+        const environment =
+            process.env.QA_PLAYGROUND_ENV || 'qa';
+
+        const { username, password } =
+            appConfig.getUiCredentials(environment);
+
+        expect(
+            username,
+            `Username is not configured for environment "${environment}"`
+        ).toBeTruthy();
+
+        expect(
+            password,
+            `Password is not configured for environment "${environment}"`
+        ).toBeTruthy();
 
         await loginPage.openLoginPage();
         await loginPage.login(username, password);
@@ -18,24 +31,37 @@ test(
         await accountsPage.navigateToAccount();
         await accountsPage.waitForAccountLoaded();
 
-        // Verify account table is visible
         await accountsPage.verifyVisible();
 
-        // Verify the seeded balance is displayed
-       const rowCount = await accountsPage.getAccountRowsCount();
-         expect(rowCount).toBeGreaterThan(0);
+        const accountBalance =
+            await accountsPage.getAccountBalance();
 
-       const accountDetails = await accountsPage.getAccountDetails();
-
-            expect(accountDetails.length).toBeGreaterThan(0);
-    },
+        expect(accountBalance).toBe(
+            accountsData.checkingAccount.balance
+        );
+    }
 );
+
+
 test(
     'ACC-005: Verify account number/details are displayed correctly @smoke',
     async ({ page, loginPage, accountsPage }) => {
 
-        const username = process.env.UI_QA_USERNAME;
-        const password = process.env.UI_QA_PASSWORD;
+        const environment =
+            process.env.QA_PLAYGROUND_ENV || 'qa';
+
+        const { username, password } =
+            appConfig.getUiCredentials(environment);
+
+        expect(
+            username,
+            `Username is not configured for environment "${environment}"`
+        ).toBeTruthy();
+
+        expect(
+            password,
+            `Password is not configured for environment "${environment}"`
+        ).toBeTruthy();
 
         await loginPage.openLoginPage();
         await loginPage.login(username, password);
@@ -45,18 +71,39 @@ test(
         await accountsPage.navigateToAccount();
         await accountsPage.waitForAccountLoaded();
 
-        await accountsPage.verifyAccountDetails();
+        const accountDetails =
+            await accountsPage.getAccountDetails();
 
-        const accountDetails = await accountsPage.getAccountDetails();
-    
-        expect(accountDetails.length).toBeGreaterThan(0);
+        const checkingAccount = accountDetails.find(account =>
+            account.includes(
+                accountsData.checkingAccount.accountNumber
+            )
+        );
 
-        for (const account of accountDetails) {
-             expect(account.trim()).not.toBe('');
-            }
+        expect(
+            checkingAccount,
+            `Account ${accountsData.checkingAccount.accountNumber} not found`
+        ).toBeTruthy();
+
+        expect(checkingAccount).toContain(
+            accountsData.checkingAccount.accountName
+        );
+
+        expect(checkingAccount).toContain(
+            accountsData.checkingAccount.accountNumber
+        );
+
+        expect(checkingAccount).toContain(
+            accountsData.checkingAccount.accountType
+        );
+
+        const accountBalance =
+    await accountsPage.getCheckingAccountBalance();
+
+        expect(accountBalance).toBe(
+            accountsData.checkingAccount.balance
+        );
     }
-);
-
-    
+);;
 
 });

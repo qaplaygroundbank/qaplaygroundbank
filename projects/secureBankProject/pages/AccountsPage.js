@@ -36,6 +36,11 @@ class AccountsPage extends BasePage {
             accountPageSelectors.savingsAccount
         );
         // end here 
+
+        this.accountBalance = resolveLocator(
+    page,
+    accountPageSelectors.accountBalance
+);
        
         this.accountRows = resolveLocator(
             page,
@@ -53,6 +58,11 @@ class AccountsPage extends BasePage {
         );
     }
 
+    async getAccountBalance() {
+    return (
+        await this.accountBalance.first().textContent()
+    ).trim();
+}
     async navigateToAccount() {
         await this.accountMenuLink.click();
     }
@@ -75,10 +85,23 @@ class AccountsPage extends BasePage {
         //end here
     }
     // added by vivek
-    async verifyAccountDetails() {
-    await expect(this.checkingAccount).toBeVisible();
-    await expect(this.savingsAccount).toBeVisible();
-    }
+    async verifyAccountDetails(accountData) {
+    const accountDetails = await this.getAccountDetails();
+
+    const account = accountDetails.find(detail =>
+        detail.includes(accountData.accountNumber)
+    );
+
+    expect(
+        account,
+        `Account ${accountData.accountNumber} not found`
+    ).toBeTruthy();
+
+    expect(account).toContain(accountData.accountName);
+    expect(account).toContain(accountData.accountNumber);
+    expect(account).toContain(accountData.accountType);
+    expect(account).toContain(accountData.balance);
+}
     
     // end here
 
@@ -104,6 +127,15 @@ class AccountsPage extends BasePage {
 async getAccountDetails() {
     return await this.accountRows.allTextContents();
 }
+async getCheckingAccountBalance() {
+    return (
+        await this.page
+            .locator('[data-account-id="acc-checking-1"]')
+            .locator('[data-testid="account-row-balance"]')
+            .textContent()
+    ).trim();
+}
+
 }
 
 export default AccountsPage;
