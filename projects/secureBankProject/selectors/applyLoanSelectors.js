@@ -19,6 +19,10 @@ const applyLoanSelectors = {
         type: 'css',
         value: 'body'
     },
+    loanHistoryTable: {
+        type: 'testId',
+        value: 'loan-history-table'
+    },
     amountInput: {
         type: 'css',
         value: 'input[name="amount"]'
