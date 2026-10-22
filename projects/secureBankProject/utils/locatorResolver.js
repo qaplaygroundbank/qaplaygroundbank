@@ -42,10 +42,13 @@ function resolveLocator(page, selector) {
     };
 
     const exact = selector.exact ?? true;
+    const root = selector.within
+        ? resolveLocator(page, selector.within)
+        : page;
 
     switch (selector.type) {
         case 'testId':
-            return page.getByTestId(requireValue());
+            return root.getByTestId(requireValue());
 
         case 'role':
             if (
@@ -66,28 +69,28 @@ function resolveLocator(page, selector) {
                 );
             }
 
-            return page.getByRole(selector.role, {
+            return root.getByRole(selector.role, {
                 name: selector.name,
                 exact
             });
 
         case 'label':
-            return page.getByLabel(requireValue(), { exact });
+            return root.getByLabel(requireValue(), { exact });
 
         case 'placeholder':
-            return page.getByPlaceholder(requireValue(), { exact });
+            return root.getByPlaceholder(requireValue(), { exact });
 
         case 'text':
-            return page.getByText(requireValue(), { exact });
+            return root.getByText(requireValue(), { exact });
 
         case 'css':
-            return page.locator(requireValue());
+            return root.locator(requireValue());
 
         case 'id':
-            return page.locator(`#${requireValue()}`);
+            return root.locator(`#${requireValue()}`);
 
         case 'xpath':
-            return page.locator(`xpath=${requireValue()}`);
+            return root.locator(`xpath=${requireValue()}`);
 
         default:
             throw new Error(

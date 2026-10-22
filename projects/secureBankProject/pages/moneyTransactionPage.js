@@ -1,54 +1,31 @@
 import BasePage from './BasePage.js';
+import transactionsPageSelectors from '../selectors/transactionsPageSelectors.js';
+import { resolveLocator } from '../utils/locatorResolver.js';
 
 class MoneyTransactionPage extends BasePage {
     constructor(page) {
         super(page);
-        this.transactionsLink = page.getByRole('link', {
-            name: /Transactions View all account activity/
-        });
-        this.heading = page.getByRole('heading', { name: 'Transactions' });
-        this.searchInput = page.getByRole('textbox', { name: 'Search' });
-        this.accountDropdown = page.getByRole('combobox', { name: 'Account' });
-        this.allTransactionsButton = page.getByRole('button', { name: 'All', exact: true });
-        this.creditsButton = page.getByRole('button', { name: 'Credits', exact: true });
-        this.debitsButton = page.getByRole('button', { name: 'Debits', exact: true });
-        this.clearButton = page.getByRole('button', { name: 'Clear', exact: true });
-        this.transactionsTable = page.getByRole('table', {
-            name: 'All account transactions'
-        });
-        this.transactionRows = this.transactionsTable.locator('tbody tr');
-        this.dateColumnHeader = this.transactionsTable.getByRole('columnheader', {
-            name: 'Date'
-        });
-        this.accountColumnHeader = this.transactionsTable.getByRole('columnheader', {
-            name: 'Account'
-        });
-        this.descriptionColumnHeader = this.transactionsTable.getByRole('columnheader', {
-            name: 'Description'
-        });
-        this.categoryColumnHeader = this.transactionsTable.getByRole('columnheader', {
-            name: /Category/
-        });
-        this.amountColumnHeader = this.transactionsTable.getByRole('columnheader', {
-            name: /Amount/
-        });
-        this.noResultsMessage = page.getByText(
-            'No transactions match your filters.',
-            { exact: true }
-        );
-        this.pagination = page.getByRole('navigation', {
-            name: 'Transaction pagination'
-        });
-        this.paginationStatus = this.pagination.locator('p');
-        this.previousPageButton = this.pagination.getByRole('button', {
-            name: 'Previous page'
-        });
-        this.nextPageButton = this.pagination.getByRole('button', {
-            name: 'Next page'
-        });
-        this.downloadCsvButton = this.pagination.getByRole('button', {
-            name: 'Download CSV'
-        });
+        this.transactionsLink = resolveLocator(page, transactionsPageSelectors.transactionsLink);
+        this.heading = resolveLocator(page, transactionsPageSelectors.heading);
+        this.searchInput = resolveLocator(page, transactionsPageSelectors.searchInput);
+        this.accountDropdown = resolveLocator(page, transactionsPageSelectors.accountDropdown);
+        this.allTransactionsButton = resolveLocator(page, transactionsPageSelectors.allTransactionsButton);
+        this.creditsButton = resolveLocator(page, transactionsPageSelectors.creditsButton);
+        this.debitsButton = resolveLocator(page, transactionsPageSelectors.debitsButton);
+        this.clearButton = resolveLocator(page, transactionsPageSelectors.clearButton);
+        this.transactionsTable = resolveLocator(page, transactionsPageSelectors.transactionsTable);
+        this.transactionRows = resolveLocator(page, transactionsPageSelectors.transactionRows);
+        this.dateColumnHeader = resolveLocator(page, transactionsPageSelectors.dateColumnHeader);
+        this.accountColumnHeader = resolveLocator(page, transactionsPageSelectors.accountColumnHeader);
+        this.descriptionColumnHeader = resolveLocator(page, transactionsPageSelectors.descriptionColumnHeader);
+        this.categoryColumnHeader = resolveLocator(page, transactionsPageSelectors.categoryColumnHeader);
+        this.amountColumnHeader = resolveLocator(page, transactionsPageSelectors.amountColumnHeader);
+        this.noResultsMessage = resolveLocator(page, transactionsPageSelectors.noResultsMessage);
+        this.pagination = resolveLocator(page, transactionsPageSelectors.pagination);
+        this.paginationStatus = resolveLocator(page, transactionsPageSelectors.paginationStatus);
+        this.previousPageButton = resolveLocator(page, transactionsPageSelectors.previousPageButton);
+        this.nextPageButton = resolveLocator(page, transactionsPageSelectors.nextPageButton);
+        this.downloadCsvButton = resolveLocator(page, transactionsPageSelectors.downloadCsvButton);
     }
 
     async openFromDashboard() {
