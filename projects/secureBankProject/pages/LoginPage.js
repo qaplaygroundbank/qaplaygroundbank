@@ -9,6 +9,7 @@ class LoginPage extends BasePage {
         this.usernameInput = resolveLocator(page, loginPageSelectors.usernameInput);
         this.passwordInput = resolveLocator(page, loginPageSelectors.passwordInput);
         this.loginButton = resolveLocator(page, loginPageSelectors.loginButton);
+        this.errorBanner = resolveLocator(page, loginPageSelectors.errorBanner);
     }
 
     async openLoginPage() {

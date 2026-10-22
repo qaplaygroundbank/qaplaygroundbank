@@ -15,6 +15,10 @@ const loginPageSelectors = {
         type: 'role',
         role: 'button',
         name: 'Sign in to SecureBank'
+    },
+    errorBanner: {
+        type: 'testId',
+        value: 'login-error-banner'
     }
     // *******THE FOLLOWING SELECTORS ARE SAMPLE USE CASES TO DEMONSTRATE DIFFERENT SELECTION METHODS *****
     // transferButton: {
