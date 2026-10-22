@@ -39,7 +39,7 @@ async function paraBankProject(options) {
             options.testFile
         );
 
-        args.push(testFile.split(path.sep).join('/'));
+        args.push(testFile);
         logger.info(`Test File   : ${testFile}`);
     } else {
         logger.info('Test File   : All configured ParaBank tests');
