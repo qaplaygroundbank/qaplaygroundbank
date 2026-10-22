@@ -1,0 +1,17 @@
+{
+  "checkingAccount": {
+    "accountNumber": "4321",
+    "balance": "$4,250.00",
+    "accountName": "Everyday Checking",
+    "accountType":"Checking"
+
+
+  },
+
+  "savingsAccount": {
+"accountName": "High-Yield Savings",
+"accountNumber": "****8765",
+"accountType": "Savings",
+"balance": "$15,000.00"
+}
+}

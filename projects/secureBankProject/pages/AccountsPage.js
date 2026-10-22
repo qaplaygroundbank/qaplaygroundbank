@@ -21,12 +21,27 @@ class AccountsPage extends BasePage {
             page,
             accountPageSelectors.addAccountButton
         );
-
-        this.accountTable = resolveLocator(
+        // added here by  vivek 
+        this.accountBalance = resolveLocator(
             page,
-            accountPageSelectors.accountTable
+        accountPageSelectors.accountBalance
+        );
+        this.checkingAccount = resolveLocator(
+            page,
+            accountPageSelectors.checkingAccount
         );
 
+        this.savingsAccount = resolveLocator(
+            page,
+            accountPageSelectors.savingsAccount
+        );
+        // end here 
+
+        this.accountBalance = resolveLocator(
+    page,
+    accountPageSelectors.accountBalance
+);
+       
         this.accountRows = resolveLocator(
             page,
             accountPageSelectors.accountRows
@@ -43,6 +58,11 @@ class AccountsPage extends BasePage {
         );
     }
 
+    async getAccountBalance() {
+    return (
+        await this.accountBalance.first().textContent()
+    ).trim();
+}
     async navigateToAccount() {
         await this.accountMenuLink.click();
     }
@@ -60,8 +80,30 @@ class AccountsPage extends BasePage {
     async verifyVisible() {
         await expect(this.accountPageTitle).toBeVisible();
         await expect(this.addAccountButton).toBeVisible();
-        await expect(this.accountTable).toBeVisible();
+        //added by vivek
+        await expect(this.accountRows.first()).toBeVisible();
+        //end here
     }
+    // added by vivek
+    async verifyAccountDetails(accountData) {
+    const accountDetails = await this.getAccountDetails();
+
+    const account = accountDetails.find(detail =>
+        detail.includes(accountData.accountNumber)
+    );
+
+    expect(
+        account,
+        `Account ${accountData.accountNumber} not found`
+    ).toBeTruthy();
+
+    expect(account).toContain(accountData.accountName);
+    expect(account).toContain(accountData.accountNumber);
+    expect(account).toContain(accountData.accountType);
+    expect(account).toContain(accountData.balance);
+}
+    
+    // end here
 
     async clickAddAccount() {
         await this.addAccountButton.click();
@@ -78,6 +120,22 @@ class AccountsPage extends BasePage {
     async clickFirstViewAccount() {
         await this.viewButton.first().click();
     }
+   async getAccountRowsCount() {
+    return await this.accountRows.count();
+}
+
+async getAccountDetails() {
+    return await this.accountRows.allTextContents();
+}
+async getCheckingAccountBalance() {
+    return (
+        await this.page
+            .locator('[data-account-id="acc-checking-1"]')
+            .locator('[data-testid="account-row-balance"]')
+            .textContent()
+    ).trim();
+}
+
 }
 
 export default AccountsPage;

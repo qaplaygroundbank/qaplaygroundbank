@@ -4,6 +4,7 @@ export const accountPageSelectors = {
         role: 'link',
         name: 'Accounts'
     },
+    
 
     accountPageTitle: {
         type: 'text',
@@ -34,7 +35,28 @@ export const accountPageSelectors = {
     viewButton: {
         type: 'text',
         value: 'View'
-    }
+    },
+     accountTitle: {
+        type: 'text',
+        value: 'My Accounts'
+    },
+    // added by vivek
+    checkingAccount: {
+        type: 'text',
+        value: 'Everyday Checking'
+    },
+    accountBalance: {
+    type: 'testId',
+    value: 'account-row-balance'
+},
+   
+    savingsAccount: {
+        type: 'text',
+        value: 'High-Yield Savings'
+}
+//end here
 };
+
+
 
 export default accountPageSelectors;

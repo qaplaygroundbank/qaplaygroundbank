@@ -15,7 +15,8 @@ const loginPageSelectors = {
         type: 'role',
         role: 'button',
         name: 'Sign in to SecureBank'
-    }
+    },
+   
     // *******THE FOLLOWING SELECTORS ARE SAMPLE USE CASES TO DEMONSTRATE DIFFERENT SELECTION METHODS *****
     // transferButton: {
     //   type: 'css',

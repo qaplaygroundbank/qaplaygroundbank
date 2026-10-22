@@ -3,6 +3,7 @@ import { URLS } from '../utils/constants.js';
 import loginPageSelectors from '../selectors/loginPageSelectors.js';
 import { resolveLocator } from '../utils/locatorResolver.js';
 
+
 class LoginPage extends BasePage {
     constructor(page) {
         super(page);
