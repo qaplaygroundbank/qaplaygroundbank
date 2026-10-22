@@ -34,10 +34,20 @@ async function secureBankProject(options) {
 
     // Add the test file before Playwright options.
     if (options.testFile) {
-        const testFile = path.resolve(
-            __dirname,
-            options.testFile
-        );
+        // Playwright treats positional file arguments as regular expressions
+        // matched against the absolute test path. An absolute Windows path
+        // contains backslashes, which are regex escape characters, so it never
+        // matches and the run fails with "No tests found". Use a path relative
+        // to the project folder with forward slashes instead.
+        const absoluteTestFile = path.resolve(__dirname, options.testFile);
+        const relativeTestFile = path
+            .relative(__dirname, absoluteTestFile)
+            .split(path.sep)
+            .join('/');
+
+        const testFile = relativeTestFile.startsWith('..')
+            ? absoluteTestFile.split(path.sep).join('/')
+            : relativeTestFile;
 
         args.push(testFile);
         logger.info(`Test File   : ${testFile}`);
