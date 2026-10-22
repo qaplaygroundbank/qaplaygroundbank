@@ -11,7 +11,7 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 package-lock.json
-
+**/screenshots/
 .DS_Store
 
 # API Testing 
