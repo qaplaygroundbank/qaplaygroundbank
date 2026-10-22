@@ -75,6 +75,17 @@ const transferPageSelectors = {
     type: 'testId',
     value: 'transfer-error-message',
   },
+
+  //Confirmation modal (specific selectors)
+  confirmModal: { 
+    type: 'role', 
+    role: 'dialog', 
+    name: 'Confirm Transfer', 
+  },
+  confirmModalSummary:{
+    type:'testId',
+    value: 'transfer-confirm-summary',
+  },
 };
  
 export default transferPageSelectors;

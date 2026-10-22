@@ -15,7 +15,7 @@ class TransferPage extends BasePage {
     this.fromAccountSelect = resolveLocator(page, transferPageSelectors.fromAccountSelect);
     this.toAccountSelect = resolveLocator(page, transferPageSelectors.toAccountSelect);
     this.amountInput = resolveLocator(page, transferPageSelectors.amountInput);
-    // this.memoInput = resolveLocator(page, transferPageSelectors.memoInput);
+    this.memoInput = resolveLocator(page, transferPageSelectors.memoInput);
  
     // Radios & Buttons
     this.transferDateTodayRadio = resolveLocator(page, transferPageSelectors.transferDateTodayRadio);
@@ -23,7 +23,9 @@ class TransferPage extends BasePage {
     this.reviewTransferButton = resolveLocator(page, transferPageSelectors.reviewTransferButton);
     this.confirmTransferButton = resolveLocator(page, transferPageSelectors.confirmTransferButton);
     this.cancelButton = resolveLocator(page, transferPageSelectors.cancelButton);
- 
+    this.confirmModalLocator = resolveLocator(page, transferPageSelectors.confirmModal);
+    this.confirmModalSummary = resolveLocator(page, transferPageSelectors.confirmModalSummary);
+    this.confirmModalAmount = this.confirmModalSummary.locator('div').nth(2).locator('span').last();
     // Feedback
     this.successMessage = page.getByTestId('transfer-success-heading');
 
@@ -43,6 +45,10 @@ class TransferPage extends BasePage {
    */
   async openTransferPage() {
     await this.navigate(URLS?.TRANSFER_PAGE || '/bank/transfer');
+  }
+    //nav Transfer
+  async openTransferMoney() {
+    await this.navTransfer.click();
   }
  
   /**
@@ -70,20 +76,36 @@ class TransferPage extends BasePage {
    * Fills transfer details with auto-selected accounts
    * @param {Object} data - Contains amount,  and dateOption
    */
-  async fillTransferForm({ amount, dateOption = 'today' }) {
+  async fillTransferForm({ amount, memo='', dateOption = 'today' }) {
     await this.autoSelectAccounts();
  
     await this.amountInput.fill(String(amount));
  
-    // if (memo) {
-    //   await this.memoInput.fill(memo);
-    // }
+    if (memo?.trim()) {
+      await this.memoInput.fill(memo);
+    }
  
     if (dateOption.toLowerCase() === 'schedule') {
       await this.transferDateScheduleRadio.check();
     } else {
       await this.transferDateTodayRadio.check();
     }
+  }
+  /**
+   * Confirm Transfer Modal Dialog
+   */
+  async confirmModalLoad(timeout = 5000){
+    await this.confirmModalLocator.waitFor({state: 'visible', timeout});
+  }
+  /**
+   * Confirm Transfer Amount 
+   */
+  async getConfirmModalAmountText(){
+    if(await this.confirmModalAmount.count()>0){
+      return (await this.confirmModalAmount.first().innerText()).trim();
+    }
+    return '';
+
   }
  
   /**

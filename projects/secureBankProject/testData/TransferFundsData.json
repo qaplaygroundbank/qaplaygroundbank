@@ -11,5 +11,13 @@
     "amount": "0.00",
     "dateOption": "today",
     "expectedErrorMessage": "Please enter a valid amount."
+  },
+  "decimalPrecision":{
+    "amount": "100.333"
+  },
+  "memoOptional":{
+    "amount" : "101.00",
+    "memo" : "",
+    "dateOption": "today"
   }
 }
