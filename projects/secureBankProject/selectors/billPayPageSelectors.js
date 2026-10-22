@@ -70,17 +70,20 @@ const billPaySelectors = {
         value: 'bill-pay-ref-id'
     },
 
+    cancelPaymentButton: {
+      type: 'testId',
+      value: 'cancel-bill-btn'
+    },
+
     amountValidationMessage: {
-        type: 'testId',
-        value: 'bill-pay-error'
-},
+      type: 'testId',
+      value: 'bill-pay-error'
+    },
 
     closeConfirmPaymentPopup: {
-
-       type: 'css',
-       value: '[data-slot="dialog-close"]'
-
-}
+      type: 'css',
+      value: '[data-slot="dialog-close"]'
+    }
 
 };
 
