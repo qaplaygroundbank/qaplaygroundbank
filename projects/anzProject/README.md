@@ -37,6 +37,9 @@ npm run cli -- anz --suite negative
 npm run cli -- anz --suite boundary
 ```
 
+At the end of a run, the terminal prints a category summary listing the CRM
+test cases under Positive, Negative, and Boundary.
+
 ## Project layout
 
 ```text
