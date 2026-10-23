@@ -36,5 +36,6 @@ projects/anzProject/
 └── utils/locatorResolver.js
 ```
 
-The tests cover the customer directory, search by business name or customer ID,
-segment filtering, record details, and the no-results state.
+The tests include explicitly labeled positive, negative, and boundary cases
+for the customer directory, search, segment filtering, record details, and
+empty states.
