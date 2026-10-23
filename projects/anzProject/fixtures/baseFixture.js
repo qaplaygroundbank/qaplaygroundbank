@@ -15,15 +15,6 @@ export const test = base.extend({
             )
         );
         await use(new CommercialCrmPage(page));
-        const holdMilliseconds = Number(process.env.ANZ_TEST_HOLD_MS || 0);
-        if (!Number.isFinite(holdMilliseconds) || holdMilliseconds < 0) {
-            throw new Error(
-                'ANZ_TEST_HOLD_MS must be a non-negative number of milliseconds.'
-            );
-        }
-        if (holdMilliseconds > 0) {
-            await page.waitForTimeout(holdMilliseconds);
-        }
     }
 });
 
