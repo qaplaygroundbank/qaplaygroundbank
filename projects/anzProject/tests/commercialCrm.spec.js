@@ -21,7 +21,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         }
     });
 
-    test('Positive 1 - displays the customer directory and segment options', async ({ crmPage }) => {
+    test('Positive 1 @positive - displays the customer directory and segment options', async ({ crmPage }) => {
         await expect(crmPage.heading).toBeVisible();
         await expect(crmPage.searchInput).toBeVisible();
         await expect(crmPage.segmentFilter).toBeVisible();
@@ -39,7 +39,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Positive 2 - searches customers by business name and customer ID', async ({ crmPage }) => {
+    test('Positive 2 @positive - searches customers by business name and customer ID', async ({ crmPage }) => {
         const customer = commercialCrmData.customers[2];
 
         await crmPage.searchCustomers(commercialCrmData.search.businessName);
@@ -55,7 +55,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Positive 3 - search is case-insensitive and ignores surrounding whitespace', async ({ crmPage }) => {
+    test('Positive 3 @positive - search is case-insensitive and ignores surrounding whitespace', async ({ crmPage }) => {
         const customer = commercialCrmData.customers[2];
         await crmPage.searchCustomers('  brightpath TECHNOLOGIES  ');
 
@@ -65,7 +65,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Positive 4 - searches customers by relationship manager and industry', async ({ crmPage }) => {
+    test('Positive 4 @positive - searches customers by relationship manager and industry', async ({ crmPage }) => {
         const customer = commercialCrmData.customers[1];
 
         await crmPage.searchCustomers(customer.relationshipManager);
@@ -81,7 +81,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Positive 5 - filters customers by segment and restores all customers', async ({ crmPage }) => {
+    test('Positive 5 @positive - filters customers by segment and restores all customers', async ({ crmPage }) => {
         await crmPage.filterBySegment('Corporate');
         await expect(crmPage.customerRows).toHaveCount(2);
         await expect(crmPage.customerRows.nth(0)).toContainText(
@@ -97,7 +97,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Negative 1 - combined search and segment filters show no unrelated customers', async ({ crmPage }) => {
+    test('Negative 1 @negative - combined search and segment filters show no unrelated customers', async ({ crmPage }) => {
         await crmPage.filterBySegment('Corporate');
         await crmPage.searchCustomers('Wattle');
 
@@ -111,7 +111,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         await expect(crmPage.emptyState).toBeVisible();
     });
 
-    test('Positive 6 - opens and closes a customer record with its expected details', async ({ crmPage }) => {
+    test('Positive 6 @positive - opens and closes a customer record with its expected details', async ({ crmPage }) => {
         const customer = commercialCrmData.customers[1];
         await crmPage.openCustomerDetails(customer.customerId);
 
@@ -133,7 +133,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         await expect(crmPage.customerDetails).toBeHidden();
     });
 
-    test('Negative 2 - shows an empty state for a search with no matches', async ({ crmPage }) => {
+    test('Negative 2 @negative - shows an empty state for a search with no matches', async ({ crmPage }) => {
         await crmPage.searchCustomers(commercialCrmData.search.noMatch);
 
         await expect(crmPage.customerRows).toHaveCount(0);
@@ -143,7 +143,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Boundary 1 - clearing the search restores the full customer list', async ({ crmPage }) => {
+    test('Boundary 1 @boundary - clearing the search restores the full customer list', async ({ crmPage }) => {
         await crmPage.searchCustomers(commercialCrmData.search.businessName);
         await expect(crmPage.customerRows).toHaveCount(1);
 
@@ -155,7 +155,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         await expect(crmPage.emptyState).toBeHidden();
     });
 
-    test('Negative 3 - punctuation-only search returns no customers', async ({ crmPage }) => {
+    test('Negative 3 @negative - punctuation-only search returns no customers', async ({ crmPage }) => {
         await crmPage.searchCustomers('!@#$%^&*');
 
         await expect(crmPage.customerRows).toHaveCount(0);
@@ -165,14 +165,14 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Negative 4 - unknown customer ID returns no customers', async ({ crmPage }) => {
+    test('Negative 4 @negative - unknown customer ID returns no customers', async ({ crmPage }) => {
         await crmPage.searchCustomers('DEMO-CUS-9999');
 
         await expect(crmPage.customerRows).toHaveCount(0);
         await expect(crmPage.emptyState).toBeVisible();
     });
 
-    test('Boundary 2 - empty search displays the full directory', async ({ crmPage }) => {
+    test('Boundary 2 @boundary - empty search displays the full directory', async ({ crmPage }) => {
         await crmPage.searchCustomers('');
 
         await expect(crmPage.customerRows).toHaveCount(
@@ -181,7 +181,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         await expect(crmPage.emptyState).toBeHidden();
     });
 
-    test('Boundary 3 - whitespace-only search is treated as an empty query', async ({ crmPage }) => {
+    test('Boundary 3 @boundary - whitespace-only search is treated as an empty query', async ({ crmPage }) => {
         await crmPage.searchCustomers('   ');
 
         await expect(crmPage.customerRows).toHaveCount(
@@ -190,7 +190,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         await expect(crmPage.emptyState).toBeHidden();
     });
 
-    test('Boundary 4 - exact customer ID search returns only that record', async ({ crmPage }) => {
+    test('Boundary 4 @boundary - exact customer ID search returns only that record', async ({ crmPage }) => {
         const customer = commercialCrmData.customers[0];
         await crmPage.searchCustomers(customer.customerId);
 
@@ -203,7 +203,7 @@ test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
         );
     });
 
-    test('Boundary 5 - each segment filter only returns customers in that segment', async ({ crmPage }) => {
+    test('Boundary 5 @boundary - each segment filter only returns customers in that segment', async ({ crmPage }) => {
         const segments = commercialCrmData.segments.filter(
             (segment) => segment !== 'All segments'
         );

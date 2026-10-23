@@ -27,6 +27,15 @@ The project supports Chromium, Firefox, and WebKit. Suite names other than
 `regression` select test tags; the CRM tests are marked `@smoke` and `@crm`.
 `--hold` keeps each page open for the specified milliseconds after a test
 finishes (default: `5000`), making headed executions easier to watch.
+Each test title includes a category label (`@positive`, `@negative`, or
+`@boundary`), so the category is visible in Playwright output and can be
+selected independently, for example:
+
+```bash
+npm run cli -- anz --suite positive
+npm run cli -- anz --suite negative
+npm run cli -- anz --suite boundary
+```
 
 ## Project layout
 
