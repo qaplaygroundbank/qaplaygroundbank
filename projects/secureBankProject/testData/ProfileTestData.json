@@ -10,6 +10,13 @@
         "Email": "xyz",
         "EMailErrorMessage": "Please enter a valid email address."
     },
+
+    "PhoneData": {
+    "ValidPhone": "(415) 555-0101",
+    "InvalidPhone": "12345",
+    "AboveMaxPhone": "12345678901234567890"
+    },
+    
     "editProfile": {
         "phone": "(918) 366-1010",
         "successMessage": "Profile updated successfully.",
@@ -19,4 +26,5 @@
     "htmlCode":{
        "scriptInput": "<script>  function showAlert() {  alert(\"Hello! This is an alert message.\");          } </script>  "
     }
+
 }

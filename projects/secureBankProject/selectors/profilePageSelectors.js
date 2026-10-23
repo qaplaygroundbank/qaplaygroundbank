@@ -53,16 +53,78 @@ const profilePageSelectors = {
     type: 'testId',
     value: 'profile-save-success'
     },
-    
-    phoneInput: {
-        type: "testId",
-        value: "profile-phone-input"
+    // Username displayed on profile page
+    username: {
+        type: 'testId',
+        value: 'profile-username'
     },
 
+    // First name displayed on profile page
+    firstName: {
+        type: 'testId',
+        value: 'profile-first-name'
+    },
+
+    // Last name displayed on profile page
+    lastName: {
+        type: 'testId',
+        value: 'profile-last-name'
+    },
+
+    // Phone number displayed on profile page
     phone: {
         type: 'testId',
         value: 'profile-phone'
+    },
+
+    // Address displayed on profile page
+    address: {
+        type: 'testId',
+        value: 'profile-address'
+    },
+
+    // First Name input field
+    firstNameInput: {
+        type: 'testId',
+        value: 'profile-first-name-input'
+    },
+
+    // Last Name input field
+    lastNameInput: {
+        type: 'testId',
+        value: 'profile-last-name-input'
+    },
+
+    // Phone input field
+    phoneInput: {
+        type: 'testId',
+        value: 'profile-phone-input'
+    },
+
+    // Address input field
+    addressInput: {
+        type: 'testId',
+        value: 'profile-address-input'
+    },
+
+    // Cancel Changes button
+    cancelEditProfileButton: {
+        type: 'testId',
+        value: 'cancel-edit-profile-btn'
+    },
+
+    // Phone validation error message
+    phoneValidationError: {
+        type: 'testId',
+        value: 'profile-error'
+    },
+    
+    // Email displayed on profile page
+    profileEmail: {
+        type: 'testId',
+        value: 'profile-email'
     }
+
 };
 
 export default profilePageSelectors;
