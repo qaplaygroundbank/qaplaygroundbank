@@ -31,7 +31,7 @@ test.describe('Transfer Money Page Tests', () => {
     await expect(transferPage.pageHeading).toBeVisible();
     await expect(transferPage.pageHeading).toHaveText('Transfer Money');
   });
-  test('TM-001: Transfer Money Validations @transferMoney @regression ', async () => {
+  test('TM-001: Transfer Money Validations @transferMoney @smoke ', async () => {
 
     await expect(transferPage.fromAccountSelect).toBeVisible();
     await expect(transferPage.toAccountSelect).toBeVisible();
