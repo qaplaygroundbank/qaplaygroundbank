@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ANZ Commercial CRM Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem auto; max-width: 70rem; padding: 0 1rem; color: #172b4d; }
+        header { border-bottom: 3px solid #0072ac; margin-bottom: 1.5rem; }
+        .notice { background: #eef6fa; padding: 0.75rem; }
+        .filters { display: flex; flex-wrap: wrap; gap: 1rem; margin: 1.5rem 0; }
+        label { display: grid; gap: 0.4rem; }
+        input, select, button { font: inherit; padding: 0.55rem; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccd5df; padding: 0.7rem; text-align: left; }
+        th { background: #eef2f6; }
+        #customer-details { border: 1px solid #ccd5df; margin-top: 1.5rem; padding: 1rem; }
+        #customer-details[hidden], [hidden] { display: none; }
+        dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.5rem 1rem; }
+        dt { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ANZ Commercial CRM Demo</h1>
+        <p class="notice">Local automation demo only. All customer records are fictional and are not ANZ customer data.</p>
+    </header>
+    <main>
+        <section aria-label="Customer search and filters" class="filters">
+            <label>
+                Search customers
+                <input id="customer-search" type="search" autocomplete="off">
+            </label>
+            <label>
+                Customer segment
+                <select id="customer-segment">
+                    <option>All segments</option>
+                    <option>Agribusiness</option>
+                    <option>Corporate</option>
+                    <option>SME</option>
+                </select>
+            </label>
+        </section>
+        <table aria-label="Commercial customer directory">
+            <thead>
+                <tr>
+                    <th scope="col">Business name</th>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Segment</th>
+                    <th scope="col">Relationship manager</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="customer-rows"></tbody>
+        </table>
+        <p id="empty-state" role="status" hidden>No commercial customers match your search.</p>
+        <section id="customer-details" aria-label="Customer details" hidden>
+            <h2>Customer details</h2>
+            <h3 id="detail-business-name"></h3>
+            <dl>
+                <dt>Customer ID</dt><dd data-field="customerId"></dd>
+                <dt>Segment</dt><dd data-field="segment"></dd>
+                <dt>Relationship manager</dt><dd data-field="relationshipManager"></dd>
+                <dt>Status</dt><dd data-field="status"></dd>
+                <dt>Industry</dt><dd data-field="industry"></dd>
+                <dt>Region</dt><dd data-field="region"></dd>
+            </dl>
+            <button id="close-details" type="button">Close customer details</button>
+        </section>
+    </main>
+    <script>
+        const customers = __CRM_TEST_DATA__;
+        const searchInput = document.querySelector('#customer-search');
+        const segmentFilter = document.querySelector('#customer-segment');
+        const rows = document.querySelector('#customer-rows');
+        const emptyState = document.querySelector('#empty-state');
+        const details = document.querySelector('#customer-details');
+
+        function renderCustomers() {
+            const query = searchInput.value.trim().toLowerCase();
+            const segment = segmentFilter.value;
+            const matches = customers.filter((customer) => {
+                const matchesQuery = [
+                    customer.businessName,
+                    customer.customerId,
+                    customer.industry,
+                    customer.relationshipManager
+                ].some((value) => value.toLowerCase().includes(query));
+                return matchesQuery &&
+                    (segment === 'All segments' || customer.segment === segment);
+            });
+
+            rows.replaceChildren();
+            for (const customer of matches) {
+                const row = document.createElement('tr');
+                for (const value of [
+                    customer.businessName,
+                    customer.customerId,
+                    customer.segment,
+                    customer.relationshipManager,
+                    customer.status
+                ]) {
+                    const cell = document.createElement('td');
+                    cell.textContent = value;
+                    row.append(cell);
+                }
+                const actionCell = document.createElement('td');
+                const viewButton = document.createElement('button');
+                viewButton.type = 'button';
+                viewButton.textContent = 'View details';
+                viewButton.setAttribute('aria-label', 'View details');
+                viewButton.addEventListener('click', () => showCustomerDetails(customer));
+                actionCell.append(viewButton);
+                row.append(actionCell);
+                rows.append(row);
+            }
+            emptyState.hidden = matches.length > 0;
+        }
+
+        function showCustomerDetails(customer) {
+            document.querySelector('#detail-business-name').textContent = customer.businessName;
+            for (const field of [
+                'customerId',
+                'segment',
+                'relationshipManager',
+                'status',
+                'industry',
+                'region'
+            ]) {
+                details.querySelector(`[data-field="${field}"]`).textContent = customer[field];
+            }
+            details.hidden = false;
+        }
+
+        searchInput.addEventListener('input', renderCustomers);
+        segmentFilter.addEventListener('change', renderCustomers);
+        document.querySelector('#close-details').addEventListener('click', () => {
+            details.hidden = true;
+        });
+        renderCustomers();
+    </script>
+</body>
+</html>
