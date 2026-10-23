@@ -2,6 +2,25 @@ import { test, expect } from '../fixtures/baseFixture.js';
 import commercialCrmData from '../testData/commercialCrmData.json' with { type: 'json' };
 
 test.describe('ANZ Commercial CRM demo @crm @smoke', () => {
+    test.afterEach(async ({ page }, testInfo) => {
+        const holdMilliseconds = Number(
+            process.env.ANZ_TEST_HOLD_MS ?? 5000
+        );
+
+        if (!Number.isFinite(holdMilliseconds) || holdMilliseconds < 0) {
+            throw new Error(
+                'ANZ_TEST_HOLD_MS must be a non-negative number of milliseconds.'
+            );
+        }
+
+        if (holdMilliseconds > 0) {
+            testInfo.setTimeout(
+                Math.max(testInfo.timeout, holdMilliseconds + 5000)
+            );
+            await page.waitForTimeout(holdMilliseconds);
+        }
+    });
+
     test('Positive 1 - displays the customer directory and segment options', async ({ crmPage }) => {
         await expect(crmPage.heading).toBeVisible();
         await expect(crmPage.searchInput).toBeVisible();
