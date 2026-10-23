@@ -10,5 +10,12 @@
         "biller": "Electric",
         "amount": "-500",
         "memo": "Monthly bill payment"
+    },
+
+      "insufficientAmountUser": {
+        "fromAccount": "Everyday Checking",
+        "biller": "Electric",
+        "amount": "12800.50",
+        "memo": "Monthly bill payment"
     }
 }

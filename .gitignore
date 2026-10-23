@@ -16,3 +16,11 @@ node_modules/
 package-lock.json
 
 .DS_Store
+
+# API Testing 
+mochawesome-report/
+
+# Allure
+allure-report/
+allure-results/
+reports/
