@@ -50,21 +50,16 @@ class TransferPage extends BasePage {
    * and the second available option for 'To Account'
    */
   async autoSelectAccounts() {
-    // 1. Open 'From Account' dropdown and select the first item
-    await this.fromAccountSelect.click();
-    await this.page.getByRole('option').first().click();
- 
-    // 2. Open 'To Account' dropdown and select the second item
-    await this.toAccountSelect.click();
-    const toOptions = this.page.getByRole('option');
-    
-    // Choose index 1 if 2+ options exist, else choose index 0
-    if ((await toOptions.count()) > 1) {
-      await toOptions.nth(1).click();
-    } else {
-      await toOptions.first().click();
-    }
-  }
+ await this.fromAccountSelect.click();
+ await this.page.getByRole('option', {
+  name: /Everyday Checking/
+}).click();
+
+  await this.toAccountSelect.click();
+  await this.page.getByRole('option', {
+  name: /High-Yield Savings/
+}).click();
+}
  
   /**
    * Fills transfer details with auto-selected accounts
