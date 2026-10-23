@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { test, expect } from '../../fixtures/baseFixture.js';
 import appConfig from '../../config/app.config.js';
 import { VALIDATIONS } from '../../utils/constants.js';
-import MoneyTransactionPage from '../../pages/moneyTransactionPage.js';
+import MoneyTransactionPage from '../../pages/TransactionsPage.js';
 
 
 async function openTransactions(page) {

@@ -1,6 +1,6 @@
 import BasePage from './BasePage.js';
 
-class FindTransactionsPage extends BasePage {
+class MoneyTransactionsPage extends BasePage {
   constructor(page) {
     super(page);
     this.transactionIdInput = page.locator('#transactionId');
@@ -40,4 +40,4 @@ class FindTransactionsPage extends BasePage {
   }
 }
 
-export default FindTransactionsPage;
+export default MoneyTransactionsPage;
