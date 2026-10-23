@@ -5,6 +5,14 @@ demo. It does not connect to an ANZ system and uses fictional customer data
 only. The local HTML fixture makes the tests repeatable and independent from
 external services.
 
+## Environment settings
+
+The project loads settings from `projects/anzProject/.env`. The local file is
+ignored by Git; use `.env.example` as the template when setting up another
+workspace. `ANZ_TEST_HOLD_MS` controls how long each test page remains open
+after a test, and `ANZ_SLOW_MO_MS` controls the delay between browser actions.
+Both default to `5000` and `0` milliseconds respectively.
+
 ## Run from the repository root
 
 ```bash
@@ -18,7 +26,7 @@ npm run cli -- anz --suite regression --headed --hold 10000
 The project supports Chromium, Firefox, and WebKit. Suite names other than
 `regression` select test tags; the CRM tests are marked `@smoke` and `@crm`.
 `--hold` keeps each page open for the specified milliseconds after a test
-finishes (default: `3000`), making headed executions easier to watch.
+finishes (default: `5000`), making headed executions easier to watch.
 
 ## Project layout
 
