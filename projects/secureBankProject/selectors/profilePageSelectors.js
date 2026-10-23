@@ -1,5 +1,6 @@
 // Profile page selectors
 const profilePageSelectors = {
+
     // Profile menu link
     profileLink: {
         type: 'testId',
@@ -30,38 +31,83 @@ const profilePageSelectors = {
         value: 'edit-profile-btn'
     },
 
-    // Profile details
+    // Profile details in view mode
+    username: {
+        type: 'testId',
+        value: 'profile-username'
+    },
+
+    firstName: {
+        type: 'testId',
+        value: 'profile-first-name'
+    },
+
+    lastName: {
+        type: 'testId',
+        value: 'profile-last-name'
+    },
+
     email: {
         type: 'testId',
-        value: 'profile-email-input'
-    },
-
-    // Submit Button
-    submitButton: {
-    type: 'testId',
-    value: 'save-profile-btn'
-    },
-
-    // Profile Error
-    profileErrorMessage: {
-    type: 'testId',
-    value: 'profile-error'
-    },
-
-    //Success Message
-    profileSuccessMessage: {
-    type: 'testId',
-    value: 'profile-save-success'
-    },
-    
-    phoneInput: {
-        type: "testId",
-        value: "profile-phone-input"
+        value: 'profile-email'
     },
 
     phone: {
         type: 'testId',
         value: 'profile-phone'
+    },
+
+    address: {
+        type: 'testId',
+        value: 'profile-address'
+    },
+
+    // Editable fields in Edit mode
+    firstNameInput: {
+        type: 'testId',
+        value: 'profile-first-name-input'
+    },
+
+    lastNameInput: {
+        type: 'testId',
+        value: 'profile-last-name-input'
+    },
+
+    emailInput: {
+        type: 'testId',
+        value: 'profile-email-input'
+    },
+
+    phoneInput: {
+        type: 'testId',
+        value: 'profile-phone-input'
+    },
+
+    addressInput: {
+        type: 'testId',
+        value: 'profile-address-input'
+    },
+
+    // Form buttons
+    submitButton: {
+        type: 'testId',
+        value: 'save-profile-btn'
+    },
+
+    cancelEditProfileButton: {
+        type: 'testId',
+        value: 'cancel-edit-profile-btn'
+    },
+
+    // Validation and success messages
+    profileErrorMessage: {
+        type: 'testId',
+        value: 'profile-error'
+    },
+
+    profileSuccessMessage: {
+        type: 'testId',
+        value: 'profile-save-success'
     }
 };
 
