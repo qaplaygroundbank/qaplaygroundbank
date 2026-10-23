@@ -1,43 +1,95 @@
 import BasePage from './BasePage.js';
+import transactionsPageSelectors from '../selectors/transationsPageSelectors.js';
+import { resolveLocator } from '../utils/locatorResolver.js';
 
-class FindTransactionsPage extends BasePage {
-  constructor(page) {
-    super(page);
-    this.transactionIdInput = page.locator('#transactionId');
-    this.dateInput = page.locator('#transactionDate');
-    this.fromDateInput = page.locator('#fromDate');
-    this.toDateInput = page.locator('#toDate');
-    this.amountInput = page.locator('#amount');
-    this.resultsTable = page.locator('#transactionTable');
-    this.resultsRows = page.locator('#transactionTable tbody tr');
-    this.errorText = page.locator('#rightPanel .error, #transactionTable + .error');
-  }
+class MoneyTransactionsPage extends BasePage {
+    constructor(page) {
+        super(page);
 
-  async goto(accountId) {
-    const url = accountId ? `/findtrans.htm?id=${accountId}` : 'findtrans.htm';
-    await this.page.goto(url);
-  }
+        this.transactionsTable = resolveLocator(
+            page,
+            transactionsPageSelectors.transactionsTable
+        );
+        this.pagination = resolveLocator(
+            page,
+            transactionsPageSelectors.pagination
+        );
 
-  async findByTransactionId(id) {
-    await this.transactionIdInput.fill(String(id));
-    await this.page.getByRole('button', { name: 'Find Transactions' }).first().click();
-  }
+        for (const [name, selector] of Object.entries(transactionsPageSelectors)) {
+            switch (name) {
+                case 'transactionRows':
+                    this[name] = this.transactionsTable.locator('tbody tr');
+                    break;
+                case 'dateColumnHeader':
+                case 'accountColumnHeader':
+                case 'descriptionColumnHeader':
+                case 'categoryColumnHeader':
+                case 'amountColumnHeader':
+                    this[name] = this.transactionsTable.getByRole(
+                        'columnheader',
+                        { name: selector.name, exact: selector.exact }
+                    );
+                    break;
+                case 'paginationStatus':
+                    this[name] = this.pagination.locator(selector.value);
+                    break;
+                case 'previousPageButton':
+                case 'nextPageButton':
+                case 'downloadCsvButton':
+                    this[name] = resolveLocator(
+                        this.pagination,
+                        selector
+                    );
+                    break;
+                default:
+                    this[name] = resolveLocator(page, selector);
+            }
+        }
+    }
 
-  async findByDate(date) {
-    await this.dateInput.fill(date);
-    await this.page.getByRole('button', { name: 'Find Transactions' }).nth(1).click();
-  }
+    async openFromDashboard() {
+        await this.transactionsLink.click();
+    }
 
-  async findByDateRange(fromDate, toDate) {
-    await this.fromDateInput.fill(fromDate);
-    await this.toDateInput.fill(toDate);
-    await this.page.getByRole('button', { name: 'Find Transactions' }).nth(2).click();
-  }
+    async searchByDescription(description) {
+        await this.searchInput.fill(description);
+    }
 
-  async findByAmount(amount) {
-    await this.amountInput.fill(String(amount));
-    await this.page.getByRole('button', { name: 'Find Transactions' }).nth(3).click();
-  }
+    async filterByType(type) {
+        const buttons = {
+            all: this.allTransactionsButton,
+            credits: this.creditsButton,
+            debits: this.debitsButton
+        };
+        const button = buttons[type];
+
+        if (!button) {
+            throw new Error(`Unsupported transaction type: "${type}".`);
+        }
+
+        await button.click();
+    }
+
+    async filterByAccount(account) {
+        await this.accountDropdown.click();
+        await this.page.getByRole('option', {
+            name: account,
+            exact: true
+        }).click();
+    }
+
+    async clearFilters() {
+        await this.clearButton.click();
+    }
+
+    async getAccountOptions() {
+        await this.accountDropdown.click();
+        const options = (
+            await this.page.getByRole('option').allTextContents()
+        ).map((option) => option.trim());
+        await this.page.keyboard.press('Escape');
+        return options;
+    }
 }
 
-export default FindTransactionsPage;
+export default MoneyTransactionsPage;
