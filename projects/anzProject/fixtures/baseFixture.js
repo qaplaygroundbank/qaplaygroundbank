@@ -10,7 +10,7 @@ export const test = base.extend({
         const demoHtml = await readFile(demoHtmlPath, 'utf8');
         await page.setContent(
             demoHtml.replace(
-                '__CRM_TEST_DATA__',
+                /(?<=<script id="crm-test-data" type="application\/json">)[\s\S]*?(?=<\/script>)/,
                 JSON.stringify(commercialCrmData.customers)
             )
         );

@@ -69,8 +69,48 @@
             <button id="close-details" type="button">Close customer details</button>
         </section>
     </main>
+    <script id="crm-test-data" type="application/json">[
+        {
+            "businessName": "Harbourline Logistics Pty Ltd",
+            "customerId": "DEMO-CUS-1001",
+            "segment": "Corporate",
+            "relationshipManager": "Emma Nguyen",
+            "status": "Active",
+            "industry": "Transport and logistics",
+            "region": "Greater Sydney"
+        },
+        {
+            "businessName": "Southern Cross Farms Pty Ltd",
+            "customerId": "DEMO-CUS-1002",
+            "segment": "Agribusiness",
+            "relationshipManager": "Liam O'Connor",
+            "status": "Active",
+            "industry": "Agriculture",
+            "region": "Regional New South Wales"
+        },
+        {
+            "businessName": "Brightpath Technologies Pty Ltd",
+            "customerId": "DEMO-CUS-1003",
+            "segment": "SME",
+            "relationshipManager": "Priya Shah",
+            "status": "Active",
+            "industry": "Technology",
+            "region": "Melbourne"
+        },
+        {
+            "businessName": "Wattle Creek Manufacturing Pty Ltd",
+            "customerId": "DEMO-CUS-1004",
+            "segment": "Corporate",
+            "relationshipManager": "Noah Williams",
+            "status": "Under review",
+            "industry": "Manufacturing",
+            "region": "Queensland"
+        }
+    ]</script>
     <script>
-        const customers = __CRM_TEST_DATA__;
+        const customers = JSON.parse(
+            document.querySelector('#crm-test-data').textContent
+        );
         const searchInput = document.querySelector('#customer-search');
         const segmentFilter = document.querySelector('#customer-segment');
         const rows = document.querySelector('#customer-rows');
