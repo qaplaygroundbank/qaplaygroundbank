@@ -30,8 +30,18 @@
         "successMessage": "Profile updated successfully.",
         "PhoneErrorMsg": "/^Phone must be in format/"
     },
-
+    "ResponsiveViewports": {
+        "Minimum": {
+            "Width": 400,
+            "Height": 581
+        },
+        "Desktop": {
+            "Width": 1280,
+            "Height": 720
+        }
+    },
     "htmlCode":{
        "scriptInput": "<script>  function showAlert() {  alert(\"Hello! This is an alert message.\");          } </script>  "
     }
+    
 }

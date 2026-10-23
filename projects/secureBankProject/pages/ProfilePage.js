@@ -529,6 +529,224 @@ class ProfilePage extends BasePage {
         await expect(this.profileErrorMessage).toHaveText(expectedText);
     }
 
+    async verifyElementAccessible(
+        locator,
+        viewportWidth,
+        elementName
+    ) {
+        await locator.scrollIntoViewIfNeeded();
+
+        await expect(
+            locator,
+            `${elementName} should be visible.`
+        ).toBeVisible();
+
+        await expect(
+            locator,
+            `${elementName} should be enabled.`
+        ).toBeEnabled();
+
+        const elementBox = await locator.boundingBox();
+
+        expect(
+            elementBox,
+            `${elementName} should have a visible position.`
+        ).not.toBeNull();
+
+        expect(
+            elementBox.x,
+            `${elementName} should not start outside the viewport.`
+        ).toBeGreaterThanOrEqual(0);
+
+        expect(
+            elementBox.x + elementBox.width,
+            `${elementName} should not extend outside the viewport.`
+        ).toBeLessThanOrEqual(viewportWidth + 1);
+
+        const receivesPointer = await locator.evaluate(element => {
+            const rectangle = element.getBoundingClientRect();
+            const centreX = rectangle.left + rectangle.width / 2;
+            const centreY = rectangle.top + rectangle.height / 2;
+            const targetElement = document.elementFromPoint(
+                centreX,
+                centreY
+            );
+
+            return Boolean(
+                targetElement === element ||
+                element.contains(targetElement) ||
+                targetElement?.contains(element)
+            );
+        });
+
+        expect(
+            receivesPointer,
+            `${elementName} should receive pointer interaction.`
+        ).toBe(true);
+    }
+
+    async verifyNoHorizontalOverflow(viewportWidth) {
+        const pageWidth = await this.page.evaluate(
+            () => document.documentElement.scrollWidth
+        );
+
+        expect(
+            pageWidth,
+            'The Profile page should not have horizontal overflow.'
+        ).toBeLessThanOrEqual(viewportWidth + 1);
+    }
+
+    async verifyProfileViewAtViewport(viewportWidth) {
+        await this.verifyElementAccessible(
+            this.profilePageTitle,
+            viewportWidth,
+            'Profile page title'
+        );
+
+        await this.verifyElementAccessible(
+            this.personalInfoSection,
+            viewportWidth,
+            'Personal Information section'
+        );
+
+        await this.verifyElementAccessible(
+            this.editProfileButton,
+            viewportWidth,
+            'Edit Profile button'
+        );
+
+        const viewFields = [
+            {
+                name: 'First Name',
+                locator: this.firstName
+            },
+            {
+                name: 'Last Name',
+                locator: this.lastName
+            },
+            {
+                name: 'Email',
+                locator: this.email
+            },
+            {
+                name: 'Phone',
+                locator: this.phone
+            },
+            {
+                name: 'Address',
+                locator: this.address
+            }
+        ];
+
+        for (const field of viewFields) {
+            await this.verifyElementAccessible(
+                field.locator,
+                viewportWidth,
+                `${field.name} Profile value`
+            );
+        }
+    }
+
+    async verifyProfileEditControlsAtViewport(viewportWidth) {
+        const editableFields = [
+            {
+                name: 'First Name',
+                locator: this.firstNameInput
+            },
+            {
+                name: 'Last Name',
+                locator: this.lastNameInput
+            },
+            {
+                name: 'Email',
+                locator: this.emailInput
+            },
+            {
+                name: 'Phone',
+                locator: this.phoneInput
+            },
+            {
+                name: 'Address',
+                locator: this.addressInput
+            }
+        ];
+
+        for (const field of editableFields) {
+            await this.verifyElementAccessible(
+                field.locator,
+                viewportWidth,
+                `${field.name} input`
+            );
+
+            await expect(
+                field.locator,
+                `${field.name} input should be editable.`
+            ).toBeEditable();
+        }
+
+        await this.verifyElementAccessible(
+            this.submitButton,
+            viewportWidth,
+            'Save Changes button'
+        );
+
+        await this.verifyElementAccessible(
+            this.cancelEditProfileButton,
+            viewportWidth,
+            'Cancel button'
+        );
+    }
+
+    async verifyProfileNavigationAtViewport(viewportWidth) {
+        const desktopProfileLink = this.page
+            .getByTestId('sidebar-link-profile')
+            .first();
+
+        if (await desktopProfileLink.isVisible()) {
+            await this.verifyElementAccessible(
+                desktopProfileLink,
+                viewportWidth,
+                'Desktop Profile navigation link'
+            );
+
+            return;
+        }
+
+        const mobileMenuButton = this.page.getByRole(
+            'button',
+            {
+                name: 'Open navigation menu'
+            }
+        );
+
+        await this.verifyElementAccessible(
+            mobileMenuButton,
+            viewportWidth,
+            'Mobile navigation menu button'
+        );
+
+        await mobileMenuButton.click();
+
+        const mobileNavigation = this.page.getByTestId(
+            'mobile-menu-overlay'
+        );
+
+        await expect(mobileNavigation).toBeVisible();
+
+        const mobileProfileLink =
+            mobileNavigation.getByTestId('sidebar-link-profile');
+
+        await this.verifyElementAccessible(
+            mobileProfileLink,
+            viewportWidth,
+            'Mobile Profile navigation link'
+        );
+
+        await mobileProfileLink.click();
+
+        await expect(mobileNavigation).toBeHidden();
+    }
+
 }
 
 export default ProfilePage;

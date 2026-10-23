@@ -187,6 +187,72 @@ test.describe('Profile Tests', () => {
     );
 
     test(
+        'PROF-022 Verify Profile remains usable across viewport sizes',
+        {
+            tag: ['@profile', '@boundary']
+        },
+        async ({ page }) => {
+            const minimumViewport = {
+                width:
+                    ProfileTestData
+                        .ResponsiveViewports
+                        .Minimum
+                        .Width,
+                height:
+                    ProfileTestData
+                        .ResponsiveViewports
+                        .Minimum
+                        .Height
+            };
+
+            const desktopViewport = {
+                width:
+                    ProfileTestData
+                        .ResponsiveViewports
+                        .Desktop
+                        .Width,
+                height:
+                    ProfileTestData
+                        .ResponsiveViewports
+                        .Desktop
+                        .Height
+            };
+
+            const viewportSizes = [
+                minimumViewport,
+                desktopViewport
+            ];
+
+            for (const viewport of viewportSizes) {
+                await page.setViewportSize(viewport);
+
+                expect(page.viewportSize()).toEqual(viewport);
+
+                await profilePage.verifyNoHorizontalOverflow(
+                    viewport.width
+                );
+
+                await profilePage.verifyProfileNavigationAtViewport(
+                    viewport.width
+                );
+
+                await profilePage.verifyProfileViewAtViewport(
+                    viewport.width
+                );
+
+                await profilePage.clickEditProfile();
+
+                await profilePage.verifyProfileEditControlsAtViewport(
+                    viewport.width
+                );
+
+                await profilePage.clickCancelEditProfile();
+                await profilePage.verifyEditProfileButton();
+            }
+        }
+    );
+
+    test(
         'PROF-013 Verify unsafe input cannot execute or corrupt UI.',
         { tag: ['@profile'] },
         async () => {
