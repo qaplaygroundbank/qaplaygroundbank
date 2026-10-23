@@ -70,7 +70,10 @@ async function anzProject(options) {
 
     const playwrightProcess = spawn(process.execPath, args, {
         stdio: 'inherit',
-        env: process.env
+        env: {
+            ...process.env,
+            ANZ_TEST_HOLD_MS: options.hold
+        }
     });
 
     return new Promise((resolve, reject) => {

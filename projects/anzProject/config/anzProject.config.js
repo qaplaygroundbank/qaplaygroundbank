@@ -8,6 +8,9 @@ export default defineConfig({
     workers: process.env.CI ? 1 : undefined,
     reporter: 'list',
     use: {
+        launchOptions: {
+            slowMo: Number(process.env.ANZ_SLOW_MO_MS || 0)
+        },
         trace: 'on-first-retry'
     },
     projects: [

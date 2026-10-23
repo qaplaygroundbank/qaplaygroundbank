@@ -16,6 +16,11 @@ function registerAnzProject(program) {
                 .default('chromium')
         )
         .option('--headed', 'Run the browser in visible mode', false)
+        .option(
+            '--hold <milliseconds>',
+            'Keep each test page open for this long after the test',
+            '3000'
+        )
         .option('--test-file <file>', 'Run a specific ANZ project test file');
 
     anzCommand.action(async (options) => {

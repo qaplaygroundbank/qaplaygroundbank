@@ -12,10 +12,13 @@ npm run cli -- anz --help
 npm run cli -- anz --suite smoke
 npm run cli -- anz --suite regression --browser chromium
 npm run cli -- anz --suite regression --test-file tests/commercialCrm.spec.js
+npm run cli -- anz --suite regression --headed --hold 10000
 ```
 
 The project supports Chromium, Firefox, and WebKit. Suite names other than
 `regression` select test tags; the CRM tests are marked `@smoke` and `@crm`.
+`--hold` keeps each page open for the specified milliseconds after a test
+finishes (default: `3000`), making headed executions easier to watch.
 
 ## Project layout
 
