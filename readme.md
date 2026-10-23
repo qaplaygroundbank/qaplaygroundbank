@@ -67,7 +67,8 @@ Display the available CLI commands:
 npm run cli -- --help
 ```
 
-The available project commands are `ui`, `api`, and `migration`.
+The available project commands are `ui`, `api`, `migration`, `parabank`, and
+`anz`.
 
 ## Configuration and secrets
 
@@ -156,6 +157,18 @@ npm run cli -- ui --env qa --suite smoke --headed
 ```
 
 The UI runner treats `regression` as all tests. Other suite names are used as tags, matching tests with a corresponding annotation such as `@smoke` or `@payments`. Use the tags actually present in the test files.
+
+### ANZ Commercial CRM demo
+
+The `anz` project runs against a local ANZ-themed CRM demo using fictional
+customer data. It is a self-contained automation fixture and does not connect
+to ANZ systems.
+
+```bash
+npm run cli -- anz --suite smoke
+npm run cli -- anz --suite regression --browser chromium
+npm run cli -- anz --suite regression --test-file tests/commercialCrm.spec.js
+```
 
 ### API automation
 
